@@ -2,6 +2,7 @@ package de.intranda.goobi.plugins;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  * This file is part of a plugin for Goobi - a Workflow tool for the support of mass digitization.
@@ -37,12 +38,20 @@ import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.StorageProvider;
+import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
+import de.sub.goobi.metadaten.MetadatenImagesHelper;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
+import ugh.dl.DigitalDocument;
+import ugh.dl.DocStruct;
 import ugh.dl.Fileformat;
+import ugh.dl.Prefs;
+import ugh.dl.Reference;
+import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
+import ugh.exceptions.TypeNotAllowedForParentException;
 
 @PluginImplementation
 @Log4j2
@@ -62,13 +71,21 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     @Getter
     private List<Path> images = null;
     @Getter
-    private Fileformat fileformat;
+    private transient Fileformat fileformat;
+    private transient DigitalDocument digitalDocument;
+
+    private Prefs prefs;
+
+    @Getter
+    private List<PageElement> pages = new ArrayList<>();
 
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
         this.step = step;
         process = step.getProzess();
+        prefs = process.getRegelsatz().getPreferences();
+
         // read parameters from correct block in configuration file
         SubnodeConfiguration myconfig = ConfigPlugins.getProjectAndStepConfig(title, step);
 
@@ -113,12 +130,13 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     public boolean execute() {
 
         // get all images from media folder
-
+        String folderName;
         try {
-            String folderName = process.getImagesTifDirectory(false);
+            folderName = process.getImagesTifDirectory(false);
             images = StorageProvider.getInstance().listFiles(folderName);
         } catch (IOException | SwapException e) {
             log.error(e);
+            return false;
         }
         if (images == null || images.isEmpty()) {
             // no images found, abort
@@ -129,7 +147,8 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         // open metadata file
         try {
             fileformat = process.readMetadataFile();
-        } catch (ReadException | IOException | SwapException e) {
+            digitalDocument = fileformat.getDigitalDocument();
+        } catch (ReadException | IOException | SwapException | PreferencesException e) {
             log.error(e);
             Helper.setFehlerMeldung(""); // TODO
             return false;
@@ -139,7 +158,43 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         // if not, create pagination
 
-        // create ics urls for each image
+        MetadatenImagesHelper mih = new MetadatenImagesHelper(prefs, digitalDocument);
+        try {
+            mih.createPagination(process, folderName);
+        } catch (TypeNotAllowedForParentException | IOException | SwapException | DAOException e) {
+            log.error(e);
+            Helper.setFehlerMeldung(""); // TODO
+            return false;
+        }
+
+        DocStruct logical = digitalDocument.getLogicalDocStruct();
+        if (logical.getType().isAnchor()) {
+            logical = logical.getAllChildren().get(0);
+        }
+
+        // check if a logical docstruct exists for each image
+        DocStruct physical = digitalDocument.getPhysicalDocStruct();
+        for (DocStruct pageStruct : physical.getAllChildren()) {
+            PageElement pe = null;
+            for (Reference ref : pageStruct.getAllFromReferences()) {
+                // ignore reference is to logical topstruct
+                if (!ref.getSource().getType().isTopmost()) {
+                    pe = new PageElement(ref.getSource(), pageStruct);
+                }
+            }
+            // if not, create doscstruct
+
+            if (pe == null) {
+                try {
+                    DocStruct ds = digitalDocument.createDocStruct(prefs.getDocStrctTypeByName("Chapter")); //TODO get type from config?
+                    ds.addReferenceTo(pageStruct, "logical_physical");
+                    pe = new PageElement(ds, pageStruct);
+                } catch (TypeNotAllowedForParentException e) {
+                    log.error(e);
+                }
+            }
+            pages.add(pe);
+        }
 
         return true;
     }
