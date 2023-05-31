@@ -1,5 +1,8 @@
 package de.intranda.goobi.plugins;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 /**
  * This file is part of a plugin for Goobi - a Workflow tool for the support of mass digitization.
  *
@@ -20,8 +23,10 @@ package de.intranda.goobi.plugins;
  */
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.configuration.SubnodeConfiguration;
+import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginReturnValue;
@@ -30,42 +35,48 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
 
 import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.helper.Helper;
+import de.sub.goobi.helper.StorageProvider;
+import de.sub.goobi.helper.exceptions.SwapException;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
+import ugh.dl.Fileformat;
+import ugh.exceptions.ReadException;
 
 @PluginImplementation
 @Log4j2
 public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
-    
+
+    private static final long serialVersionUID = -4190101017743019816L;
+
     @Getter
     private String title = "intranda_step_crownMetadata";
     @Getter
     private Step step;
-    @Getter
-    private String value;
-    @Getter 
-    private boolean allowTaskFinishButtons;
+
+    private Process process;
+
     private String returnPath;
+
+    @Getter
+    private List<Path> images = null;
+    @Getter
+    private Fileformat fileformat;
 
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
         this.step = step;
-                
+        process = step.getProzess();
         // read parameters from correct block in configuration file
         SubnodeConfiguration myconfig = ConfigPlugins.getProjectAndStepConfig(title, step);
-        value = myconfig.getString("value", "default value"); 
-        allowTaskFinishButtons = myconfig.getBoolean("allowTaskFinishButtons", false);
-        log.info("CrownMetadata step plugin initialized");
+
     }
 
     @Override
     public PluginGuiType getPluginGuiType() {
         return PluginGuiType.FULL;
-        // return PluginGuiType.PART;
-        // return PluginGuiType.PART_AND_FULL;
-        // return PluginGuiType.NONE;
     }
 
     @Override
@@ -87,7 +98,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     public String finish() {
         return "/uii" + returnPath;
     }
-    
+
     @Override
     public int getInterfaceVersion() {
         return 0;
@@ -95,24 +106,46 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
     @Override
     public HashMap<String, StepReturnValue> validate() {
-        return null;
+        return null; // NOSONAR
     }
-    
+
     @Override
     public boolean execute() {
-        PluginReturnValue ret = run();
-        return ret != PluginReturnValue.ERROR;
+
+        // get all images from media folder
+
+        try {
+            String folderName = process.getImagesTifDirectory(false);
+            images = StorageProvider.getInstance().listFiles(folderName);
+        } catch (IOException | SwapException e) {
+            log.error(e);
+        }
+        if (images == null || images.isEmpty()) {
+            // no images found, abort
+            Helper.setFehlerMeldung(""); // TODO
+            return false;
+        }
+
+        // open metadata file
+        try {
+            fileformat = process.readMetadataFile();
+        } catch (ReadException | IOException | SwapException e) {
+            log.error(e);
+            Helper.setFehlerMeldung(""); // TODO
+            return false;
+        }
+
+        // check if images are linked in metadata file
+
+        // if not, create pagination
+
+        // create ics urls for each image
+
+        return true;
     }
 
     @Override
     public PluginReturnValue run() {
-        boolean successful = true;
-        // your logic goes here
-        
-        log.info("CrownMetadata step plugin executed");
-        if (!successful) {
-            return PluginReturnValue.ERROR;
-        }
         return PluginReturnValue.FINISH;
     }
 }

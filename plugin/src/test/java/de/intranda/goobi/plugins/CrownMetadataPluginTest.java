@@ -2,6 +2,7 @@ package de.intranda.goobi.plugins;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.VariableReplacer;
 import de.sub.goobi.helper.enums.StepStatus;
 import de.sub.goobi.metadaten.MetadatenHelper;
@@ -41,7 +43,7 @@ import ugh.fileformats.mets.MetsMods;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ MetadatenHelper.class, VariableReplacer.class, ConfigurationHelper.class, ProcessManager.class,
-        MetadataManager.class })
+        MetadataManager.class, Helper.class })
 @PowerMockIgnore({ "javax.management.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.net.ssl.*", "jdk.internal.reflect.*" })
 public class CrownMetadataPluginTest {
 
@@ -83,9 +85,16 @@ public class CrownMetadataPluginTest {
     }
 
     @Test
-    public void testVersion() throws IOException {
-        String s = "xyz";
-        assertNotNull(s);
+    public void testOpenRecord() {
+
+        CrownMetadataStepPlugin plugin = new CrownMetadataStepPlugin();
+        plugin.initialize(step, "something");
+
+        assertTrue(plugin.execute());
+
+        assertEquals(4, plugin.getImages().size());
+        assertNotNull(plugin.getFileformat());
+
     }
 
     @Before
@@ -117,6 +126,16 @@ public class CrownMetadataPluginTest {
         EasyMock.expect(configurationHelper.getConfigurationFolder()).andReturn(resourcesFolder).anyTimes();
         EasyMock.expect(configurationHelper.getNumberOfMetaBackups()).andReturn(0).anyTimes();
         EasyMock.replay(configurationHelper);
+
+        PowerMock.mockStatic(Helper.class);
+        //        EasyMock.expect(Helper.getTranslation(EasyMock.anyString())).andReturn("").anyTimes();
+        //        EasyMock.expect(Helper.getMetadataLanguage()).andReturn("en").anyTimes();
+        //        EasyMock.expect(Helper.getLoginBean()).andReturn(null).anyTimes();
+        //        EasyMock.expect(Helper.getCurrentUser()).andReturn(null).anyTimes();
+        //        EasyMock.expect(Helper.getTranslation(EasyMock.anyString(), EasyMock.anyString(), EasyMock.anyString())).andReturn("").anyTimes();
+        Helper.setFehlerMeldung(EasyMock.anyString());
+
+        PowerMock.replay(Helper.class);
 
         PowerMock.mockStatic(VariableReplacer.class);
         EasyMock.expect(VariableReplacer.simpleReplace(EasyMock.anyString(), EasyMock.anyObject())).andReturn("00469418X_media").anyTimes();
@@ -195,6 +214,16 @@ public class CrownMetadataPluginTest {
         File mediaDirectory = new File(imageDirectory.getAbsolutePath(), "00469418X_media");
         mediaDirectory.mkdir();
 
-        // TODO add some file
+        // add some files
+        Path image1 = Paths.get(resourcesFolder, "00000001.tif");
+        Path image2 = Paths.get(resourcesFolder, "00000002.tif");
+        Path image3 = Paths.get(resourcesFolder, "00000003.tif");
+        Path image4 = Paths.get(resourcesFolder, "00000004.tif");
+
+        Files.copy(image1, Paths.get(mediaDirectory.getAbsolutePath(), "00000001.tif"));
+        Files.copy(image2, Paths.get(mediaDirectory.getAbsolutePath(), "00000002.tif"));
+        Files.copy(image3, Paths.get(mediaDirectory.getAbsolutePath(), "00000003.tif"));
+        Files.copy(image4, Paths.get(mediaDirectory.getAbsolutePath(), "00000004.tif"));
+
     }
 }
