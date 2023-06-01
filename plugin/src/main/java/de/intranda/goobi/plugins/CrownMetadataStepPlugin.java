@@ -2,6 +2,7 @@ package de.intranda.goobi.plugins;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -40,8 +41,10 @@ import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.StorageProvider;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
+import de.sub.goobi.metadaten.Image;
 import de.sub.goobi.metadaten.MetadatenImagesHelper;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import ugh.dl.DigitalDocument;
@@ -52,6 +55,7 @@ import ugh.dl.Reference;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
 import ugh.exceptions.TypeNotAllowedForParentException;
+import ugh.exceptions.UGHException;
 
 @PluginImplementation
 @Log4j2
@@ -69,12 +73,17 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     private String returnPath;
 
     @Getter
-    private List<Path> images = null;
+    private transient List<Path> images = null;
     @Getter
     private transient Fileformat fileformat;
-    private transient DigitalDocument digitalDocument;
 
     private Prefs prefs;
+
+    @Getter @Setter
+    private String imageUrl;
+
+    @Getter @Setter
+    private String imageName;
 
     @Getter
     private List<PageElement> pages = new ArrayList<>();
@@ -143,7 +152,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             Helper.setFehlerMeldung(""); // TODO
             return false;
         }
-
+        DigitalDocument digitalDocument;
         // open metadata file
         try {
             fileformat = process.readMetadataFile();
@@ -175,25 +184,33 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         // check if a logical docstruct exists for each image
         DocStruct physical = digitalDocument.getPhysicalDocStruct();
         for (DocStruct pageStruct : physical.getAllChildren()) {
-            PageElement pe = null;
-            for (Reference ref : pageStruct.getAllFromReferences()) {
-                // ignore reference is to logical topstruct
-                if (!ref.getSource().getType().isTopmost()) {
-                    pe = new PageElement(ref.getSource(), pageStruct);
+            Path imagePath = Paths.get(pageStruct.getImageName());
+            try {
+                Image image = new Image(process, folderName, imagePath.getFileName().toString(), 1, 200);
+                PageElement pe = null;
+                for (Reference ref : pageStruct.getAllFromReferences()) {
+                    // ignore reference is to logical topstruct
+                    if (!ref.getSource().getType().isTopmost()) {
+                        pe = new PageElement(ref.getSource(), pageStruct, image);
+                    }
                 }
-            }
-            // if not, create doscstruct
+                // if not, create doscstruct
 
-            if (pe == null) {
-                try {
-                    DocStruct ds = digitalDocument.createDocStruct(prefs.getDocStrctTypeByName("Chapter")); //TODO get type from config?
-                    ds.addReferenceTo(pageStruct, "logical_physical");
-                    pe = new PageElement(ds, pageStruct);
-                } catch (TypeNotAllowedForParentException e) {
-                    log.error(e);
+                if (pe == null) {
+                    try {
+                        //TODO get type from config?
+                        DocStruct ds = digitalDocument.createDocStruct(prefs.getDocStrctTypeByName("Chapter"));
+                        ds.addReferenceTo(pageStruct, "logical_physical");
+                        pe = new PageElement(ds, pageStruct, image);
+                        logical.addChild(ds);
+                    } catch (UGHException e) {
+                        log.error(e);
+                    }
                 }
+                pages.add(pe);
+            } catch (IOException | SwapException | DAOException e) {
+                log.error(e);
             }
-            pages.add(pe);
         }
 
         return true;

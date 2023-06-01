@@ -18,9 +18,9 @@ public class PageElement {
 
     private List<Metadata> metadata;
 
-    public PageElement(DocStruct docstruct, DocStruct page) {
+    public PageElement(DocStruct docstruct, DocStruct page, Image image) {
         this.docstruct = docstruct;
         this.page = page;
+        this.image = image;
     }
-
 }
