@@ -1,12 +1,12 @@
 package de.intranda.goobi.plugins;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.sub.goobi.metadaten.Image;
 import lombok.Getter;
 import lombok.Setter;
 import ugh.dl.DocStruct;
-import ugh.dl.Metadata;
 
 @Getter
 public class PageElement {
@@ -17,7 +17,7 @@ public class PageElement {
 
     private DocStruct page;
 
-    private List<Metadata> metadata;
+    private List<PageMetadataField> metadata = new ArrayList<>();
 
     @Setter
     private int rating = 0;

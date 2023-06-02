@@ -6,16 +6,28 @@
           3.) project name matches and step name is *
           4.) project name and step name are *
 	-->
-    
+
     <config>
         <!-- which projects to use for (can be more then one, otherwise use *) -->
         <project>*</project>
         <step>*</step>
-        
-        <!-- sample parameter -->
-        <value>test</value>
-        <!-- display button to finish the task directly from within the entered plugin -->
-        <allowTaskFinishButtons>true</allowTaskFinishButtons>
+
+        <field label="Title" metadataField="TitleDocMain" repeatable="false" displayType="input"
+            defaultValue=" - bitte eintragen - " required="true" validation="\w+"></field>
+        <field label="Schlagwort" metadataField="Keyowrd" repeatable="true" displayType="selection"
+            defaultValue="" required="false"></field>
+
+        <field label="Beschreibung" metadataField="Abstract" repeatable="false"
+            displayType="textarea"
+            defaultValue="" required="false" validation=""></field>
+
+        <field label="Schlagwort" metadataField="Keyowrd" repeatable="true" displayType="selection"
+            defaultValue="" required="false"></field>
+            
+        <field label="Klassifikation" metadataField="Classification" repeatable="false"
+            displayType="selection"
+            defaultValue="" required="true"></field>
+
     </config>
 
 </config_plugin>

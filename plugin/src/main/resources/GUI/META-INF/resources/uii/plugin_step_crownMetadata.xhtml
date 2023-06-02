@@ -300,15 +300,19 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
                             </div>
 
                             <!-- right side, 70% -->
                             <div>
                                 <!-- metadata list -->
-                                metadata list
+
+                                <ui:repeat
+                                    var="field"
+                                    value="#{page.metadata}">
+                                    <h:outputText value="#{field.label}" />
+                                    <br />
+                                </ui:repeat>
+
                             </div>
                         </div>
                         <br />
@@ -320,7 +324,7 @@
 
 
                 <div class="form-actions">
-                    <!-- TODO save only -->
+                    <!-- TODO button to save only -->
 
                     <!-- Save and finish the task -->
                     <button

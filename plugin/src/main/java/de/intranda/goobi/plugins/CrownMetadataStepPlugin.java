@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
@@ -50,8 +51,10 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
 import ugh.dl.Fileformat;
+import ugh.dl.Metadata;
 import ugh.dl.Prefs;
 import ugh.dl.Reference;
+import ugh.exceptions.MetadataTypeNotAllowedException;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
 import ugh.exceptions.TypeNotAllowedForParentException;
@@ -90,6 +93,8 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     @Getter
     private List<PageElement> pages = new ArrayList<>();
 
+    private List<PageMetadataField> configuredFields = new ArrayList<>();
+
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -99,6 +104,19 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         // read parameters from correct block in configuration file
         SubnodeConfiguration myconfig = ConfigPlugins.getProjectAndStepConfig(title, step);
+
+        for (HierarchicalConfiguration hc : myconfig.configurationsAt("/field")) {
+            PageMetadataField field = new PageMetadataField();
+            field.setLabel(hc.getString("@label"));
+            field.setMetadataField(hc.getString("@metadataField"));
+            field.setRepeatable(hc.getBoolean("@repeatable", false));
+            field.setDisplayType(hc.getString("@displayType", "input"));
+            field.setDefaultValue(hc.getString("@defaultValue", ""));
+            field.setRequired(hc.getBoolean("@required", false));
+            field.setValidation(hc.getString("@validation", ""));
+
+            configuredFields.add(field);
+        }
 
     }
 
@@ -198,10 +216,9 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                     }
                 }
                 // if not, create doscstruct
-
                 if (pe == null) {
                     try {
-                        //TODO get type from config?
+                        //TODO get type from config
                         DocStruct ds = digitalDocument.createDocStruct(prefs.getDocStrctTypeByName("Chapter"));
                         ds.addReferenceTo(pageStruct, "logical_physical");
                         pe = new PageElement(ds, pageStruct, image, order);
@@ -211,6 +228,36 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                     }
                 }
                 order++;
+
+                // for each configured metadata field
+                for (PageMetadataField configuredField : configuredFields) {
+                    PageMetadataField field = new PageMetadataField(configuredField);
+                    pe.getMetadata().add(field);
+                    if (pe.getDocstruct().getAllMetadata() != null) {
+                        for (Metadata md : pe.getDocstruct().getAllMetadata()) {
+                            if (md.getType().getName().equals(field.getMetadataField())) {
+                                field.addValue(new PageMetadataValue(md));
+                            }
+                        }
+                    }
+
+                    if (field.getValues().isEmpty()) {
+                        // new metadata
+                        // default value
+                        try {
+                            Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
+                            md.setValue(field.getDefaultValue());
+                            pe.getDocstruct().addMetadata(md);
+                            field.addValue(new PageMetadataValue(md));
+                        } catch (MetadataTypeNotAllowedException e) {
+                            log.error(e);
+                        }
+
+                    }
+                }
+
+                // create field, find metadata value from docstruct or create new metadata
+
                 pages.add(pe);
             } catch (IOException | SwapException | DAOException e) {
                 log.error(e);
