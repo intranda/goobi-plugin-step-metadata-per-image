@@ -320,26 +320,28 @@
 
 
                 <div class="form-actions">
+                    <!-- TODO save only -->
+
                     <!-- Save and finish the task -->
                     <button
-                        class="btn btn-success"
+                        class="btn btn-success me-2"
                         jsf:id="finishAndClose"
                         jsf:rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
                         jsf:action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}">
-                        <i class="fa fa-check"></i>
-                        <h:outputText value="#{msgs.task_leavePluginAndFinishTask}" />
+                        <i class="fa fa-check"></i> <span> <h:outputText value="#{msgs.task_leavePluginAndFinishTask}" />
+                        </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
                             value="#{false}" />
                     </button>
 
-                    <!-- Save -->
+                    <!-- leave -->
                     <button
-                        class="btn btn-success"
+                        class="btn btn-blank me-2"
                         jsf:id="absenden"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <i class="fa fa-close"></i>
-                        <h:outputText value="#{msgs.pluginLeave}" />
+                        <i class="fa fa-close"></i> <span> <h:outputText value="#{msgs.pluginLeave}" />
+                        </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
                             value="#{false}" />
