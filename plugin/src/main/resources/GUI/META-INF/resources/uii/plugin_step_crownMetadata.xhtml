@@ -156,6 +156,8 @@
 
                 <div class="p-4">
 
+                    <!-- TODO area for main metadata, maybe toggle it for max screen height usage  -->
+
 
                     <ui:repeat
                         var="page"
@@ -309,11 +311,39 @@
                                 metadata list
                             </div>
                         </div>
-<br/>
+                        <br />
                         <hr />
                     </ui:repeat>
 
 
+                </div>
+
+
+                <div class="form-actions">
+                    <!-- Save and finish the task -->
+                    <button
+                        class="btn btn-success"
+                        jsf:id="finishAndClose"
+                        jsf:rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
+                        jsf:action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}">
+                        <i class="fa fa-check"></i>
+                        <h:outputText value="#{msgs.task_leavePluginAndFinishTask}" />
+                        <x:updateActionListener
+                            property="#{NavigationForm.uiStatus.pluginSimulation}"
+                            value="#{false}" />
+                    </button>
+
+                    <!-- Save -->
+                    <button
+                        class="btn btn-success"
+                        jsf:id="absenden"
+                        jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
+                        <i class="fa fa-close"></i>
+                        <h:outputText value="#{msgs.pluginLeave}" />
+                        <x:updateActionListener
+                            property="#{NavigationForm.uiStatus.pluginSimulation}"
+                            value="#{false}" />
+                    </button>
                 </div>
 
             </intranda:box>
