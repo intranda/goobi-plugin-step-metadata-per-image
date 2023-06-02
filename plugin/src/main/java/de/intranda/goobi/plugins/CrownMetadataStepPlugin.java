@@ -79,10 +79,12 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
     private Prefs prefs;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String imageUrl;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String imageName;
 
     @Getter
@@ -186,7 +188,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         for (DocStruct pageStruct : physical.getAllChildren()) {
             Path imagePath = Paths.get(pageStruct.getImageName());
             try {
-                Image image = new Image(process, folderName, imagePath.getFileName().toString(), 1, 200);
+                Image image = new Image(process, folderName, imagePath.getFileName().toString(), 1, 400);
                 PageElement pe = null;
                 for (Reference ref : pageStruct.getAllFromReferences()) {
                     // ignore reference is to logical topstruct

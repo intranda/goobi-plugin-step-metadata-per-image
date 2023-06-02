@@ -73,9 +73,30 @@
 
         <style>
 .grid {
-    display: grid;
-    grid-template-columns: 30% auto;
-    grid-template-rows: auto;
+	display: grid;
+	grid-template-columns: 30% auto;
+	grid-template-rows: auto;
+}
+
+.star {
+	display: block;
+	float: left;
+}
+
+.star i {
+	color: #ccc;
+}
+
+.star .active {
+	color: #368ee0;
+}
+
+.btn--icon {
+	text-decoration: none;
+	padding: 0;
+	line-height: inherit;
+	border: none;
+	background: none;
 }
 </style>
 
@@ -140,14 +161,16 @@
                                         <div
                                             class="goobi-thumbnail"
                                             dir="auto">
+                                            <!-- image -->
                                             <div
                                                 class="goobi-thumbnail-image"
-                                                style="height: 200px; max-width: 200px">
+                                                style="height: 404px; max-width: 400px">
 
                                                 <div
                                                     class="thumb"
-                                                    style="max-height: 200px;">
+                                                    style="max-height: 404px;">
                                                     <button
+                                                        style="padding: 0;"
                                                         title="#{page.image.tooltip}"
                                                         class="colorbox-image"
                                                         data-toggle="tooltip"
@@ -156,7 +179,7 @@
                                                         jsf:onclick="$('#imageBox').modal('show');">
                                                         <canvas
                                                             class="thumb-canvas"
-                                                            style="max-height: 200px;"
+                                                            style="max-height: 400px;"
                                                             data-image_small="#{page.image.thumbnailUrl}"
                                                             data-image_large="#{page.image.largeThumbnailUrl}"
                                                             title="#{page.image.tooltip}"
@@ -174,18 +197,112 @@
                                                 </div>
 
                                             </div>
+
+                                            <!-- image name -->
+                                            <div class="row">
+                                                <div class="col-sm-5">
+                                                    <h:outputText value="#{page.image.imageName}" />
+                                                </div>
+                                                <!-- rating -->
+                                                <h:form>
+                                                    <div
+                                                        class="col-sm-7"
+                                                        jsf:id="rating">
+                                                        <ul>
+                                                            <li class="star">
+                                                                <button
+                                                                    class="btn btn--icon"
+                                                                    jsf:id="rating1">
+                                                                    <f:ajax
+                                                                        execute="@this"
+                                                                        render="rating" />
+                                                                    <f:setPropertyActionListener
+                                                                        value="1"
+                                                                        target="#{page.rating}" />
+                                                                    <i
+                                                                        class="fa fa-star #{page.rating > 0 ? 'active' : ''}"
+                                                                        aria-hidden="true"></i>
+                                                                </button>
+                                                            </li>
+                                                            <li class="star">
+                                                                <button
+                                                                    class="btn btn--icon"
+                                                                    jsf:id="rating2">
+                                                                    <f:ajax
+                                                                        execute="@this"
+                                                                        render="rating" />
+                                                                    <f:setPropertyActionListener
+                                                                        value="2"
+                                                                        target="#{page.rating}" />
+                                                                    <i
+                                                                        class="fa fa-star #{page.rating > 1 ? 'active' : ''}"
+                                                                        aria-hidden="true"></i>
+
+                                                                </button>
+                                                            </li>
+                                                            <li class="star">
+
+                                                                <button
+                                                                    class="btn btn--icon"
+                                                                    jsf:id="rating3">
+                                                                    <f:ajax
+                                                                        execute="@this"
+                                                                        render="rating" />
+                                                                    <f:setPropertyActionListener
+                                                                        value="3"
+                                                                        target="#{page.rating}" />
+                                                                    <i
+                                                                        class="fa fa-star #{page.rating > 2 ? 'active' : ''}"
+                                                                        aria-hidden="true"></i>
+                                                                </button>
+                                                            </li>
+                                                            <li class="star">
+
+                                                                <button
+                                                                    class="btn btn--icon"
+                                                                    jsf:id="rating4">
+                                                                    <f:ajax
+                                                                        execute="@this"
+                                                                        render="rating" />
+                                                                    <f:setPropertyActionListener
+                                                                        value="4"
+                                                                        target="#{page.rating}" />
+                                                                    <i
+                                                                        class="fa fa-star #{page.rating > 3 ? 'active' : ''}"
+                                                                        aria-hidden="true"></i>
+                                                                </button>
+                                                            </li>
+                                                            <li class="star">
+
+
+                                                                <button
+                                                                    class="btn btn--icon"
+                                                                    jsf:id="rating5">
+                                                                    <f:ajax
+                                                                        execute="@this"
+                                                                        render="rating" />
+                                                                    <f:setPropertyActionListener
+                                                                        value="5"
+                                                                        target="#{page.rating}" />
+                                                                    <i
+                                                                        class="fa fa-star #{page.rating == 5 ? 'active' : ''}"
+                                                                        aria-hidden="true"></i>
+                                                                </button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </h:form>
+                                            </div>
                                         </div>
-                                        <!-- image -->
 
-                                        <!-- image name -->
 
-                                        <!-- rating -->
+
                                     </div>
 
                                     <!-- right side, 70% -->
                                     <div>
                                         <!-- metadata list -->
-                                        metadata
+                                        metadata list
                                     </div>
                                 </div>
                                 <hr />
@@ -255,8 +372,7 @@
                                     class="close"
                                     data-dismiss="modal"
                                     aria-label="Close">
-                                    <span aria-hidden="true">
-                                        <h:outputText
+                                    <span aria-hidden="true"> <h:outputText
                                             value="&amp;times;"
                                             escape="false" />
                                     </span>
@@ -271,7 +387,7 @@
                 </div>
             </div>
         </h:panelGroup>
-        
+
     </ui:define>
 
 </ui:composition>
