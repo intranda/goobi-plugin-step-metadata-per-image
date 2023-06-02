@@ -22,9 +22,12 @@ public class PageElement {
     @Setter
     private int rating = 0;
 
-    public PageElement(DocStruct docstruct, DocStruct page, Image image) {
+    private int order = 0;
+
+    public PageElement(DocStruct docstruct, DocStruct page, Image image, int order) {
         this.docstruct = docstruct;
         this.page = page;
         this.image = image;
+        this.order = order;
     }
 }

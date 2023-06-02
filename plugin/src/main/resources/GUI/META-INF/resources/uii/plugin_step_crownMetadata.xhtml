@@ -24,10 +24,10 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:o="http://omnifaces.org/ui"
     xmlns:of="http://omnifaces.org/functions"
-    template="/uii/template/template.html"
+    template="/uii/templatePG/templatePG.html"
     xmlns:x="http://myfaces.apache.org/tomahawk"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
-    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG">
 
     <ui:param
         name="myPageTitle"
@@ -69,12 +69,12 @@
     </ui:define>
 
     <ui:define name="content">
-        <script src="template/js/intranda.js?v=1.2"></script>
+
 
         <style>
 .grid {
 	display: grid;
-	grid-template-columns: 30% auto;
+	grid-template-columns: 25% auto;
 	grid-template-rows: auto;
 }
 
@@ -98,30 +98,40 @@
 	border: none;
 	background: none;
 }
+
+.label-grid {
+	display: grid;
+	grid-template-columns: 40% auto;
+	grid-template-rows: auto;
+}
 </style>
 
 
         <h:form id="myform">
-            <div class="box box-color lightgrey box-bordered">
-                <div class="box-title">
-                    <h3>
-                        <i class="fa fa-puzzle-piece" />
-                        <h:outputText
-                            id="id9a"
-                            value="#{AktuelleSchritteForm.myPlugin.step.titel}" />
-                    </h3>
-                    <div class="actions">
+
+            <intranda:box
+                boxType="primary"
+                boxTitle="false"
+                boxForm="false">
+
+                <intranda:boxTitle
+                    title="#{AktuelleSchritteForm.myPlugin.step.titel}"
+                    icon="fa-puzzle-piece">
+
+                    <div class="actions d-flex">
+
+
                         <h:commandLink
                             id="id10"
                             action="#{NavigationForm.Reload}"
-                            styleClass="btn btn-mini">
+                            styleClass="btn d-flex align-items-center btn--title-action">
                             <i class="fa fa-refresh" />
                         </h:commandLink>
                         <!-- TODO save button -->
                         <h:commandLink
                             id="id11"
                             action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}"
-                            styleClass="btn btn-mini"
+                            styleClass="btn d-flex align-items-center btn--title-action"
                             rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
                             title="#{msgs.task_leavePluginAndFinishTask}">
                             <i class="fa fa-check" />
@@ -133,7 +143,7 @@
                         <h:commandLink
                             id="id12"
                             action="#{AktuelleSchritteForm.myPlugin.cancel}"
-                            styleClass="btn btn-mini"
+                            styleClass="btn d-flex align-items-center btn--title-action"
                             rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
                             title="#{msgs.pluginLeave}">
                             <i class="fa fa-close" />
@@ -142,251 +152,242 @@
                                 value="#{false}" />
                         </h:commandLink>
                     </div>
-                </div>
+                </intranda:boxTitle>
 
-                <div class="box-content">
+                <div class="p-4">
 
 
-                    <h:panelGroup
-                        id="actionform"
-                        styleClass="col-sm-12">
-                        <div class="row">
-                            <ui:repeat
-                                var="page"
-                                value="#{AktuelleSchritteForm.myPlugin.pages}">
-                                <div class="grid">
-                                    <!-- left side, 30% -->
-                                    <div>
-                                        <!-- image area -->
+                    <ui:repeat
+                        var="page"
+                        value="#{AktuelleSchritteForm.myPlugin.pages}">
+                        <div class="grid">
+                            <!-- left side, 30% -->
+                            <div>
+                                <!-- image area -->
+                                <div
+                                    class="goobi-thumbnail"
+                                    dir="auto">
+                                    <!-- image -->
+                                    <div
+                                        class="goobi-thumbnail-image"
+                                        style="height: 404px; max-width: 400px">
+
                                         <div
-                                            class="goobi-thumbnail"
-                                            dir="auto">
-                                            <!-- image -->
-                                            <div
-                                                class="goobi-thumbnail-image"
-                                                style="height: 404px; max-width: 400px">
-
-                                                <div
-                                                    class="thumb"
-                                                    style="max-height: 404px;">
-                                                    <button
-                                                        style="padding: 0;"
-                                                        title="#{page.image.tooltip}"
-                                                        class="colorbox-image"
-                                                        data-toggle="tooltip"
-                                                        href="#{page.image.bookmarkUrl}"
-                                                        jsf:id="showBookmark1"
-                                                        jsf:onclick="$('#imageBox').modal('show');">
-                                                        <canvas
-                                                            class="thumb-canvas"
-                                                            style="max-height: 400px;"
-                                                            data-image_small="#{page.image.thumbnailUrl}"
-                                                            data-image_large="#{page.image.largeThumbnailUrl}"
-                                                            title="#{page.image.tooltip}"
-                                                            id="thumbnail1"></canvas>
-                                                        <f:setPropertyActionListener
-                                                            value="#{page.image.largeThumbnailUrl}"
-                                                            target="#{AktuelleSchritteForm.myPlugin.imageUrl}" />
-                                                        <f:setPropertyActionListener
-                                                            value="#{page.image.tooltip}"
-                                                            target="#{AktuelleSchritteForm.myPlugin.imageName}" />
-                                                        <f:ajax
-                                                            execute="@this"
-                                                            render="imageBoxContent" />
-                                                    </button>
-                                                </div>
-
-                                            </div>
-
-                                            <!-- image name -->
-                                            <div class="row">
-                                                <div class="col-sm-5">
-                                                    <h:outputText value="#{page.image.imageName}" />
-                                                </div>
-                                                <!-- rating -->
-                                                <h:form>
-                                                    <div
-                                                        class="col-sm-7"
-                                                        jsf:id="rating">
-                                                        <ul>
-                                                            <li class="star">
-                                                                <button
-                                                                    class="btn btn--icon"
-                                                                    jsf:id="rating1">
-                                                                    <f:ajax
-                                                                        execute="@this"
-                                                                        render="rating" />
-                                                                    <f:setPropertyActionListener
-                                                                        value="1"
-                                                                        target="#{page.rating}" />
-                                                                    <i
-                                                                        class="fa fa-star #{page.rating > 0 ? 'active' : ''}"
-                                                                        aria-hidden="true"></i>
-                                                                </button>
-                                                            </li>
-                                                            <li class="star">
-                                                                <button
-                                                                    class="btn btn--icon"
-                                                                    jsf:id="rating2">
-                                                                    <f:ajax
-                                                                        execute="@this"
-                                                                        render="rating" />
-                                                                    <f:setPropertyActionListener
-                                                                        value="2"
-                                                                        target="#{page.rating}" />
-                                                                    <i
-                                                                        class="fa fa-star #{page.rating > 1 ? 'active' : ''}"
-                                                                        aria-hidden="true"></i>
-
-                                                                </button>
-                                                            </li>
-                                                            <li class="star">
-
-                                                                <button
-                                                                    class="btn btn--icon"
-                                                                    jsf:id="rating3">
-                                                                    <f:ajax
-                                                                        execute="@this"
-                                                                        render="rating" />
-                                                                    <f:setPropertyActionListener
-                                                                        value="3"
-                                                                        target="#{page.rating}" />
-                                                                    <i
-                                                                        class="fa fa-star #{page.rating > 2 ? 'active' : ''}"
-                                                                        aria-hidden="true"></i>
-                                                                </button>
-                                                            </li>
-                                                            <li class="star">
-
-                                                                <button
-                                                                    class="btn btn--icon"
-                                                                    jsf:id="rating4">
-                                                                    <f:ajax
-                                                                        execute="@this"
-                                                                        render="rating" />
-                                                                    <f:setPropertyActionListener
-                                                                        value="4"
-                                                                        target="#{page.rating}" />
-                                                                    <i
-                                                                        class="fa fa-star #{page.rating > 3 ? 'active' : ''}"
-                                                                        aria-hidden="true"></i>
-                                                                </button>
-                                                            </li>
-                                                            <li class="star">
+                                            class="thumb"
+                                            style="max-height: 404px;">
 
 
-                                                                <button
-                                                                    class="btn btn--icon"
-                                                                    jsf:id="rating5">
-                                                                    <f:ajax
-                                                                        execute="@this"
-                                                                        render="rating" />
-                                                                    <f:setPropertyActionListener
-                                                                        value="5"
-                                                                        target="#{page.rating}" />
-                                                                    <i
-                                                                        class="fa fa-star #{page.rating == 5 ? 'active' : ''}"
-                                                                        aria-hidden="true"></i>
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </h:form>
-                                            </div>
+                                            <button
+                                                style="padding: 0;"
+                                                title="#{page.image.tooltip}"
+                                                class="colorbox-image"
+                                                data-toggle="tooltip"
+                                                href="#{page.image.bookmarkUrl}"
+                                                jsf:id="showBookmark1"
+                                                jsf:onclick="$('#imageBox').modal('show');">
+                                                <canvas
+                                                    class="thumb-canvas"
+                                                    style="max-height: 400px;"
+                                                    data-image_small="#{page.image.thumbnailUrl}"
+                                                    data-image_large="#{page.image.largeThumbnailUrl}"
+                                                    title="#{page.image.tooltip}"
+                                                    id="thumbnail1"></canvas>
+                                                <f:setPropertyActionListener
+                                                    value="#{page.image.largeThumbnailUrl}"
+                                                    target="#{AktuelleSchritteForm.myPlugin.imageUrl}" />
+                                                <f:setPropertyActionListener
+                                                    value="#{page.image.tooltip}"
+                                                    target="#{AktuelleSchritteForm.myPlugin.imageName}" />
+                                                <f:ajax
+                                                    execute="@this"
+                                                    render="imageBoxContent" />
+                                            </button>
                                         </div>
 
 
 
-                                    </div>
+                                        <!-- image name -->
+                                        <div class="label-grid">
+                                            <div>
+                                                <h:outputText value="#{page.image.imageName}" />
+                                            </div>
+                                            <!-- rating -->
 
-                                    <!-- right side, 70% -->
-                                    <div>
-                                        <!-- metadata list -->
-                                        metadata list
+                                            <div jsf:id="rating">
+                                                <ul>
+                                                    <li class="star">
+                                                        <button
+                                                            class="btn btn--icon"
+                                                            jsf:id="rating1">
+                                                            <f:ajax
+                                                                execute="@this"
+                                                                render="rating" />
+                                                            <f:setPropertyActionListener
+                                                                value="1"
+                                                                target="#{page.rating}" />
+                                                            <i
+                                                                class="fa fa-star #{page.rating > 0 ? 'active' : ''}"
+                                                                aria-hidden="true"></i>
+                                                        </button>
+                                                    </li>
+                                                    <li class="star">
+                                                        <button
+                                                            class="btn btn--icon"
+                                                            jsf:id="rating2">
+                                                            <f:ajax
+                                                                execute="@this"
+                                                                render="rating" />
+                                                            <f:setPropertyActionListener
+                                                                value="2"
+                                                                target="#{page.rating}" />
+                                                            <i
+                                                                class="fa fa-star #{page.rating > 1 ? 'active' : ''}"
+                                                                aria-hidden="true"></i>
+
+                                                        </button>
+                                                    </li>
+                                                    <li class="star">
+
+                                                        <button
+                                                            class="btn btn--icon"
+                                                            jsf:id="rating3">
+                                                            <f:ajax
+                                                                execute="@this"
+                                                                render="rating" />
+                                                            <f:setPropertyActionListener
+                                                                value="3"
+                                                                target="#{page.rating}" />
+                                                            <i
+                                                                class="fa fa-star #{page.rating > 2 ? 'active' : ''}"
+                                                                aria-hidden="true"></i>
+                                                        </button>
+                                                    </li>
+                                                    <li class="star">
+
+                                                        <button
+                                                            class="btn btn--icon"
+                                                            jsf:id="rating4">
+                                                            <f:ajax
+                                                                execute="@this"
+                                                                render="rating" />
+                                                            <f:setPropertyActionListener
+                                                                value="4"
+                                                                target="#{page.rating}" />
+                                                            <i
+                                                                class="fa fa-star #{page.rating > 3 ? 'active' : ''}"
+                                                                aria-hidden="true"></i>
+                                                        </button>
+                                                    </li>
+                                                    <li class="star">
+                                                        <button
+                                                            class="btn btn--icon"
+                                                            jsf:id="rating5">
+                                                            <f:ajax
+                                                                execute="@this"
+                                                                render="rating" />
+                                                            <f:setPropertyActionListener
+                                                                value="5"
+                                                                target="#{page.rating}" />
+                                                            <i
+                                                                class="fa fa-star #{page.rating == 5 ? 'active' : ''}"
+                                                                aria-hidden="true"></i>
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <hr />
-                            </ui:repeat>
+
+
+
+                            </div>
+
+                            <!-- right side, 70% -->
+                            <div>
+                                <!-- metadata list -->
+                                metadata list
+                            </div>
                         </div>
-                    </h:panelGroup>
+<br/>
+                        <hr />
+                    </ui:repeat>
+
 
                 </div>
 
-                <div class="form-actions">
+            </intranda:box>
+            <h:panelGroup
+                styleClass="modal"
+                layout="block"
+                id="imageBox"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="imageBox"
+                aria-hidden="true">
 
-                    <!-- Save and finish the task -->
-                    <h:commandLink
-                        styleClass="btn btn-green font-size-s"
-                        id="finishAndClose"
-                        rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
-                        action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}">
-                        <i class="fa fa-check margin-right-5"></i>
-                        <h:outputText value="#{msgs.task_leavePluginAndFinishTask}" />
-                        <x:updateActionListener
-                            property="#{NavigationForm.uiStatus.pluginSimulation}"
-                            value="#{false}" />
-                    </h:commandLink>
-
-                    <!-- Save -->
-                    <h:commandLink
-                        styleClass="btn btn-lightgrey pull-right font-size-s"
-                        id="absenden"
-                        action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <i class="fa fa-close margin-right-5"></i>
-                        <h:outputText value="#{msgs.pluginLeave}" />
-                        <x:updateActionListener
-                            property="#{NavigationForm.uiStatus.pluginSimulation}"
-                            value="#{false}" />
-                    </h:commandLink>
-
+                <div class="modal-content-wrapper">
+                    <div
+                        class="modal-dialog"
+                        role="document">
+                        <h:panelGroup
+                            styleClass="modal-content"
+                            layout="block"
+                            id="imageBoxContent">
+                            <h:form
+                                styleClass="form-horizontal"
+                                prependId="false">
+                                <div class="modal-header">
+                                    <button
+                                        type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close">
+                                        <span aria-hidden="true"> <h:outputText
+                                                value="&amp;times;"
+                                                escape="false" />
+                                        </span>
+                                    </button>
+                                    <h4
+                                        class="modal-title"
+                                        style="width: 90%">#{AktuelleSchritteForm.myPlugin.imageName}</h4>
+                                </div>
+                                <img src="#{AktuelleSchritteForm.myPlugin.imageUrl}" />
+                            </h:form>
+                        </h:panelGroup>
+                    </div>
                 </div>
-
-            </div>
-
+            </h:panelGroup>
         </h:form>
 
 
-        <h:panelGroup
-            styleClass="modal"
-            layout="block"
-            id="imageBox"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="imageBox"
-            aria-hidden="true">
 
-            <div class="modal-content-wrapper">
-                <div
-                    class="modal-dialog"
-                    role="document">
-                    <h:panelGroup
-                        styleClass="modal-content"
-                        layout="block"
-                        id="imageBoxContent">
-                        <h:form
-                            styleClass="form-horizontal"
-                            prependId="false">
-                            <div class="modal-header">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    data-dismiss="modal"
-                                    aria-label="Close">
-                                    <span aria-hidden="true"> <h:outputText
-                                            value="&amp;times;"
-                                            escape="false" />
-                                    </span>
-                                </button>
-                                <h4
-                                    class="modal-title"
-                                    style="width: 90%">#{AktuelleSchritteForm.myPlugin.imageName}</h4>
-                            </div>
-                            <img src="#{AktuelleSchritteForm.myPlugin.imageUrl}" />
-                        </h:form>
-                    </h:panelGroup>
-                </div>
-            </div>
-        </h:panelGroup>
+        <script type="text/javascript">
+									window.onload = function() {
+										loadImages();
+									}
+
+									jsf.ajax.addOnEvent(function(data) {
+										var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
+
+										switch (ajaxstatus) {
+										case "begin": // This is called right before ajax request is been sent.
+
+											break;
+
+										case "complete": // This is called right after ajax response is received.
+
+											break;
+
+										case "success": // This is called when ajax response is successfully processed.
+
+											loadImages();
+
+											break;
+										}
+									});
+								</script>
+
 
     </ui:define>
 

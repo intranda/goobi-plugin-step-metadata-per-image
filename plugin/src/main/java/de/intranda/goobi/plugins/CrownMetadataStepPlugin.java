@@ -185,6 +185,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         // check if a logical docstruct exists for each image
         DocStruct physical = digitalDocument.getPhysicalDocStruct();
+        int order = 0;
         for (DocStruct pageStruct : physical.getAllChildren()) {
             Path imagePath = Paths.get(pageStruct.getImageName());
             try {
@@ -193,7 +194,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                 for (Reference ref : pageStruct.getAllFromReferences()) {
                     // ignore reference is to logical topstruct
                     if (!ref.getSource().getType().isTopmost()) {
-                        pe = new PageElement(ref.getSource(), pageStruct, image);
+                        pe = new PageElement(ref.getSource(), pageStruct, image, order);
                     }
                 }
                 // if not, create doscstruct
@@ -203,12 +204,13 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                         //TODO get type from config?
                         DocStruct ds = digitalDocument.createDocStruct(prefs.getDocStrctTypeByName("Chapter"));
                         ds.addReferenceTo(pageStruct, "logical_physical");
-                        pe = new PageElement(ds, pageStruct, image);
+                        pe = new PageElement(ds, pageStruct, image, order);
                         logical.addChild(ds);
                     } catch (UGHException e) {
                         log.error(e);
                     }
                 }
+                order++;
                 pages.add(pe);
             } catch (IOException | SwapException | DAOException e) {
                 log.error(e);
