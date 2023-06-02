@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
 import org.easymock.EasyMock;
 import org.goobi.beans.Process;
 import org.goobi.beans.Project;
@@ -31,6 +35,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.forms.HelperForm;
+import de.sub.goobi.helper.FacesContextHelper;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.VariableReplacer;
 import de.sub.goobi.helper.enums.StepStatus;
@@ -43,7 +49,7 @@ import ugh.fileformats.mets.MetsMods;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ MetadatenHelper.class, VariableReplacer.class, ConfigurationHelper.class, ProcessManager.class,
-        MetadataManager.class, Helper.class })
+        MetadataManager.class, Helper.class, HelperForm.class })
 @PowerMockIgnore({ "javax.management.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.net.ssl.*", "jdk.internal.reflect.*" })
 public class CrownMetadataPluginTest {
 
@@ -139,6 +145,21 @@ public class CrownMetadataPluginTest {
         Helper.setFehlerMeldung(EasyMock.anyString());
 
         PowerMock.replay(Helper.class);
+
+        FacesContext facesContext = EasyMock.createMock(FacesContext.class);
+        ExternalContext externalContext = EasyMock.createMock(ExternalContext.class);
+        HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
+        FacesContextHelper.setFacesContext(facesContext);
+        EasyMock.expect(facesContext.getExternalContext()).andReturn(externalContext).anyTimes();
+        EasyMock.expect(externalContext.getRequest()).andReturn(request).anyTimes();
+        EasyMock.expect(request.getScheme()).andReturn("http://").anyTimes();
+
+        EasyMock.expect(request.getServerName()).andReturn("example.com").anyTimes();
+        EasyMock.expect(request.getServerPort()).andReturn(80).anyTimes();
+        EasyMock.expect(request.getContextPath()).andReturn("goobi").anyTimes();
+        EasyMock.replay(request);
+        EasyMock.replay(externalContext);
+        EasyMock.replay(facesContext);
 
         PowerMock.mockStatic(VariableReplacer.class);
         EasyMock.expect(VariableReplacer.simpleReplace(EasyMock.anyString(), EasyMock.anyObject())).andReturn("00469418X_media").anyTimes();
