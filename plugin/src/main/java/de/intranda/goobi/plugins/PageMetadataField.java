@@ -20,6 +20,7 @@ public class PageMetadataField {
     private boolean required;
     private String validation;
     private boolean readonly;
+    private String validationErrorMessage;
 
     public PageMetadataField() {
 
@@ -33,6 +34,8 @@ public class PageMetadataField {
         defaultValue = other.getDefaultValue();
         required = other.isRequired();
         validation = other.getValidation();
+        readonly = other.isReadonly();
+        validationErrorMessage = other.getValidationErrorMessage();
     }
 
     public void addValue(PageMetadataValue value) {

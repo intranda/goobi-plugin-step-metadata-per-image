@@ -312,10 +312,10 @@
                                 <ui:repeat
                                     var="field"
                                     value="#{page.metadata}">
-                                    <ui:fragment rendered="#{field.displayType=='input'}">
-                                        <ui:repeat
-                                            var="value"
-                                            value="#{field.values}">
+                                    <ui:repeat
+                                        var="value"
+                                        value="#{field.values}">
+                                        <ui:fragment rendered="#{field.displayType=='input'}">
                                             <intranda:formInputTextAjax
                                                 id="input"
                                                 name="input"
@@ -328,17 +328,13 @@
                                                 fieldStyle="#{value.valid ? '' : 'invalid'}"
                                                 execute="@this"
                                                 render="@form" />
-                                            <!-- TODO Button area add/remove/search -->
-                                        </ui:repeat>
-                                    </ui:fragment>
+                                        </ui:fragment>
+                                        <!-- TODO Button area add/remove/search -->
 
-                                    <ui:fragment rendered="#{field.displayType=='textarea'}">
-                                        <ui:repeat
-                                            var="value"
-                                            value="#{field.values}">
+                                        <ui:fragment rendered="#{field.displayType=='textarea'}">
                                             <intranda:formInputTextAreaAjax
-                                                id="input"
-                                                name="input"
+                                                id="area"
+                                                name="area"
                                                 label="#{msgs[field.label]}"
                                                 field="#{value.metadata.value}"
                                                 help="#{msgs.helpProcessStepTitle}"
@@ -348,8 +344,18 @@
                                                 fieldStyle="#{value.valid ? '' : 'invalid'}"
                                                 execute="@this"
                                                 render="@form" />
-                                        </ui:repeat>
-                                    </ui:fragment>
+                                        </ui:fragment>
+
+
+                                        <h:panelGroup
+                                            layout="block"
+                                            rendered="#{!value.valid}"
+                                            styleClass="w-100 font-danger validation-message">
+
+                                            <i class="fa fa-exclamation-circle warning-icon error" />
+                                            <h:outputText value="#{field.validationErrorMessage}" />
+                                        </h:panelGroup>
+                                    </ui:repeat>
                                 </ui:repeat>
                             </div>
                         </div>

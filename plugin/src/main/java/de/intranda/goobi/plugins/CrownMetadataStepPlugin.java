@@ -115,7 +115,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             field.setRequired(hc.getBoolean("@required", false));
             field.setValidation(hc.getString("@validation", ""));
             field.setReadonly(hc.getBoolean("@readonly", false));
-
+            field.setValidationErrorMessage(hc.getString("@validationErrorMessage", ""));
             configuredFields.add(field);
         }
 
