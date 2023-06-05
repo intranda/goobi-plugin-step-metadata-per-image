@@ -346,6 +346,35 @@
                                                 render="@form" />
                                         </ui:fragment>
 
+                                        <ui:fragment rendered="#{field.displayType=='select' or field.displayType=='vocabulary'}">
+                                            <intranda:formInputDropDownAjax
+                                                id="select"
+                                                ajaxEvent="change"
+                                                ajaxRender="@form"
+                                                label="#{msgs[field.label]}"
+                                                field="#{value.metadata.value}"
+                                                help="#{msgs.helpLdapAuthenticationType}"
+                                                name="select"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                selectItems="#{field.valueList}"
+                                                var="item"
+                                                itemLabel="#{item}"
+                                                itemValue="#{item}" />
+                                        </ui:fragment>
+
+
+                                        <ui:fragment rendered="#{field.displayType=='multiselect'}">
+multi select
+</ui:fragment>
+
+
+                                        <ui:fragment rendered="#{field.displayType=='processlink'}">
+process link
+</ui:fragment>
+
+
+
 
                                         <h:panelGroup
                                             layout="block"

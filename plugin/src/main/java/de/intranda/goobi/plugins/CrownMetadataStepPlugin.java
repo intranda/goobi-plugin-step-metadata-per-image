@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * This file is part of a plugin for Goobi - a Workflow tool for the support of mass digitization.
@@ -36,6 +38,8 @@ import org.goobi.production.enums.PluginReturnValue;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
+import org.goobi.vocabulary.VocabRecord;
+import org.goobi.vocabulary.Vocabulary;
 
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
@@ -44,6 +48,7 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.metadaten.Image;
 import de.sub.goobi.metadaten.MetadatenImagesHelper;
+import de.sub.goobi.persistence.managers.VocabularyManager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -116,6 +121,25 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             field.setValidation(hc.getString("@validation", ""));
             field.setReadonly(hc.getBoolean("@readonly", false));
             field.setValidationErrorMessage(hc.getString("@validationErrorMessage", ""));
+
+            if ("select".equals(field.getDisplayType())) {
+                // get allowed values
+                List<String> values = Arrays.asList(hc.getStringArray("/field"));
+                field.setValueList(values);
+            } else if ("vocabulary".equals(field.getDisplayType())) {
+                List<String> values = new ArrayList<>();
+                String vocabularyName = hc.getString("/vocabulary");
+                Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
+                VocabularyManager.getAllRecords(currentVocabulary);
+                List<VocabRecord> recordList = currentVocabulary.getRecords();
+
+                for (VocabRecord vr : recordList) {
+                    values.add(vr.getTitle());
+                }
+                Collections.sort(values);
+                field.setValueList(values);
+            }
+
             configuredFields.add(field);
         }
 

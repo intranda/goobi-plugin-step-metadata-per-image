@@ -12,22 +12,24 @@
         <project>*</project>
         <step>*</step>
 
-        <field label="Title" metadataField="TitleDocMain" repeatable="false" displayType="input"
-            defaultValue=" - bitte eintragen - " required="true" validation="\w+"></field>
-        <field label="Schlagwort" metadataField="Keyowrd" repeatable="true" displayType="selection"
-            defaultValue="" required="false"></field>
+        <field label="Input, required" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue=" - bitte eintragen - " required="true" validation="\w+" validationErrorMessage="field is required" readonly="false"></field>
+        <field label="Input, repeatable, not required" metadataField="DocLanguage" repeatable="true" displayType="input" defaultValue="" required="false"></field>
+        <field label="Textarea" metadataField="Abstract" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
 
-        <field label="Beschreibung" metadataField="Abstract" repeatable="false"
-            displayType="textarea"
-            defaultValue="" required="false" validation=""></field>
+        <field label="Select field" metadataField="Classification" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+            <field>value A</field>
+            <field>value B</field>
+            <field>value C</field>                    
+        </field>
 
-        <field label="Schlagwort" metadataField="Keyowrd" repeatable="true" displayType="selection"
-            defaultValue="" required="false"></field>
+        <field label="Vocabulary" metadataField="PublisherName" repeatable="false" displayType="vocabulary" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+            <vocabulary>Artistic Movement</vocabulary>                 
+        </field>
+
+<!--
+        <field label="Schlagwort" metadataField="SubjectTopic" repeatable="true" displayType="selection" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required"></field>
             
-        <field label="Klassifikation" metadataField="Classification" repeatable="false"
-            displayType="selection"
-            defaultValue="" required="true"></field>
-
+-->
     </config>
 
 </config_plugin>

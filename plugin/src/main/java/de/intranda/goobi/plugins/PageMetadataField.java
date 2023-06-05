@@ -22,6 +22,8 @@ public class PageMetadataField {
     private boolean readonly;
     private String validationErrorMessage;
 
+    private List<String> valueList;
+
     public PageMetadataField() {
 
     }
@@ -36,6 +38,7 @@ public class PageMetadataField {
         validation = other.getValidation();
         readonly = other.isReadonly();
         validationErrorMessage = other.getValidationErrorMessage();
+        valueList = other.getValueList();
     }
 
     public void addValue(PageMetadataValue value) {
