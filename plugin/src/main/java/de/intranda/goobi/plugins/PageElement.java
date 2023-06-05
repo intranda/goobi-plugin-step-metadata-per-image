@@ -19,6 +19,8 @@ public class PageElement {
 
     private List<PageMetadataField> metadata = new ArrayList<>();
 
+    private List<ProcessLink> links = new ArrayList<>();
+
     @Setter
     private int rating = 0;
 

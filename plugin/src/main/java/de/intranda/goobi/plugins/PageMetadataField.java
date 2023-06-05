@@ -7,6 +7,7 @@ import org.goobi.production.properties.MultiSelectProperty;
 
 import lombok.Getter;
 import lombok.Setter;
+import ugh.dl.MetadataType;
 
 @Getter
 @Setter
@@ -26,6 +27,8 @@ public class PageMetadataField implements MultiSelectProperty<String> {
 
     private List<String> valueList;
 
+    private MetadataType metadataType;
+
     public PageMetadataField() {
 
     }
@@ -41,6 +44,7 @@ public class PageMetadataField implements MultiSelectProperty<String> {
         readonly = other.isReadonly();
         validationErrorMessage = other.getValidationErrorMessage();
         valueList = other.getValueList();
+        metadataType = other.getMetadataType();
     }
 
     public void addValue(PageMetadataValue value) {
