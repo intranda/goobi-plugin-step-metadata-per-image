@@ -311,21 +311,22 @@
                                 <!-- metadata list -->
                                 <ui:repeat
                                     var="field"
-                                    value="#{page.metadata}">
+                                    value="#{page.metadata}"
+                                    varStatus="fieldstatus">
                                     <ui:repeat
-                                        var="value"
+                                        var="entry"
                                         value="#{field.values}">
                                         <ui:fragment rendered="#{field.displayType=='input'}">
                                             <intranda:formInputTextAjax
                                                 id="input"
                                                 name="input"
                                                 label="#{msgs[field.label]}"
-                                                field="#{value.metadata.value}"
+                                                field="#{entry.value}"
                                                 help="#{msgs.helpProcessStepTitle}"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 readonly="#{field.readonly}"
-                                                fieldStyle="#{value.valid ? '' : 'invalid'}"
+                                                fieldStyle="#{entry.valid ? '' : 'invalid'}"
                                                 execute="@this"
                                                 render="@form" />
                                         </ui:fragment>
@@ -336,12 +337,12 @@
                                                 id="area"
                                                 name="area"
                                                 label="#{msgs[field.label]}"
-                                                field="#{value.metadata.value}"
+                                                field="#{entry.value}"
                                                 help="#{msgs.helpProcessStepTitle}"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 readonly="#{field.readonly}"
-                                                fieldStyle="#{value.valid ? '' : 'invalid'}"
+                                                fieldStyle="#{entry.valid ? '' : 'invalid'}"
                                                 execute="@this"
                                                 render="@form" />
                                         </ui:fragment>
@@ -352,21 +353,18 @@
                                                 ajaxEvent="change"
                                                 ajaxRender="@form"
                                                 label="#{msgs[field.label]}"
-                                                field="#{value.metadata.value}"
+                                                field="#{entry.value}"
                                                 help="#{msgs.helpLdapAuthenticationType}"
                                                 name="select"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 selectItems="#{field.valueList}"
+                                                fieldStyle="form-control #{entry.valid ? '' : 'invalid'}"
                                                 var="item"
                                                 itemLabel="#{item}"
                                                 itemValue="#{item}" />
                                         </ui:fragment>
 
-
-                                        <ui:fragment rendered="#{field.displayType=='multiselect'}">
-multi select
-</ui:fragment>
 
 
                                         <ui:fragment rendered="#{field.displayType=='processlink'}">
@@ -378,13 +376,31 @@ process link
 
                                         <h:panelGroup
                                             layout="block"
-                                            rendered="#{!value.valid}"
+                                            rendered="#{!entry.valid}"
                                             styleClass="w-100 font-danger validation-message">
 
                                             <i class="fa fa-exclamation-circle warning-icon error" />
                                             <h:outputText value="#{field.validationErrorMessage}" />
                                         </h:panelGroup>
                                     </ui:repeat>
+
+                                    <ui:fragment rendered="#{field.displayType=='multiselect'}">
+                                        <intranda:formInputMultiSelect
+                                            id="multiselect"
+                                            name="multiselect"
+                                            label="#{msgs[field.label]}"
+                                            field="#{field}"
+                                            help="#{msgs.help}"
+                                            selectItems="#{field.possibleValues}"
+                                            var="var"
+                                            itemValue="#{var}"
+                                            itemLabel="#{var}"
+                                            fieldStyle="form-control #{entry.valid ? '' : 'invalid'}"
+                                            displayAsRequired="#{field.required}"
+                                            required="false"
+                                            displayLabel="true" />
+                                    </ui:fragment>
+
                                 </ui:repeat>
                             </div>
                         </div>

@@ -4,29 +4,28 @@ import org.apache.commons.lang.StringUtils;
 
 import lombok.Getter;
 import lombok.Setter;
-import ugh.dl.Metadata;
 
 @Getter
 @Setter
 public class PageMetadataValue {
 
+    private String value;
     private String validationMessage;
-    private Metadata metadata;
 
     private boolean required;
     private String validationRegex;
 
-    public PageMetadataValue(Metadata metadata, String validationRegex, boolean required) {
-        this.metadata = metadata;
+    public PageMetadataValue(String value, String validationRegex, boolean required) {
+        this.value = value;
         this.validationRegex = validationRegex;
         this.required = required;
     }
 
     public boolean isValid() {
-        if (required && StringUtils.isBlank(metadata.getValue())) {
+        if (required && StringUtils.isBlank(value)) {
             return false;
-        } else if (StringUtils.isNotBlank(validationMessage) && StringUtils.isNotBlank(metadata.getValue())) {
-            if (!metadata.getValue().matches(validationMessage)) {
+        } else if (StringUtils.isNotBlank(validationMessage) && StringUtils.isNotBlank(value)) {
+            if (!value.matches(validationMessage)) {
                 return false;
             }
         }

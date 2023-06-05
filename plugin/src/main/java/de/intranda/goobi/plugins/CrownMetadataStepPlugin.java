@@ -122,22 +122,29 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             field.setReadonly(hc.getBoolean("@readonly", false));
             field.setValidationErrorMessage(hc.getString("@validationErrorMessage", ""));
 
-            if ("select".equals(field.getDisplayType())) {
-                // get allowed values
-                List<String> values = Arrays.asList(hc.getStringArray("/field"));
-                field.setValueList(values);
-            } else if ("vocabulary".equals(field.getDisplayType())) {
-                List<String> values = new ArrayList<>();
-                String vocabularyName = hc.getString("/vocabulary");
-                Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
-                VocabularyManager.getAllRecords(currentVocabulary);
-                List<VocabRecord> recordList = currentVocabulary.getRecords();
+            List<String> values = new ArrayList<>();
+            switch (field.getDisplayType()) {
+                case "select":
+                case "multiselect":
+                    // get allowed values
+                    values = Arrays.asList(hc.getStringArray("/field"));
+                    field.setValueList(values);
+                    break;
+                case "vocabulary":
 
-                for (VocabRecord vr : recordList) {
-                    values.add(vr.getTitle());
-                }
-                Collections.sort(values);
-                field.setValueList(values);
+                    String vocabularyName = hc.getString("/vocabulary");
+                    Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
+                    VocabularyManager.getAllRecords(currentVocabulary);
+                    List<VocabRecord> recordList = currentVocabulary.getRecords();
+
+                    for (VocabRecord vr : recordList) {
+                        values.add(vr.getTitle());
+                    }
+                    Collections.sort(values);
+                    field.setValueList(values);
+                    break;
+                default:
+                    break;
             }
 
             configuredFields.add(field);
@@ -250,6 +257,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                         logical.addChild(ds);
                     } catch (UGHException e) {
                         log.error(e);
+                        return false;
                     }
                 }
                 order++;
@@ -261,19 +269,19 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                     if (pe.getDocstruct().getAllMetadata() != null) {
                         for (Metadata md : pe.getDocstruct().getAllMetadata()) {
                             if (md.getType().getName().equals(field.getMetadataField())) {
-                                field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
+                                field.addValue(new PageMetadataValue(md.getValue(), field.getValidation(), field.isRequired()));
                             }
                         }
                     }
 
-                    if (field.getValues().isEmpty()) {
+                    if (field.getValues().isEmpty() && !"multiselect".equals(field.getDisplayType())) {
                         // new metadata
                         // default value
                         try {
                             Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
                             md.setValue(field.getDefaultValue());
                             pe.getDocstruct().addMetadata(md);
-                            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
+                            field.addValue(new PageMetadataValue(md.getValue(), field.getValidation(), field.isRequired()));
                         } catch (MetadataTypeNotAllowedException e) {
                             log.error(e);
                         }

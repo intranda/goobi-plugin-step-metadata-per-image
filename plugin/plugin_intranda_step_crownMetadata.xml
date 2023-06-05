@@ -26,9 +26,22 @@
             <vocabulary>Artistic Movement</vocabulary>                 
         </field>
 
+        <field label="Multiselect" metadataField="SubjectTopic" repeatable="true" displayType="multiselect" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+            <field>value A</field>
+            <field>value B</field>
+            <field>value C</field>
+            <field>value D</field>
+            <field>value E</field>
+            <field>value F</field>
+            <field>value G</field>
+            <field>value H</field>
+            <field>value I</field>
+        </field>
+
+
+
 <!--
-        <field label="Schlagwort" metadataField="SubjectTopic" repeatable="true" displayType="selection" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required"></field>
-            
+            Biography Type
 -->
     </config>
 
