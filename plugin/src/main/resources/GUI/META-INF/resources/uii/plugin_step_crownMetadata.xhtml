@@ -104,6 +104,10 @@
 	grid-template-columns: 40% auto;
 	grid-template-rows: auto;
 }
+
+.form-control.invalid, .form-select.invalid {
+	border: 1px solid var(--clr-box-hot);
+}
 </style>
 
 
@@ -302,17 +306,51 @@
                                 </div>
                             </div>
 
-                            <!-- right side, 70% -->
+                            <!-- right side -->
                             <div>
                                 <!-- metadata list -->
-
                                 <ui:repeat
                                     var="field"
                                     value="#{page.metadata}">
-                                    <h:outputText value="#{field.label}" />
-                                    <br />
-                                </ui:repeat>
+                                    <ui:fragment rendered="#{field.displayType=='input'}">
+                                        <ui:repeat
+                                            var="value"
+                                            value="#{field.values}">
+                                            <intranda:formInputTextAjax
+                                                id="input"
+                                                name="input"
+                                                label="#{msgs[field.label]}"
+                                                field="#{value.metadata.value}"
+                                                help="#{msgs.helpProcessStepTitle}"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                readonly="#{field.readonly}"
+                                                fieldStyle="#{value.valid ? '' : 'invalid'}"
+                                                execute="@this"
+                                                render="@form" />
+                                            <!-- TODO Button area add/remove/search -->
+                                        </ui:repeat>
+                                    </ui:fragment>
 
+                                    <ui:fragment rendered="#{field.displayType=='textarea'}">
+                                        <ui:repeat
+                                            var="value"
+                                            value="#{field.values}">
+                                            <intranda:formInputTextAreaAjax
+                                                id="input"
+                                                name="input"
+                                                label="#{msgs[field.label]}"
+                                                field="#{value.metadata.value}"
+                                                help="#{msgs.helpProcessStepTitle}"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                readonly="#{field.readonly}"
+                                                fieldStyle="#{value.valid ? '' : 'invalid'}"
+                                                execute="@this"
+                                                render="@form" />
+                                        </ui:repeat>
+                                    </ui:fragment>
+                                </ui:repeat>
                             </div>
                         </div>
                         <br />

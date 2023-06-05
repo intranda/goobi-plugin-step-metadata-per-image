@@ -19,6 +19,7 @@ public class PageMetadataField {
     private String defaultValue;
     private boolean required;
     private String validation;
+    private boolean readonly;
 
     public PageMetadataField() {
 

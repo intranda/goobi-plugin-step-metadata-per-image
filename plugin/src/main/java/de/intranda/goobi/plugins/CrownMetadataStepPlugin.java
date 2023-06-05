@@ -114,6 +114,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             field.setDefaultValue(hc.getString("@defaultValue", ""));
             field.setRequired(hc.getBoolean("@required", false));
             field.setValidation(hc.getString("@validation", ""));
+            field.setReadonly(hc.getBoolean("@readonly", false));
 
             configuredFields.add(field);
         }
@@ -236,7 +237,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                     if (pe.getDocstruct().getAllMetadata() != null) {
                         for (Metadata md : pe.getDocstruct().getAllMetadata()) {
                             if (md.getType().getName().equals(field.getMetadataField())) {
-                                field.addValue(new PageMetadataValue(md));
+                                field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
                             }
                         }
                     }
@@ -248,7 +249,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                             Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
                             md.setValue(field.getDefaultValue());
                             pe.getDocstruct().addMetadata(md);
-                            field.addValue(new PageMetadataValue(md));
+                            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
                         } catch (MetadataTypeNotAllowedException e) {
                             log.error(e);
                         }
