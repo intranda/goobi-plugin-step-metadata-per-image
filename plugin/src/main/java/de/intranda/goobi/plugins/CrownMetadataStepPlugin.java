@@ -122,25 +122,24 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             field.setReadonly(hc.getBoolean("@readonly", false));
             field.setValidationErrorMessage(hc.getString("@validationErrorMessage", ""));
 
-            List<String> values = new ArrayList<>();
             switch (field.getDisplayType()) {
                 case "select":
                 case "multiselect":
                     // get allowed values
-                    values = Arrays.asList(hc.getStringArray("/field"));
-                    field.setValueList(values);
-                    break;
-                case "vocabulary":
+                    List<String> values = Arrays.asList(hc.getStringArray("/field"));
 
-                    String vocabularyName = hc.getString("/vocabulary");
-                    Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
-                    VocabularyManager.getAllRecords(currentVocabulary);
-                    List<VocabRecord> recordList = currentVocabulary.getRecords();
+                    if (values.isEmpty()) {
+                        values = new ArrayList<>();
+                        String vocabularyName = hc.getString("/vocabulary");
+                        Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
+                        VocabularyManager.getAllRecords(currentVocabulary);
+                        List<VocabRecord> recordList = currentVocabulary.getRecords();
 
-                    for (VocabRecord vr : recordList) {
-                        values.add(vr.getTitle());
+                        for (VocabRecord vr : recordList) {
+                            values.add(vr.getTitle());
+                        }
+                        Collections.sort(values);
                     }
-                    Collections.sort(values);
                     field.setValueList(values);
                     break;
                 default:

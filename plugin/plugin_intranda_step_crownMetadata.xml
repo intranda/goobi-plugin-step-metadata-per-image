@@ -16,16 +16,6 @@
         <field label="Input, repeatable, not required" metadataField="DocLanguage" repeatable="true" displayType="input" defaultValue="" required="false"></field>
         <field label="Textarea" metadataField="Abstract" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
 
-        <field label="Select field" metadataField="Classification" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
-            <field>value A</field>
-            <field>value B</field>
-            <field>value C</field>                    
-        </field>
-
-        <field label="Vocabulary" metadataField="PublisherName" repeatable="false" displayType="vocabulary" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
-            <vocabulary>Artistic Movement</vocabulary>                 
-        </field>
-
         <field label="Multiselect" metadataField="SubjectTopic" repeatable="true" displayType="multiselect" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
             <field>value A</field>
             <field>value B</field>
@@ -37,12 +27,19 @@
             <field>value H</field>
             <field>value I</field>
         </field>
+        <field label="Select field" metadataField="Classification" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+            <field>value A</field>
+            <field>value B</field>
+            <field>value C</field>                    
+        </field>
+
+        <field label="Vocabulary" metadataField="PublisherName" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+            <vocabulary>Biography Type</vocabulary>                 
+        </field>
 
 
 
-<!--
-            Biography Type
--->
+
     </config>
 
 </config_plugin>
