@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.enums.PluginGuiType;
@@ -48,6 +49,7 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.metadaten.Image;
 import de.sub.goobi.metadaten.MetadatenImagesHelper;
+import de.sub.goobi.persistence.managers.ProcessManager;
 import de.sub.goobi.persistence.managers.VocabularyManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -96,9 +98,15 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     private String imageName;
 
     @Getter
-    private List<PageElement> pages = new ArrayList<>();
+    private transient List<PageElement> pages = new ArrayList<>();
 
-    private List<PageMetadataField> configuredFields = new ArrayList<>();
+    private transient List<PageMetadataField> configuredFields = new ArrayList<>();
+
+    private List<String> searchFields = new ArrayList<>();
+
+    @Getter
+    @Setter
+    private String searchValue;
 
     @Override
     public void initialize(Step step, String returnPath) {
@@ -149,6 +157,8 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             configuredFields.add(field);
         }
 
+        searchFields = Arrays.asList(myconfig.getStringArray("/searchfield"));
+
     }
 
     @Override
@@ -184,6 +194,59 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     @Override
     public HashMap<String, StepReturnValue> validate() {
         return null; // NOSONAR
+    }
+
+    @Getter
+    private List processDataList = new ArrayList<>();
+
+    public void processSearch() {
+
+        String query = generateSearchQuery();
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> list = ProcessManager.runSQL(query);
+        for (Object[] obj : list) {
+            String processid = (String) obj[0];
+            String metadataName = (String) obj[1];
+            String metadataValue = (String) obj[2];
+            log.info(processid + ": " + metadataName + " - " + metadataValue);
+
+        }
+
+        processDataList = null;
+    }
+
+    private String generateSearchQuery() {
+        String escapedValue = StringEscapeUtils.escapeSql(searchValue);
+
+        StringBuilder processIDBuilder = new StringBuilder();
+        processIDBuilder.append("SELECT processid, name, value FROM metadata WHERE processid IN ( ");
+        processIDBuilder.append("SELECT DISTINCT processid FROM metadata ");
+        processIDBuilder.append("WHERE ");
+
+        // search for the exact value in the identifier field
+        processIDBuilder.append("(name = 'CatalogIDDIgital' AND value = '");
+        processIDBuilder.append(escapedValue);
+
+        // or use a contains search in the configured fields
+        processIDBuilder.append("') ");
+        if (!searchFields.isEmpty()) {
+            StringBuilder sub = new StringBuilder();
+            processIDBuilder.append("OR name IN (");
+            for (String searchfield : searchFields) {
+                if (sub.length() > 0) {
+                    sub.append(", ");
+                }
+                sub.append("'");
+                sub.append(searchfield);
+                sub.append("'");
+            }
+            processIDBuilder.append(sub.toString());
+            processIDBuilder.append(") AND value LIKE '%");
+            processIDBuilder.append(escapedValue);
+            processIDBuilder.append("%') ");
+        }
+        return processIDBuilder.toString();
     }
 
     @Override

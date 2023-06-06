@@ -73,40 +73,40 @@
 
         <style>
 .grid {
-	display: grid;
-	grid-template-columns: 25% auto;
-	grid-template-rows: auto;
+    display: grid;
+    grid-template-columns: 25% auto;
+    grid-template-rows: auto;
 }
 
 .star {
-	display: block;
-	float: left;
+    display: block;
+    float: left;
 }
 
 .star i {
-	color: #ccc;
+    color: #ccc;
 }
 
 .star .active {
-	color: #368ee0;
+    color: #368ee0;
 }
 
 .btn--icon {
-	text-decoration: none;
-	padding: 0;
-	line-height: inherit;
-	border: none;
-	background: none;
+    text-decoration: none;
+    padding: 0;
+    line-height: inherit;
+    border: none;
+    background: none;
 }
 
 .label-grid {
-	display: grid;
-	grid-template-columns: 40% auto;
-	grid-template-rows: auto;
+    display: grid;
+    grid-template-columns: 40% auto;
+    grid-template-rows: auto;
 }
 
 .form-control.invalid, .form-select.invalid {
-	border: 1px solid var(--clr-box-hot);
+    border: 1px solid var(--clr-box-hot);
 }
 </style>
 
@@ -374,6 +374,7 @@ process link
 
 
 
+
                                         <h:panelGroup
                                             layout="block"
                                             rendered="#{!entry.valid}"
@@ -383,7 +384,6 @@ process link
                                             <h:outputText value="#{field.validationErrorMessage}" />
                                         </h:panelGroup>
                                     </ui:repeat>
-
                                     <ui:fragment rendered="#{field.displayType=='multiselect'}">
                                         <intranda:formInputMultiSelect
                                             id="multiselect"
@@ -402,6 +402,19 @@ process link
                                     </ui:fragment>
 
                                 </ui:repeat>
+                                <!--  link processes -->
+                                <button
+                                    style="padding: 0;"
+                                    title="#{msgs.plugin_step_crown_addLink}"
+                                    class="btn btn-outline"
+                                    data-toggle="tooltip"
+                                    jsf:id="processSearchBoxButton"
+                                    jsf:onclick="$('#processSearchBox').modal('show');">
+                                    <h:outputText value="#{msgs.plugin_step_crown_addLink}" />
+                                    <f:ajax
+                                        execute="@this"
+                                        render="processSearchBoxContent" />
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -421,7 +434,9 @@ process link
                         jsf:id="finishAndClose"
                         jsf:rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
                         jsf:action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}">
-                        <i class="fa fa-check"></i> <span> <h:outputText value="#{msgs.task_leavePluginAndFinishTask}" />
+                        <i class="fa fa-check"></i>
+                        <span>
+                            <h:outputText value="#{msgs.task_leavePluginAndFinishTask}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
@@ -433,7 +448,9 @@ process link
                         class="btn btn-blank me-2"
                         jsf:id="absenden"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <i class="fa fa-close"></i> <span> <h:outputText value="#{msgs.pluginLeave}" />
+                        <i class="fa fa-close"></i>
+                        <span>
+                            <h:outputText value="#{msgs.pluginLeave}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
@@ -442,77 +459,44 @@ process link
                 </div>
 
             </intranda:box>
-            
-            
-            
-            
+
         </h:form>
 
-            <h:panelGroup
-                styleClass="modal p-4 py-md-5"
-                layout="block"
-                id="imageBox"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="imageBox"
-                aria-hidden="true">
-                    <div
-                        class="modal-dialog"
-                        role="document">
-                        <h:panelGroup
-                            styleClass="modal-content"
-                            layout="block"
-                            id="imageBoxContent">
-                            <h:form
-                                styleClass="form-horizontal"
-                                prependId="false">
-                                <div class="modal-header">
-                                    <h4
-                                        class="modal-title"
-                                        style="width: 90%">#{AktuelleSchritteForm.myPlugin.imageName}</h4>
-                                    <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close">
-                                      
-                                      
-                                    </button>
-                                </div>
-                                <div class="modal-body"> 
-                                <img src="#{AktuelleSchritteForm.myPlugin.imageUrl}" style="width: 100%" />
-                                </div>
-                            </h:form>
-                        </h:panelGroup>
-                    </div>
-            </h:panelGroup>
+
+
+
+
+        <ui:include src="process_search_modal.xhtml" />
+        <ui:include src="image_modal.xhtml" />
+
+
 
 
         <script type="text/javascript">
-									window.onload = function() {
-										loadImages();
-									}
+                                    window.onload = function() {
+                                        loadImages();
+                                    }
 
-									jsf.ajax.addOnEvent(function(data) {
-										var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
-
-										switch (ajaxstatus) {
-										case "begin": // This is called right before ajax request is been sent.
-
-											break;
-
-										case "complete": // This is called right after ajax response is received.
-
-											break;
-
-										case "success": // This is called when ajax response is successfully processed.
-
-											loadImages();
-
-											break;
-										}
-									});
-								</script>
+                                    jsf.ajax.addOnEvent( function( data ) {
+                                        var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
+                                        
+                                        switch ( ajaxstatus ) {
+                                            case "begin": // This is called right before ajax request is been sent.
+                                            
+                                                break;
+                                            
+                                            case "complete": // This is called right after ajax response is received.
+                                            
+                                                break;
+                                            
+                                            case "success": // This is called when ajax response is successfully processed.
+                                            
+                                                loadImages();
+                                                
+                                                break;
+                                        }
+                                    } );
+                                </script>
 
 
     </ui:define>

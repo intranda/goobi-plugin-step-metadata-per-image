@@ -39,7 +39,9 @@
 
 
 
-
+        <searchfield>TitleDocMain</searchfield>
+        <searchfield>shelfmarksource</searchfield>
+        <searchfield>CatalogIDDigital</searchfield>                
     </config>
 
 </config_plugin>
