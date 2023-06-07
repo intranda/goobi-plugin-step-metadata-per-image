@@ -22,7 +22,7 @@
             aria-labelledby="processSearchBox"
             aria-hidden="true">
             <div
-                class="modal-dialog"
+                class="modal-dialog modal-dialog-scrollable"
                 role="document">
                 <h:panelGroup
                     styleClass="modal-content"
@@ -74,7 +74,7 @@
                             </div>
 
                             <h:panelGroup id="processSearchlist">
-                                <div class="modal__gnd-list scrollable">
+                                <div class="modal-dialog-scrollable" style="max-height: 500px">
                                     <x:dataList
                                         value="#{AktuelleSchritteForm.myPlugin.processDataList}"
                                         var="proc">

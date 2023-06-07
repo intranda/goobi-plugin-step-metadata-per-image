@@ -14,6 +14,7 @@ public class ProcessObject {
 
 
     private String processId;
+    private String label;
     private List<StringPair> metadataList = new ArrayList<>();
 
 }
