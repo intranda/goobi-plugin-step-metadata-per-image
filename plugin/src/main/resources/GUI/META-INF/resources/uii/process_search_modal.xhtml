@@ -72,15 +72,21 @@
                                     </button>
                                 </div>
                             </div>
-
-                            <h:panelGroup id="processSearchlist">
-                                <div class="modal-dialog-scrollable" style="max-height: 500px">
+                            <h:panelGroup id="processSearchlist" layout="block" styleClass="modal-dialog-scrollable modal-results"  >
                                     <x:dataList
                                         value="#{AktuelleSchritteForm.myPlugin.processDataList}"
                                         var="proc">
                                         <div class="row">
-                                        
-                                        <h:outputText value="#{proc.processId}"></h:outputText>
+                                          <div class="col-12 col-md-12">
+                                        <h:outputText value="#{proc.label}" />
+                                        </div>
+                                                 <div class="col-12 col-md-10">
+                                                 metadata
+                                                 </div>
+                                                 
+                                                 <div class="col-12 col-md-2">
+                                                 button
+                                                 </div>
                                         
                                             <!--                                             <div class="col-11"> -->
                                             <!--                                                 <x:dataList -->
@@ -148,7 +154,6 @@
                                             value="#{msgs.NORM_noHits}"
                                             rendered="#{AktuelleSchritteForm.myPlugin.processDataList == null}" />
                                     </p>
-                                </div>
                             </h:panelGroup>
 
                         </div>

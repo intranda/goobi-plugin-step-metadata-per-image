@@ -207,7 +207,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     }
 
     public void processSearch() {
-
+        processDataList.clear();
         String query = generateSearchQuery();
         String currentProcessId = null;
         List<StringPair> metadataList = new ArrayList<>();
@@ -242,7 +242,11 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     private ProcessObject createProcessObject(String currentProcessId, List<StringPair> metadataList) {
         ProcessObject po = new ProcessObject();
         po.setProcessId(currentProcessId);
-
+        for (StringPair pair : metadataList) {
+            if (pair.getOne().equals("TitleDocMain")) {
+                po.setLabel(pair.getTwo());
+            }
+        }
         // add fields in the configured order
         for (String displayName : processDisplayFields) {
             for (StringPair pair : metadataList) {
