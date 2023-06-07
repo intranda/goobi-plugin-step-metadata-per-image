@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProcessLink {
+public class ProcessReference {
 
     // process id
     private Integer processId;

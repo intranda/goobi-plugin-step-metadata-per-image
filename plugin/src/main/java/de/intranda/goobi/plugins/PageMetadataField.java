@@ -7,7 +7,9 @@ import org.goobi.production.properties.MultiSelectProperty;
 
 import lombok.Getter;
 import lombok.Setter;
+import ugh.dl.Metadata;
 import ugh.dl.MetadataType;
+import ugh.exceptions.MetadataTypeNotAllowedException;
 
 @Getter
 @Setter
@@ -111,8 +113,14 @@ public class PageMetadataField implements MultiSelectProperty<String> {
 
     @Override
     public void setCurrentValue(String value) {
-        PageMetadataValue pmv = new PageMetadataValue(value, validation, required);
-        values.add(pmv);
+        try {
+            Metadata md = new Metadata(metadataType);
+            md.setValue(value);
+            PageMetadataValue pmv = new PageMetadataValue(md, validation, required);
+            values.add(pmv);
+        } catch (MetadataTypeNotAllowedException e) {
+            // ignore this, it will not occur
+        }
 
     }
 }

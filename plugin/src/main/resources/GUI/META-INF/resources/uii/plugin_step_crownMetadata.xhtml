@@ -429,20 +429,21 @@ process link
                     <!-- TODO button to save only -->
 
                     <!-- Save and finish the task -->
+                    
+                    
                     <button
                         class="btn btn-success me-2"
-                        jsf:id="finishAndClose"
-                        jsf:rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
-                        jsf:action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}">
-                        <i class="fa fa-check"></i>
+                        jsf:id="saveMetadata"
+                        jsf:action="#{AktuelleSchritteForm.myPlugin.saveMetadata}">
+                        <i class="fa fa-floppy-o"></i>
                         <span>
-                            <h:outputText value="#{msgs.task_leavePluginAndFinishTask}" />
+                            <h:outputText value="#{msgs.speichern}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
                             value="#{false}" />
-                    </button>
-
+                    </button>                    
+                
                     <!-- leave -->
                     <button
                         class="btn btn-blank me-2"

@@ -34,6 +34,7 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
+import org.goobi.production.cli.helper.StringPair;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginReturnValue;
 import org.goobi.production.enums.PluginType;
@@ -61,11 +62,13 @@ import ugh.dl.Fileformat;
 import ugh.dl.Metadata;
 import ugh.dl.Prefs;
 import ugh.dl.Reference;
+import ugh.exceptions.DocStructHasNoTypeException;
 import ugh.exceptions.MetadataTypeNotAllowedException;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
 import ugh.exceptions.TypeNotAllowedForParentException;
 import ugh.exceptions.UGHException;
+import ugh.exceptions.WriteException;
 
 @PluginImplementation
 @Log4j2
@@ -103,6 +106,11 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     private transient List<PageMetadataField> configuredFields = new ArrayList<>();
 
     private List<String> searchFields = new ArrayList<>();
+    private List<String> processDisplayFields = new ArrayList<>();
+
+    @Getter
+    private transient List<ProcessObject> processDataList = new ArrayList<>();
+
 
     @Getter
     @Setter
@@ -129,6 +137,8 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             field.setValidation(hc.getString("@validation", ""));
             field.setReadonly(hc.getBoolean("@readonly", false));
             field.setValidationErrorMessage(hc.getString("@validationErrorMessage", ""));
+
+            field.setMetadataType(prefs.getMetadataTypeByName(hc.getString("@metadataField")));
 
             switch (field.getDisplayType()) {
                 case "select":
@@ -158,6 +168,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         }
 
         searchFields = Arrays.asList(myconfig.getStringArray("/searchfield"));
+        processDisplayFields = Arrays.asList(myconfig.getStringArray("/display/field"));
 
     }
 
@@ -196,9 +207,6 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         return null; // NOSONAR
     }
 
-    @Getter
-    private List processDataList = new ArrayList<>();
-
     public void processSearch() {
 
         String query = generateSearchQuery();
@@ -209,7 +217,8 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             String processid = (String) obj[0];
             String metadataName = (String) obj[1];
             String metadataValue = (String) obj[2];
-            log.info(processid + ": " + metadataName + " - " + metadataValue);
+            System.out.println(processid + ": " + metadataName + " - " + metadataValue);
+            StringPair sp = new StringPair(metadataName, metadataValue);
 
         }
 
@@ -331,7 +340,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                     if (pe.getDocstruct().getAllMetadata() != null) {
                         for (Metadata md : pe.getDocstruct().getAllMetadata()) {
                             if (md.getType().getName().equals(field.getMetadataField())) {
-                                field.addValue(new PageMetadataValue(md.getValue(), field.getValidation(), field.isRequired()));
+                                field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
                             }
                         }
                     }
@@ -343,7 +352,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                             Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
                             md.setValue(field.getDefaultValue());
                             pe.getDocstruct().addMetadata(md);
-                            field.addValue(new PageMetadataValue(md.getValue(), field.getValidation(), field.isRequired()));
+                            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
                         } catch (MetadataTypeNotAllowedException e) {
                             log.error(e);
                         }
@@ -360,6 +369,36 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         }
 
         return true;
+    }
+
+
+    public void saveMetadata() {
+        // make sure all new metadata is assigned to the docstruct
+        for (PageElement pe : pages) {
+            for (PageMetadataField field : pe.getMetadata()) {
+                for (PageMetadataValue val : field.getValues()) {
+                    if (val.getMetadata().getParent() == null) {
+                        try {
+                            pe.getDocstruct().addMetadata(val.getMetadata());
+                        } catch (MetadataTypeNotAllowedException | DocStructHasNoTypeException e) {
+                            log.error(e);
+                        }
+                    }
+                }
+            }
+            // create metadata group for each reference
+            for (ProcessReference ref : pe.getProcessReferences()) {
+
+            }
+
+        }
+
+        try {
+            process.writeMetadataFile(fileformat);
+        } catch (WriteException | PreferencesException | IOException | SwapException e) {
+            log.error(e);
+        }
+
     }
 
     @Override
