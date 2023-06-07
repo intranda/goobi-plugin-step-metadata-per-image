@@ -113,6 +113,10 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
     @Getter
     @Setter
+    private transient ProcessObject currentProcess;
+
+    @Getter
+    @Setter
     private String searchValue;
 
     @Override
@@ -438,4 +442,23 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     public PluginReturnValue run() {
         return PluginReturnValue.FINISH;
     }
+
+
+    public void addReference() {
+
+        // get current Page
+
+        // add reference to other process in page object
+
+        // load other process
+
+        // add reference to current process + page object in other process
+
+        // reset search results, searchvalue
+        searchValue = "";
+        processDataList.clear();
+        System.out.println("click");
+
+    }
+
 }

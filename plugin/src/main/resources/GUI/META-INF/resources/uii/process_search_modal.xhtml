@@ -81,79 +81,61 @@
                                         <h:outputText value="#{proc.label}" />
                                         </div>
                                                  <div class="col-12 col-md-10">
-                                                 metadata
+                                                 
+                                                 <ui:repeat var="metadata" value="#{proc.metadataList}">
+                                                  <div class="row">
+                                                   <div class="col-12 col-md-4">
+                                                  <h:outputText value="#{msgs['process_grid_'.concat(metadata.one)]}"/>
+                                                  </div>
+                                                  <div class="col-12 col-md-8">
+                                                  <h:outputText value="#{metadata.two}"/>
+                                                  </div>
+                                                  </div>
+                                                 
+                                                 </ui:repeat>
+                                                 
+                                               
                                                  </div>
                                                  
                                                  <div class="col-12 col-md-2">
-                                                 button
+<button
+    jsf:id="selectProcess"
+    class="btn btn-success"
+    jsf:action="#{AktuelleSchritteForm.myPlugin.addReference}">
+    <i class="fa fa-check"></i>
+                                                                                                    <f:setPropertyActionListener
+                                                                                                    value="#{proc}"
+                                                                                                    target="#{AktuelleSchritteForm.myPlugin.currentProcess}" />
+                                                                            
+    
+</button>                                                 
+                                                 
+                                                 <!-- 
+                                                                                            <button
+                                                                                                onclick="goobiWorkflowJS.meScrollPos.storeScrollPos()"
+                                                                                                jsf:id="check"
+                                                                                                aria-label="#{msgs.selectFile}"
+                                                                                                class="btn btn- -icon-green greenCheckButton" 
+                                                                                                jsf:action="#{Metadaten.currentMetadataToPerformSearch.getData}">
+                                                                                                <f:setPropertyActionListener
+                                                                                                    value="#{normdataList}"
+                                                                                                    target="#{Metadaten.currentMetadataToPerformSearch.currentData}" />
+                                                                                                <f:setPropertyActionListener
+                                                                                                    value=""
+                                                                                                    target="#{Metadaten.searchOption}" />
+                                                                                                <f:setPropertyActionListener
+                                                                                                    value=""
+                                                                                                    target="#{Metadaten.gndSearchValue}" />
+                                                                                                <i class="fa fa-check" />
+                                                                                            </button> -->
+
                                                  </div>
-                                        
-                                            <!--                                             <div class="col-11"> -->
-                                            <!--                                                 <x:dataList -->
-                                            <!--                                                     value="#{normdataList}" -->
-                                            <!--                                                     var="normdata"> -->
-                                            <!--                                                     <div class="row"> -->
-                                            <!--                                                         <div class="col-4"> -->
-                                            <!--                                                             <h:outputText value="#{msgs[normdata.key]}" /> -->
-                                            <!--                                                         </div> -->
-
-                                            <!--                                                         <div class="col-8"> -->
-                                            <!--                                                             <x:dataList -->
-                                            <!--                                                                 value="#{normdata.values}" -->
-                                            <!--                                                                 var="value"> -->
-                                            <!--                                                                 <div class="row"> -->
-                                            <!--                                                                     <div class="col-sm-12"> -->
-                                            <!--                                                                         <h:outputLink -->
-                                            <!--                                                                             rendered="#{value.url != null}" -->
-                                            <!--                                                                             target="_blank" -->
-                                            <!--                                                                             value="#{value.url}"> -->
-                                            <!--                                                                             <h:outputText value="#{value.text}" /> -->
-                                            <!--                                                                             <h:outputText -->
-                                            <!--                                                                                 rendered="#{value.identifier != null}" -->
-                                            <!--                                                                                 value=" (#{value.identifier})" /> -->
-                                            <!--                                                                         </h:outputLink> -->
-
-                                            <!--                                                                         <h:outputText -->
-                                            <!--                                                                             value="#{value.text}" -->
-                                            <!--                                                                             rendered="#{value.url == null}" /> -->
-                                            <!--                                                                     </div> -->
-                                            <!--                                                                 </div> -->
-                                            <!--                                                             </x:dataList> -->
-                                            <!--                                                         </div> -->
-                                            <!--                                                     </div> -->
-                                            <!--                                                 </x:dataList> -->
-                                            <!--                                             </div> -->
-
-                                            <!--                                             <div class="col-1"> -->
-                                            <!--                                                 <button -->
-                                            <!--                                                     onclick="goobiWorkflowJS.meScrollPos.storeScrollPos()" -->
-                                            <!--                                                     jsf:id="check" -->
-                                            <!--                                                     aria-label="#{msgs.selectFile}" -->
-                                            <!--                                                     class="btn btn-
--icon-green greenCheckButton" -->
-                                            <!--                                                     jsf:action="#{Metadaten.currentMetadataToPerformSearch.getData}"> -->
-                                            <!--                                                     <f:setPropertyActionListener -->
-                                            <!--                                                         value="#{normdataList}" -->
-                                            <!--                                                         target="#{Metadaten.currentMetadataToPerformSearch.currentData}" /> -->
-                                            <!--                                                     <f:setPropertyActionListener -->
-                                            <!--                                                         value="" -->
-                                            <!--                                                         target="#{Metadaten.searchOption}" /> -->
-                                            <!--                                                     <f:setPropertyActionListener -->
-                                            <!--                                                         value="" -->
-                                            <!--                                                         target="#{Metadaten.gndSearchValue}" /> -->
-                                            <!--                                                     <i class="fa fa-check" /> -->
-                                            <!--                                                 </button> -->
-                                            <!--                                             </div> -->
                                         </div>
-
+                                         
                                         <hr />
                                     </x:dataList>
 
-                                    <p>
-                                        <h:outputText
-                                            value="#{msgs.NORM_noHits}"
-                                            rendered="#{AktuelleSchritteForm.myPlugin.processDataList == null}" />
-                                    </p>
+                                  
                             </h:panelGroup>
 
                         </div>

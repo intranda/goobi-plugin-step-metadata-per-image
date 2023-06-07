@@ -41,7 +41,15 @@
 
         <searchfield>TitleDocMain</searchfield>
         <searchfield>shelfmarksource</searchfield>
-        <searchfield>CatalogIDDigital</searchfield>                
+        <searchfield>CatalogIDDigital</searchfield>
+
+        <display>
+            <field>TitleDocMain</field>
+            <field>PublisherName</field>
+            <field>PublicationYear</field>
+            <field>PlaceOfPublication</field>
+            <field>CatalogIDDigital</field>
+        </display>              
     </config>
 
 </config_plugin>
