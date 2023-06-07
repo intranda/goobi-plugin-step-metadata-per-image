@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ProcessObject {
 
 
-    private Integer processId;
+    private String processId;
     private List<StringPair> metadataList = new ArrayList<>();
 
 }

@@ -111,7 +111,6 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     @Getter
     private transient List<ProcessObject> processDataList = new ArrayList<>();
 
-
     @Getter
     @Setter
     private String searchValue;
@@ -210,19 +209,50 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     public void processSearch() {
 
         String query = generateSearchQuery();
-
+        String currentProcessId = null;
+        List<StringPair> metadataList = new ArrayList<>();
         @SuppressWarnings("unchecked")
         List<Object[]> list = ProcessManager.runSQL(query);
         for (Object[] obj : list) {
             String processid = (String) obj[0];
             String metadataName = (String) obj[1];
             String metadataValue = (String) obj[2];
-            System.out.println(processid + ": " + metadataName + " - " + metadataValue);
+
+            if (currentProcessId == null) {
+                currentProcessId = processid;
+            }
             StringPair sp = new StringPair(metadataName, metadataValue);
-
+            if (currentProcessId.equals(processid)) {
+                // another metadata field for the current process
+                metadataList.add(sp);
+            } else if (!metadataList.isEmpty()) {
+                // new process started
+                processDataList.add(createProcessObject(currentProcessId, metadataList));
+                // reset data
+                currentProcessId = processid;
+                metadataList = new ArrayList<>();
+            }
         }
+        // finally add entry for last process
+        if (!metadataList.isEmpty()) {
+            processDataList.add(createProcessObject(currentProcessId, metadataList));
+        }
+    }
 
-        processDataList = null;
+    private ProcessObject createProcessObject(String currentProcessId, List<StringPair> metadataList) {
+        ProcessObject po = new ProcessObject();
+        po.setProcessId(currentProcessId);
+
+        // add fields in the configured order
+        for (String displayName : processDisplayFields) {
+            for (StringPair pair : metadataList) {
+                if (pair.getOne().equals(displayName)) {
+                    po.getMetadataList().add(pair);
+                    break;
+                }
+            }
+        }
+        return po;
     }
 
     private String generateSearchQuery() {
@@ -370,7 +400,6 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         return true;
     }
-
 
     public void saveMetadata() {
         // make sure all new metadata is assigned to the docstruct

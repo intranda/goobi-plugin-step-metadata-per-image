@@ -77,8 +77,11 @@
                                 <div class="modal__gnd-list scrollable">
                                     <x:dataList
                                         value="#{AktuelleSchritteForm.myPlugin.processDataList}"
-                                        var="normdataList">
+                                        var="proc">
                                         <div class="row">
+                                        
+                                        <h:outputText value="#{proc.processId}"></h:outputText>
+                                        
                                             <!--                                             <div class="col-11"> -->
                                             <!--                                                 <x:dataList -->
                                             <!--                                                     value="#{normdataList}" -->
