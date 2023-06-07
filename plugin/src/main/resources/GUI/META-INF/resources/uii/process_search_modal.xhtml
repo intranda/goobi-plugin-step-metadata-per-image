@@ -65,79 +65,54 @@
                                         <span>
                                             <h:outputText value="#{msgs.search}" />
                                         </span>
-
                                         <f:ajax
                                             execute="@form"
                                             render="processSearchlist" />
                                     </button>
                                 </div>
                             </div>
-                            <h:panelGroup id="processSearchlist" layout="block" styleClass="modal-dialog-scrollable modal-results"  >
-                                    <x:dataList
-                                        value="#{AktuelleSchritteForm.myPlugin.processDataList}"
-                                        var="proc">
-                                        <div class="row">
-                                          <div class="col-12 col-md-12">
-                                        <h:outputText value="#{proc.label}" />
+                            <h:panelGroup
+                                id="processSearchlist"
+                                layout="block"
+                                styleClass="modal-dialog-scrollable modal-results">
+                                <x:dataList
+                                    value="#{AktuelleSchritteForm.myPlugin.processDataList}"
+                                    var="proc">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <h:outputText value="#{proc.label}" />
                                         </div>
-                                                 <div class="col-12 col-md-10">
-                                                 
-                                                 <ui:repeat var="metadata" value="#{proc.metadataList}">
-                                                  <div class="row">
-                                                   <div class="col-12 col-md-4">
-                                                  <h:outputText value="#{msgs['process_grid_'.concat(metadata.one)]}"/>
-                                                  </div>
-                                                  <div class="col-12 col-md-8">
-                                                  <h:outputText value="#{metadata.two}"/>
-                                                  </div>
-                                                  </div>
-                                                 
-                                                 </ui:repeat>
-                                                 
-                                               
-                                                 </div>
-                                                 
-                                                 <div class="col-12 col-md-2">
-<button
-    jsf:id="selectProcess"
-    class="btn btn-success"
-    jsf:action="#{AktuelleSchritteForm.myPlugin.addReference}">
-    <i class="fa fa-check"></i>
-                                                                                                    <f:setPropertyActionListener
-                                                                                                    value="#{proc}"
-                                                                                                    target="#{AktuelleSchritteForm.myPlugin.currentProcess}" />
-                                                                            
-    
-</button>                                                 
-                                                 
-                                                 <!-- 
-                                                                                            <button
-                                                                                                onclick="goobiWorkflowJS.meScrollPos.storeScrollPos()"
-                                                                                                jsf:id="check"
-                                                                                                aria-label="#{msgs.selectFile}"
-                                                                                                class="btn btn- -icon-green greenCheckButton" 
-                                                                                                jsf:action="#{Metadaten.currentMetadataToPerformSearch.getData}">
-                                                                                                <f:setPropertyActionListener
-                                                                                                    value="#{normdataList}"
-                                                                                                    target="#{Metadaten.currentMetadataToPerformSearch.currentData}" />
-                                                                                                <f:setPropertyActionListener
-                                                                                                    value=""
-                                                                                                    target="#{Metadaten.searchOption}" />
-                                                                                                <f:setPropertyActionListener
-                                                                                                    value=""
-                                                                                                    target="#{Metadaten.gndSearchValue}" />
-                                                                                                <i class="fa fa-check" />
-                                                                                            </button> -->
+                                        <div class="col-12 col-md-10">
 
-                                                 </div>
+                                            <ui:repeat
+                                                var="metadata"
+                                                value="#{proc.metadataList}">
+                                                <div class="row">
+                                                    <div class="col-12 col-md-4">
+                                                        <h:outputText value="#{msgs['process_grid_'.concat(metadata.one)]}" />
+                                                    </div>
+                                                    <div class="col-12 col-md-8">
+                                                        <h:outputText value="#{metadata.two}" />
+                                                    </div>
+                                                </div>
+                                            </ui:repeat>
                                         </div>
-                                         
-                                        <hr />
-                                    </x:dataList>
 
-                                  
+                                        <div class="col-12 col-md-2">
+                                            <button
+                                                jsf:id="selectProcess"
+                                                class="btn btn-success"
+                                                jsf:action="#{AktuelleSchritteForm.myPlugin.addReference}">
+                                                <i class="fa fa-check"></i>
+                                                <f:setPropertyActionListener
+                                                    value="#{proc}"
+                                                    target="#{AktuelleSchritteForm.myPlugin.currentProcess}" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </x:dataList>
                             </h:panelGroup>
-
                         </div>
                     </h:form>
                 </h:panelGroup>

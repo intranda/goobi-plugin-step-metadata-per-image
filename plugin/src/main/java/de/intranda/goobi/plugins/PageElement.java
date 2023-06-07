@@ -7,6 +7,7 @@ import de.sub.goobi.metadaten.Image;
 import lombok.Getter;
 import lombok.Setter;
 import ugh.dl.DocStruct;
+import ugh.dl.Metadata;
 
 @Getter
 public class PageElement {
@@ -25,6 +26,9 @@ public class PageElement {
     private int rating = 0;
 
     private int order = 0;
+
+    @Setter
+    private Metadata identifier;
 
     public PageElement(DocStruct docstruct, DocStruct page, Image image, int order) {
         this.docstruct = docstruct;

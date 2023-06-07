@@ -28,6 +28,7 @@ import java.util.Collections;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
@@ -60,6 +61,7 @@ import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
 import ugh.dl.Fileformat;
 import ugh.dl.Metadata;
+import ugh.dl.MetadataType;
 import ugh.dl.Prefs;
 import ugh.dl.Reference;
 import ugh.exceptions.DocStructHasNoTypeException;
@@ -117,7 +119,13 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
     @Getter
     @Setter
+    private transient PageElement currentPage;
+
+    @Getter
+    @Setter
     private String searchValue;
+
+    private MetadataType identifierField;
 
     @Override
     public void initialize(Step step, String returnPath) {
@@ -172,6 +180,8 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         searchFields = Arrays.asList(myconfig.getStringArray("/searchfield"));
         processDisplayFields = Arrays.asList(myconfig.getStringArray("/display/field"));
+
+        identifierField = prefs.getMetadataTypeByName(myconfig.getString("/identifierField"));
 
     }
 
@@ -398,10 +408,22 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                     }
                 }
 
-                // create field, find metadata value from docstruct or create new metadata
+                // if needed, create new docstruct identifier
+                Metadata identifier=null;
+                List<? extends Metadata> mdl = pageStruct.getAllMetadataByType(identifierField);
+                if (!mdl.isEmpty()) {
+                    identifier = mdl.get(0);
+                } else {
+                    identifier = new Metadata(identifierField);
+                    identifier.setValue(UUID.randomUUID().toString());
+                    pageStruct.addMetadata(identifier);
+                }
+                pe.setIdentifier(identifier);
+
+                // TODO metadata for rating
 
                 pages.add(pe);
-            } catch (IOException | SwapException | DAOException e) {
+            } catch (IOException | SwapException | DAOException | UGHException e) {
                 log.error(e);
             }
         }
@@ -425,8 +447,14 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             }
             // create metadata group for each reference
             for (ProcessReference ref : pe.getProcessReferences()) {
+                // if reference is marked as new, open other process, add reference
+
+                // if reference is marked as delete, open other process, remove reference
+
+                // otherwise just store the metadata
 
             }
+
 
         }
 
@@ -443,22 +471,34 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         return PluginReturnValue.FINISH;
     }
 
-
     public void addReference() {
+        String otherProcessId = currentProcess.getProcessId();
+        String otherProcessTitle = currentProcess.getLabel();
+
+        String processid = String.valueOf(process.getId());
+        String identifier = currentPage.getIdentifier().getValue();
 
         // get current Page
 
         // add reference to other process in page object
 
-        // load other process
+        ProcessReference reference = new ProcessReference();
+        reference.setStatus("new");
+        reference.setProcessId(String.valueOf( process.getId()));
+        reference.setDocstructId(identifier); //
+        reference.setProcessName(""); //TODO main title
+        reference.setImageNumber(""); // TODO
 
-        // add reference to current process + page object in other process
+        reference.setOtherProcessId(otherProcessId);
+        reference.setOtherProcessName(otherProcessTitle);
+        reference.setOtherDocstructId(null); // keep it empty, we link to the process itself
+        reference.setOtherImageNumber(null);// keep it empty, we link to the process itself
+
+        currentPage.getProcessReferences().add(reference);
 
         // reset search results, searchvalue
         searchValue = "";
         processDataList.clear();
-        System.out.println("click");
-
     }
 
 }

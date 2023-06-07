@@ -419,6 +419,10 @@ process link
                                     <f:ajax
                                         execute="@this"
                                         render="processSearchBoxContent" />
+                                        
+                                      <f:setPropertyActionListener
+                                                    value="#{page}"
+                                                    target="#{AktuelleSchritteForm.myPlugin.currentPage}" />
                                 </button>
                             </div>
                         </div>
@@ -431,11 +435,7 @@ process link
 
 
                 <div class="form-actions">
-                    <!-- TODO button to save only -->
-
                     <!-- Save and finish the task -->
-                    
-                    
                     <button
                         class="btn btn-success me-2"
                         jsf:id="saveMetadata"
