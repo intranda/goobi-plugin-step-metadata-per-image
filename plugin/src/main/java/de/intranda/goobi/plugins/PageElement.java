@@ -40,10 +40,14 @@ public class PageElement {
 
     private List<ProcessReference> processReferences = new ArrayList<>();
 
+    private List<ProcessReference> deletedProcessReferences = new ArrayList<>();
+
     @Setter
     private int rating = 0;
 
     private int order = 0;
+    @Setter
+    private ProcessReference selectedReference;
 
     @Setter
     private Metadata identifier;
@@ -53,5 +57,11 @@ public class PageElement {
         this.page = page;
         this.image = image;
         this.order = order;
+    }
+
+    public void deleteProcessReference() {
+        processReferences.remove(selectedReference);
+        deletedProcessReferences.add(selectedReference);
+
     }
 }

@@ -402,16 +402,6 @@
                                                 itemValue="#{item}" />
                                         </ui:fragment>
 
-
-
-                                        <ui:fragment rendered="#{field.displayType=='processlink'}">
-process link
-</ui:fragment>
-
-
-
-
-
                                         <h:panelGroup
                                             layout="block"
                                             rendered="#{!entry.valid}"
@@ -439,23 +429,50 @@ process link
                                     </ui:fragment>
 
                                 </ui:repeat>
-                                <!--  link processes -->
-                                <button
-                                    style="padding: 0;"
-                                    title="#{msgs.plugin_step_crown_addLink}"
-                                    class="btn btn-outline"
-                                    data-toggle="tooltip"
-                                    jsf:id="processSearchBoxButton"
-                                    jsf:onclick="$('#processSearchBox').modal('show');">
-                                    <h:outputText value="#{msgs.plugin_step_crown_addLink}" />
-                                    <f:ajax
-                                        execute="@this"
-                                        render="processSearchBoxContent" />
+                                <div class="row">
+                                    <div class="col-12 col-md-3 control-label">
+                                        <h:outputText value="#{msgs.references}" />
 
-                                    <f:setPropertyActionListener
-                                        value="#{page}"
-                                        target="#{AktuelleSchritteForm.myPlugin.currentPage}" />
-                                </button>
+                                    </div>
+
+                                    <div class="col-12 col-md-9">
+
+
+
+                                        <ui:repeat
+                                            var="reference"
+                                            value="#{page.processReferences}">
+                                            <button
+                                                jsf:id="removeReference"
+                                                class="btn btn-blank me-2"
+                                                jsf:action="#{page.deleteProcessReference}"
+                                                >
+                                                <i class="fa fa-minus-circle"></i> <span> <h:outputText value="#{reference.otherProcessName}" />
+                                                </span>
+                                                <f:setPropertyActionListener value="#{reference}" target="#{page.selectedReference}" />
+                                                <f:ajax render="@form" execute="@this"/>
+                                            </button>
+                                            <br />
+                                        </ui:repeat>
+                                        <!--  link processes -->
+                                        <button
+                                            style="padding: 0;"
+                                            title="#{msgs.plugin_step_crown_addLink}"
+                                            class="btn btn-outline"
+                                            data-toggle="tooltip"
+                                            jsf:id="processSearchBoxButton"
+                                            jsf:onclick="$('#processSearchBox').modal('show');">
+                                            <h:outputText value="#{msgs.plugin_step_crown_addLink}" />
+                                            <f:ajax
+                                                execute="@this"
+                                                render="processSearchBoxContent" />
+
+                                            <f:setPropertyActionListener
+                                                value="#{page}"
+                                                target="#{AktuelleSchritteForm.myPlugin.currentPage}" />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <br />
