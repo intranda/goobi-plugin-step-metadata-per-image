@@ -38,10 +38,8 @@
         </field>
 
 
-
+<!-- identifier field is searched automatically, it does not need a configuration-->
         <searchfield>TitleDocMain</searchfield>
-        <searchfield>shelfmarksource</searchfield>
-        <searchfield>CatalogIDDigital</searchfield>
 
         <display>
             <field>TitleDocMain</field>
@@ -49,7 +47,13 @@
             <field>PublicationYear</field>
             <field>PlaceOfPublication</field>
             <field>CatalogIDDigital</field>
+            <field>AccessLicense</field>
         </display>              
+
+<identifierField>_urn</identifierField>
+
     </config>
+
+
 
 </config_plugin>

@@ -145,6 +145,9 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
     private MetadataType identifierField;
 
+    @Getter
+    private transient PublicationElement publicationElement;
+
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -370,6 +373,28 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
             logical = logical.getAllChildren().get(0);
         }
 
+        publicationElement = new PublicationElement();
+        publicationElement.setType(logical.getType().getName());
+        List<StringPair> processMetadataList = new ArrayList<>();
+        for (Metadata md : logical.getAllMetadata()) {
+            if ("TitleDocMain".equals(md.getType().getName())) {
+                publicationElement.setTitle(md.getValue());
+            } else {
+                StringPair sp = new StringPair(md.getType().getName(), md.getValue());
+                processMetadataList.add(sp);
+            }
+        }
+
+        // add fields in the configured order
+        for (String displayName : processDisplayFields) {
+            for (StringPair pair : processMetadataList) {
+                if (pair.getOne().equals(displayName)) {
+                    publicationElement.getMetadataList().add(pair);
+                    break;
+                }
+            }
+        }
+
         // check if a logical docstruct exists for each image
         DocStruct physical = digitalDocument.getPhysicalDocStruct();
         int order = 0;
@@ -501,10 +526,10 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         ProcessReference reference = new ProcessReference();
         reference.setStatus("new");
-        reference.setProcessId(String.valueOf(process.getId()));
-        reference.setDocstructId(identifier); //
-        reference.setProcessName(""); //TODO main title
-        reference.setImageNumber(""); // TODO
+        reference.setProcessId(processid);
+        reference.setDocstructId(identifier); // identifier of selected docstruct
+        reference.setProcessName(publicationElement.getTitle()); //main title
+        reference.setImageNumber(String.valueOf(currentPage.getOrder()));
 
         reference.setOtherProcessId(otherProcessId);
         reference.setOtherProcessName(otherProcessTitle);

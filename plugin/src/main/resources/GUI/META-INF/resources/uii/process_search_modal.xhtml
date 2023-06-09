@@ -61,9 +61,7 @@
                                         jsf:action="#{AktuelleSchritteForm.myPlugin.processSearch}">
                                         <i
                                             class="fa fa-search"
-                                            aria-hidden="true"></i>
-                                        <span>
-                                            <h:outputText value="#{msgs.search}" />
+                                            aria-hidden="true"></i> <span> <h:outputText value="#{msgs.search}" />
                                         </span>
                                         <f:ajax
                                             execute="@form"
@@ -80,7 +78,9 @@
                                     var="proc">
                                     <div class="row">
                                         <div class="col-12 col-md-12">
-                                            <h:outputText value="#{proc.label}" />
+                                            <h4>
+                                                <h:outputText value="#{proc.label}" />
+                                            </h4>
                                         </div>
                                         <div class="col-12 col-md-10">
 
