@@ -1,3 +1,21 @@
+/**
+ * This file is part of the Goobi Application - a Workflow tool for the support of mass digitization.
+ * 
+ * Visit the websites for more information.
+ *          - https://goobi.io
+ *          - https://www.intranda.com
+ *          - https://github.com/intranda/goobi-workflow
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59
+ * Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
 package de.intranda.goobi.plugins;
 
 import java.io.IOException;
@@ -257,7 +275,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
         ProcessObject po = new ProcessObject();
         po.setProcessId(currentProcessId);
         for (StringPair pair : metadataList) {
-            if (pair.getOne().equals("TitleDocMain")) {
+            if ("TitleDocMain".equals(pair.getOne())) {
                 po.setLabel(pair.getTwo());
             }
         }
@@ -409,7 +427,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
                 }
 
                 // if needed, create new docstruct identifier
-                Metadata identifier=null;
+                Metadata identifier = null;
                 List<? extends Metadata> mdl = pageStruct.getAllMetadataByType(identifierField);
                 if (!mdl.isEmpty()) {
                     identifier = mdl.get(0);
@@ -455,7 +473,6 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
             }
 
-
         }
 
         try {
@@ -484,7 +501,7 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         ProcessReference reference = new ProcessReference();
         reference.setStatus("new");
-        reference.setProcessId(String.valueOf( process.getId()));
+        reference.setProcessId(String.valueOf(process.getId()));
         reference.setDocstructId(identifier); //
         reference.setProcessName(""); //TODO main title
         reference.setImageNumber(""); // TODO
