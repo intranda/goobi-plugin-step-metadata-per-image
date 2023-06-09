@@ -35,4 +35,14 @@ public class PublicationElement {
     private String type;
 
     private List<StringPair> metadataList = new ArrayList<>();
+
+    private List<ProcessReference> processReferences = new ArrayList<>();
+    private List<ProcessReference> deletedProcessReferences = new ArrayList<>();
+    private ProcessReference selectedReference;
+
+    public void deleteProcessReference() {
+        processReferences.remove(selectedReference);
+        deletedProcessReferences.add(selectedReference);
+
+    }
 }

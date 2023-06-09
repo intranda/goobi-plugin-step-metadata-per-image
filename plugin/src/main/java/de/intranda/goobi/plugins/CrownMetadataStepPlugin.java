@@ -125,9 +125,6 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
     private transient List<PageMetadataField> configuredFields = new ArrayList<>();
 
-    private List<String> searchFields = new ArrayList<>();
-    private List<String> processDisplayFields = new ArrayList<>();
-
     @Getter
     private transient List<ProcessObject> processDataList = new ArrayList<>();
 
@@ -143,10 +140,18 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
     @Setter
     private String searchValue;
 
-    private MetadataType identifierField;
-
     @Getter
     private transient PublicationElement publicationElement;
+
+    // metadata names
+    private MetadataType identifierField;
+    private String referenceMetadataGroupName;
+    private String metadataNameProcessID;
+    private String metadataNameDocstructID;
+    private String metadataNamePageNumber;
+    private String metadataNameLabel;
+    private List<String> searchFields = new ArrayList<>();
+    private List<String> processDisplayFields = new ArrayList<>();
 
     @Override
     public void initialize(Step step, String returnPath) {
@@ -204,6 +209,11 @@ public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
 
         identifierField = prefs.getMetadataTypeByName(myconfig.getString("/identifierField"));
 
+        referenceMetadataGroupName = myconfig.getString("/reference/group");
+        metadataNameProcessID = myconfig.getString("/reference/process");
+        metadataNameDocstructID = myconfig.getString("/reference/docstruct");
+        metadataNamePageNumber = myconfig.getString("/reference/image");
+        metadataNameLabel = myconfig.getString("/reference/label");
     }
 
     @Override
