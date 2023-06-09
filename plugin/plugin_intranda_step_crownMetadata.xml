@@ -50,7 +50,16 @@
             <field>AccessLicense</field>
         </display>              
 
-<identifierField>_urn</identifierField>
+        <identifierField>_urn</identifierField>
+
+        <reference>
+            <group>Reference</group>
+            <process>RelationProcessID</process>
+            <docstruct>RelationDocstructID</docstruct>
+            <image>RelationImageNumber</image>
+            <label>RelationLabel</label>
+        </reference>
+
 
     </config>
 
