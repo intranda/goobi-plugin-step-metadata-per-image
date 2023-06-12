@@ -1,5 +1,4 @@
-# Goobi workflow Plugin: goobi-plugin-step-crownMetadata
-
+# Goobi workflow Plugin: goobi-plugin-step-metadata-per-image
 <img src="https://goobi.io/wp-content/uploads/logo_goobi_plugin.png" align="right" style="margin:0 0 20px 20px;" alt="Plugin for Goobi workflow" width="175" height="109">
 
 This is the 'metadata per image' Goobi step plugin. A description for this plugin is still missing.
