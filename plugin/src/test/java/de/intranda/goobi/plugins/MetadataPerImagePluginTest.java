@@ -69,7 +69,7 @@ import ugh.fileformats.mets.MetsMods;
 @PrepareForTest({ MetadatenHelper.class, VariableReplacer.class, ConfigurationHelper.class, ProcessManager.class,
         MetadataManager.class, Helper.class, HelperForm.class })
 @PowerMockIgnore({ "javax.management.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.net.ssl.*", "jdk.internal.reflect.*" })
-public class CrownMetadataPluginTest {
+public class MetadataPerImagePluginTest {
 
     private static String resourcesFolder;
 
@@ -97,13 +97,13 @@ public class CrownMetadataPluginTest {
 
     @Test
     public void testConstructor() throws Exception {
-        CrownMetadataStepPlugin plugin = new CrownMetadataStepPlugin();
+        MetadataPerImageStepPlugin plugin = new MetadataPerImageStepPlugin();
         assertNotNull(plugin);
     }
 
     @Test
     public void testInit() {
-        CrownMetadataStepPlugin plugin = new CrownMetadataStepPlugin();
+        MetadataPerImageStepPlugin plugin = new MetadataPerImageStepPlugin();
         plugin.initialize(step, "something");
         assertEquals(step.getTitel(), plugin.getStep().getTitel());
     }
@@ -111,7 +111,7 @@ public class CrownMetadataPluginTest {
     @Test
     public void testOpenRecord() {
 
-        CrownMetadataStepPlugin plugin = new CrownMetadataStepPlugin();
+        MetadataPerImageStepPlugin plugin = new MetadataPerImageStepPlugin();
         plugin.initialize(step, "something");
 
         assertTrue(plugin.execute());

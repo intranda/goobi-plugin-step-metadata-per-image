@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>goobi-plugin-step-crownMetadata</name>
+	<name>goobi-plugin-step-metadata-per-image</name>
 	<comment></comment>
 	<projects>
 	</projects>

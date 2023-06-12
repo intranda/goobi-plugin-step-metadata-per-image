@@ -92,12 +92,12 @@ import ugh.exceptions.WriteException;
 
 @PluginImplementation
 @Log4j2
-public class CrownMetadataStepPlugin implements IStepPluginVersion2 {
+public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
     private static final long serialVersionUID = -4190101017743019816L;
 
     @Getter
-    private String title = "intranda_step_crownMetadata";
+    private String title = "intranda_step_metadata_per_image";
     @Getter
     private Step step;
 
