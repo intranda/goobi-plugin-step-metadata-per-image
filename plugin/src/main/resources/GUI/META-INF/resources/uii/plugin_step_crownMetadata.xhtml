@@ -431,7 +431,7 @@
                                 </ui:repeat>
                                 <div class="row">
                                     <div class="col-12 col-md-3 control-label">
-                                        <h:outputText value="#{msgs.references}" />
+                                        <h:outputText value="#{msgs.plugin_step_metadata_per_image_references}" />
 
                                     </div>
 
@@ -456,12 +456,12 @@
                                         </ui:repeat>
                                         <!--  link processes -->
                                         <button
-                                            title="#{msgs.plugin_step_crown_addLink}"
+                                            title="#{msgs.plugin_step_metadata_per_image_addLink}"
                                             class="btn btn-blank"
                                             data-toggle="tooltip"
                                             jsf:id="processSearchBoxButton"
                                             jsf:onclick="$('#processSearchBox').modal('show');">
-                                            <h:outputText value="#{msgs.plugin_step_crown_addLink}" />
+                                            <h:outputText value="#{msgs.plugin_step_metadata_per_image_addLink}" />
                                             <f:ajax
                                                 execute="@this"
                                                 render="processSearchBoxContent" />
