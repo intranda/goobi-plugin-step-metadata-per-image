@@ -2,7 +2,7 @@
 
 <img src="https://goobi.io/wp-content/uploads/logo_goobi_plugin.png" align="right" style="margin:0 0 20px 20px;" alt="Plugin for Goobi workflow" width="175" height="109">
 
-This is the CrownMetadata Goobi step plugin. A description for this plugin is still missing.
+This is the 'metadata per image' Goobi step plugin. A description for this plugin is still missing.
 
 This is a plugin for Goobi workflow, the open source workflow tracking software for digitisation projects. More information about Goobi workflow is available under https://goobi.io. If you want to get in touch with the user community simply go to https://community.goobi.io.
 
