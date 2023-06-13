@@ -401,7 +401,35 @@
                                                 itemLabel="#{item}"
                                                 itemValue="#{item}" />
                                         </ui:fragment>
-
+                                        
+                                        <ui:fragment rendered="#{field.displayType=='gnd'}">
+                                            <intranda:formInputGnd
+                                                id="gnd"
+                                                name="gnd"
+                                                label="#{msgs[field.label]}"
+                                                field="#{field}"
+                                                help="#{msgs.help}"
+                                                fieldStyle="form-control"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                displayLabel="true" />
+                                        </ui:fragment>
+                                        
+                                        <ui:fragment rendered="#{field.displayType=='geonames'}">
+                                            <intranda:formInputGeonames
+                                                id="geonames"
+                                                name="geonames"
+                                                label="#{msgs[field.label]}"
+                                                field="#{field}"
+                                                help="#{msgs.help}"
+                                                fieldStyle="form-control"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                displayLabel="true"
+                                                submitDataAction="#{field.importGeonamesData()}"
+                                                 />
+                                        </ui:fragment>
+                                        
                                         <h:panelGroup
                                             layout="block"
                                             rendered="#{!entry.valid}"
