@@ -202,7 +202,9 @@
 
                     <ui:repeat
                         var="page"
-                        value="#{AktuelleSchritteForm.myPlugin.pages}">
+                        value="#{AktuelleSchritteForm.myPlugin.pages}"
+                        varStatus="myStatus"
+                        >
                         <div class="grid">
                             <!-- left side, 30% -->
                             <div>
@@ -234,7 +236,7 @@
                                                     data-image_small="#{page.image.thumbnailUrl}"
                                                     data-image_large="#{page.image.largeThumbnailUrl}"
                                                     title="#{page.image.tooltip}"
-                                                    id="thumbnail1"></canvas>
+                                                    id="thumbnail1-#{page.order}"></canvas>
                                                 <f:setPropertyActionListener
                                                     value="#{page.image.largeThumbnailUrl}"
                                                     target="#{AktuelleSchritteForm.myPlugin.imageUrl}" />
@@ -553,6 +555,7 @@
         <script type="text/javascript">
 									window.onload = function() {
 										loadImages();
+										console.log(intrandaImages);
 									}
 
 									jsf.ajax.addOnEvent(function(data) {
