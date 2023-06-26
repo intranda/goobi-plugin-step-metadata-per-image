@@ -20,32 +20,39 @@ package de.intranda.goobi.plugins;
 
 import lombok.Getter;
 import lombok.Setter;
+import ugh.dl.Metadata;
+import ugh.dl.MetadataGroup;
 
 @Getter
 @Setter
 public class ProcessReference {
 
     // process id
-    private String processId;
+    private Metadata processId;
     // display this name as label
-    private String processName;
+    private Metadata processName;
 
     // image number, if link is set to a specific image
-    private String imageNumber;
+    private Metadata imageNumber;
 
     // contains the docstruct identifier, if link is set to a specific docstruct
-    private String docstructId;
+    private Metadata docstructId;
 
     // new, deleted or changed
-    private String status = "changed";
+    private Metadata status;// = "changed";
 
     // process id of linked process
-    private String otherProcessId;
+    private Metadata otherProcessId;
     // name of linked process
-    private String otherProcessName;
+    private Metadata otherProcessName;
     // image number (might be empty)
-    private String otherImageNumber;
+    private Metadata otherImageNumber;
     // linked docstruct id (might be empty)
-    private String otherDocstructId;
+    private Metadata otherDocstructId;
 
+    private MetadataGroup group;
+
+    public ProcessReference(MetadataGroup group) {
+        this.group = group;
+    }
 }

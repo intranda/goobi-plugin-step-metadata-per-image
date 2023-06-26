@@ -80,6 +80,8 @@ import ugh.dl.DocStruct;
 import ugh.dl.DocStructType;
 import ugh.dl.Fileformat;
 import ugh.dl.Metadata;
+import ugh.dl.MetadataGroup;
+import ugh.dl.MetadataGroupType;
 import ugh.dl.MetadataType;
 import ugh.dl.Prefs;
 import ugh.dl.Reference;
@@ -146,11 +148,11 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
     // metadata names
     private MetadataType identifierField;
-    private String referenceMetadataGroupName;
-    private String metadataNameProcessID;
-    private String metadataNameDocstructID;
-    private String metadataNamePageNumber;
-    private String metadataNameLabel;
+    private MetadataGroupType referenceMetadataGroupType;
+    private MetadataType metadataNameProcessID;
+    private MetadataType metadataNameDocstructID;
+    private MetadataType metadataNamePageNumber;
+    private MetadataType metadataNameLabel;
     private List<String> searchFields = new ArrayList<>();
     private List<String> processDisplayFields = new ArrayList<>();
 
@@ -213,11 +215,11 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         identifierField = prefs.getMetadataTypeByName(myconfig.getString("/identifierField"));
         docstruct = prefs.getDocStrctTypeByName(myconfig.getString("/docstructName"));
 
-        referenceMetadataGroupName = myconfig.getString("/reference/group");
-        metadataNameProcessID = myconfig.getString("/reference/process");
-        metadataNameDocstructID = myconfig.getString("/reference/docstruct");
-        metadataNamePageNumber = myconfig.getString("/reference/image");
-        metadataNameLabel = myconfig.getString("/reference/label");
+        referenceMetadataGroupType = prefs.getMetadataGroupTypeByName(myconfig.getString("/reference/group"));
+        metadataNameProcessID = prefs.getMetadataTypeByName(myconfig.getString("/reference/process"));
+        metadataNameDocstructID = prefs.getMetadataTypeByName(myconfig.getString("/reference/docstruct"));
+        metadataNamePageNumber = prefs.getMetadataTypeByName(myconfig.getString("/reference/image"));
+        metadataNameLabel = prefs.getMetadataTypeByName(myconfig.getString("/reference/label"));
     }
 
     @Override
@@ -478,6 +480,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
                 // TODO metadata for rating
 
+                // TODO metadata groups for references
                 pages.add(pe);
             } catch (IOException | SwapException | DAOException | UGHException e) {
                 log.error(e);
@@ -510,7 +513,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 // otherwise just store the metadata
 
             }
-
+            // TODO metadata for rating
         }
 
         try {
@@ -536,20 +539,25 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         // get current Page
 
         // add reference to other process in page object
+        try {
+            MetadataGroup mg = new MetadataGroup(referenceMetadataGroupType);
+            ProcessReference reference = new ProcessReference(mg);
+            //        reference.setStatus("new");
+            //        reference.setProcessId(processid);
+            //        reference.setDocstructId(identifier); // identifier of selected docstruct
+            //        reference.setProcessName(publicationElement.getTitle()); //main title
+            //        reference.setImageNumber(String.valueOf(currentPage.getOrder()));
+            //
+            //        reference.setOtherProcessId(otherProcessId);
+            //        reference.setOtherProcessName(otherProcessTitle);
+            //        reference.setOtherDocstructId(null); // keep it empty, we link to the process itself
+            //        reference.setOtherImageNumber(null);// keep it empty, we link to the process itself
 
-        ProcessReference reference = new ProcessReference();
-        reference.setStatus("new");
-        reference.setProcessId(processid);
-        reference.setDocstructId(identifier); // identifier of selected docstruct
-        reference.setProcessName(publicationElement.getTitle()); //main title
-        reference.setImageNumber(String.valueOf(currentPage.getOrder()));
-
-        reference.setOtherProcessId(otherProcessId);
-        reference.setOtherProcessName(otherProcessTitle);
-        reference.setOtherDocstructId(null); // keep it empty, we link to the process itself
-        reference.setOtherImageNumber(null);// keep it empty, we link to the process itself
-
-        currentPage.getProcessReferences().add(reference);
+            currentPage.getProcessReferences().add(reference);
+        } catch (MetadataTypeNotAllowedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // reset search results, searchvalue
         searchValue = "";
