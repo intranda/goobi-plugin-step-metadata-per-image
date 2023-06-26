@@ -77,6 +77,7 @@ import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
+import ugh.dl.DocStructType;
 import ugh.dl.Fileformat;
 import ugh.dl.Metadata;
 import ugh.dl.MetadataType;
@@ -153,6 +154,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     private List<String> searchFields = new ArrayList<>();
     private List<String> processDisplayFields = new ArrayList<>();
 
+    private DocStructType docstruct;
+
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -208,6 +211,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         processDisplayFields = Arrays.asList(myconfig.getStringArray("/display/field"));
 
         identifierField = prefs.getMetadataTypeByName(myconfig.getString("/identifierField"));
+        docstruct = prefs.getDocStrctTypeByName(myconfig.getString("/docstructName"));
 
         referenceMetadataGroupName = myconfig.getString("/reference/group");
         metadataNameProcessID = myconfig.getString("/reference/process");
@@ -351,7 +355,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         }
         if (images == null || images.isEmpty()) {
             // no images found, abort
-            Helper.setFehlerMeldung(""); // TODO
+            Helper.setFehlerMeldung("intranda_step_metadata_per_image_noImagesFound");
             return false;
         }
         DigitalDocument digitalDocument;
@@ -361,7 +365,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             digitalDocument = fileformat.getDigitalDocument();
         } catch (ReadException | IOException | SwapException | PreferencesException e) {
             log.error(e);
-            Helper.setFehlerMeldung(""); // TODO
+            Helper.setFehlerMeldung("intranda_step_metadata_per_image_metadataNotReadable");
             return false;
         }
 
@@ -374,7 +378,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             mih.createPagination(process, folderName);
         } catch (TypeNotAllowedForParentException | IOException | SwapException | DAOException e) {
             log.error(e);
-            Helper.setFehlerMeldung(""); // TODO
+            Helper.setFehlerMeldung("intranda_step_metadata_per_image_paginationError");
             return false;
         }
 
@@ -422,8 +426,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 // if not, create doscstruct
                 if (pe == null) {
                     try {
-                        //TODO get type from config
-                        DocStruct ds = digitalDocument.createDocStruct(prefs.getDocStrctTypeByName("Chapter"));
+                        DocStruct ds = digitalDocument.createDocStruct(docstruct);
                         ds.addReferenceTo(pageStruct, "logical_physical");
                         pe = new PageElement(ds, pageStruct, image, order);
                         logical.addChild(ds);

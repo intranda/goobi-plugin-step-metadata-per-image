@@ -51,6 +51,7 @@
         </display>              
 
         <identifierField>_urn</identifierField>
+        <docstructName>Chapter</docstructName>
 
         <reference>
             <group>Reference</group>

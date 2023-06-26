@@ -48,7 +48,8 @@
             <field>CatalogIDDigital</field>
         </display>
 
-        <identifierField>_urn</identifierField>              
+        <identifierField>_urn</identifierField>
+        <docstructName>Chapter</docstructName>                      
     </config>
 
 </config_plugin>
