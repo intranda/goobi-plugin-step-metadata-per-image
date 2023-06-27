@@ -73,44 +73,44 @@
 
         <style>
 .grid {
-	display: grid;
-	grid-template-columns: 25% auto;
-	grid-template-rows: auto;
+    display: grid;
+    grid-template-columns: 25% auto;
+    grid-template-rows: auto;
 }
 
 .star {
-	display: block;
-	float: left;
+    display: block;
+    float: left;
 }
 
 .star i {
-	color: #ccc;
+    color: #ccc;
 }
 
 .star .active {
-	color: #368ee0;
+    color: #368ee0;
 }
 
 .btn--icon {
-	text-decoration: none;
-	padding: 0;
-	line-height: inherit;
-	border: none;
-	background: none;
+    text-decoration: none;
+    padding: 0;
+    line-height: inherit;
+    border: none;
+    background: none;
 }
 
 .label-grid {
-	display: grid;
-	grid-template-columns: 40% auto;
-	grid-template-rows: auto;
+    display: grid;
+    grid-template-columns: 40% auto;
+    grid-template-rows: auto;
 }
 
 .form-control.invalid, .form-select.invalid {
-	border: 1px solid var(--clr-box-hot);
+    border: 1px solid var(--clr-box-hot);
 }
 
 .modal-results {
-	max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px);
 }
 </style>
 
@@ -193,9 +193,29 @@
 
                             </x:dataList>
 
+                            <ui:fragment rendered="#{!AktuelleSchritteForm.myPlugin.publicationElement.processReferences.isEmpty()}">
+                                <div class="row">
+                                    <div class="col-12 col-md-3 control-label">
+                                        <h:outputText value="#{msgs.plugin_step_metadata_per_image_references}" />
+                                    </div>
 
+                                    <div class="col-12 col-md-9">
+                                        <ui:repeat
+                                            var="reference"
+                                            value="#{AktuelleSchritteForm.myPlugin.publicationElement.processReferences}">
+                                            <div class="btn btn-blank me-2">
+                                                <span>
+                                                    <h:outputText value="#{reference.otherProcessName} #{msgs.lw_currentImageNumber} #{reference.otherImageNumber}" />
+                                                </span>
+
+                                            </div>
+                                            <br />
+                                        </ui:repeat>
+                                    </div>
+
+                                </div>
+                            </ui:fragment>
                         </div>
-
                     </div>
                     <hr />
 
@@ -203,8 +223,7 @@
                     <ui:repeat
                         var="page"
                         value="#{AktuelleSchritteForm.myPlugin.pages}"
-                        varStatus="myStatus"
-                        >
+                        varStatus="myStatus">
                         <div class="grid">
                             <!-- left side, 30% -->
                             <div>
@@ -403,7 +422,7 @@
                                                 itemLabel="#{item}"
                                                 itemValue="#{item}" />
                                         </ui:fragment>
-                                        
+
                                         <ui:fragment rendered="#{field.displayType=='gnd'}">
                                             <intranda:formInputGnd
                                                 id="gnd"
@@ -416,7 +435,7 @@
                                                 required="false"
                                                 displayLabel="true" />
                                         </ui:fragment>
-                                        
+
                                         <ui:fragment rendered="#{field.displayType=='geonames'}">
                                             <intranda:formInputGeonames
                                                 id="geonames"
@@ -428,10 +447,9 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="true"
-                                                submitDataAction="#{field.importGeonamesData()}"
-                                                 />
+                                                submitDataAction="#{field.importGeonamesData()}" />
                                         </ui:fragment>
-                                        
+
                                         <h:panelGroup
                                             layout="block"
                                             rendered="#{!entry.valid}"
@@ -462,7 +480,6 @@
                                 <div class="row">
                                     <div class="col-12 col-md-3 control-label">
                                         <h:outputText value="#{msgs.plugin_step_metadata_per_image_references}" />
-
                                     </div>
 
                                     <div class="col-12 col-md-9">
@@ -475,12 +492,17 @@
                                             <button
                                                 jsf:id="removeReference"
                                                 class="btn btn-blank me-2"
-                                                jsf:action="#{page.deleteProcessReference}"
-                                                >
-                                                <i class="fa fa-minus-circle"></i> <span> <h:outputText value="#{reference.otherProcessName}" />
+                                                jsf:action="#{page.deleteProcessReference}">
+                                                <i class="fa fa-minus-circle"></i>
+                                                <span>
+                                                    <h:outputText value="#{reference.otherProcessName}" />
                                                 </span>
-                                                <f:setPropertyActionListener value="#{reference}" target="#{page.selectedReference}" />
-                                                <f:ajax render="@form" execute="@this"/>
+                                                <f:setPropertyActionListener
+                                                    value="#{reference}"
+                                                    target="#{page.selectedReference}" />
+                                                <f:ajax
+                                                    render="@form"
+                                                    execute="@this" />
                                             </button>
                                             <br />
                                         </ui:repeat>
@@ -518,7 +540,9 @@
                         class="btn btn-success me-2"
                         jsf:id="saveMetadata"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.saveMetadata}">
-                        <i class="fa fa-floppy-o"></i> <span> <h:outputText value="#{msgs.speichern}" />
+                        <i class="fa fa-floppy-o"></i>
+                        <span>
+                            <h:outputText value="#{msgs.speichern}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
@@ -530,7 +554,9 @@
                         class="btn btn-blank me-2"
                         jsf:id="absenden"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <i class="fa fa-close"></i> <span> <h:outputText value="#{msgs.pluginLeave}" />
+                        <i class="fa fa-close"></i>
+                        <span>
+                            <h:outputText value="#{msgs.pluginLeave}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
@@ -553,31 +579,31 @@
 
 
         <script type="text/javascript">
-									window.onload = function() {
-										loadImages();
-										console.log(intrandaImages);
-									}
+                                    window.onload = function() {
+                                        loadImages();
+                                        console.log( intrandaImages );
+                                    }
 
-									jsf.ajax.addOnEvent(function(data) {
-										var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
-
-										switch (ajaxstatus) {
-										case "begin": // This is called right before ajax request is been sent.
-
-											break;
-
-										case "complete": // This is called right after ajax response is received.
-
-											break;
-
-										case "success": // This is called when ajax response is successfully processed.
-
-											loadImages();
-
-											break;
-										}
-									});
-								</script>
+                                    jsf.ajax.addOnEvent( function( data ) {
+                                        var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
+                                        
+                                        switch ( ajaxstatus ) {
+                                            case "begin": // This is called right before ajax request is been sent.
+                                            
+                                                break;
+                                            
+                                            case "complete": // This is called right after ajax response is received.
+                                            
+                                                break;
+                                            
+                                            case "success": // This is called when ajax response is successfully processed.
+                                            
+                                                loadImages();
+                                                
+                                                break;
+                                        }
+                                    } );
+                                </script>
 
 
     </ui:define>

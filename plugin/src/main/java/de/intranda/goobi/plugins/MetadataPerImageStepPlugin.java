@@ -419,19 +419,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         List<MetadataGroup> mainReferences = logical.getAllMetadataGroupsByType(referenceMetadataGroupType);
         if (mainReferences != null) {
             for (MetadataGroup mg : mainReferences) {
-                ProcessReference pr = new ProcessReference(mg);
-
-                for (Metadata md : mg.getMetadataList()) {
-                    if (md.getType().equals(metadataNameProcessID)) {
-                        pr.setOtherProcessId(md.getValue());
-                    } else if (md.getType().equals(metadataNameDocstructID)) {
-                        pr.setOtherDocstructId(md.getValue());
-                    } else if (md.getType().equals(metadataNamePageNumber)) {
-                        pr.setOtherImageNumber(md.getValue());
-                    } else if (md.getType().equals(metadataNameLabel)) {
-                        pr.setOtherProcessName(md.getValue());
-                    }
-                }
+                ProcessReference pr = parseReference(mg);
                 pr.setProcessId("" + process.getId());
                 pr.setProcessName(publicationElement.getTitle());
                 publicationElement.getProcessReferences().add(pr);
@@ -510,23 +498,11 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
                 List<MetadataGroup> references = pe.getDocstruct().getAllMetadataGroupsByType(referenceMetadataGroupType);
                 for (MetadataGroup mg : references) {
-                    ProcessReference pr = new ProcessReference(mg);
-
-                    for (Metadata md : mg.getMetadataList()) {
-                        if (md.getType().equals(metadataNameProcessID)) {
-                            pr.setOtherProcessId(md.getValue());
-                        } else if (md.getType().equals(metadataNameDocstructID)) {
-                            pr.setOtherDocstructId(md.getValue());
-                        } else if (md.getType().equals(metadataNamePageNumber)) {
-                            pr.setOtherImageNumber(md.getValue());
-                        } else if (md.getType().equals(metadataNameLabel)) {
-                            pr.setOtherProcessName(md.getValue());
-                        }
-                    }
+                    ProcessReference pr = parseReference(mg);
                     pr.setDocstructId(pe.getIdentifier().getValue());
                     pr.setProcessId("" + process.getId());
                     pr.setProcessName(publicationElement.getTitle());
-                    pr.setImageNumber("" + pe.getOrder());
+                    pr.setImageNumber(String.valueOf(pe.getOrder() + 1));
                     pe.getProcessReferences().add(pr);
                 }
 
@@ -537,6 +513,23 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         }
 
         return true;
+    }
+
+    private ProcessReference parseReference(MetadataGroup mg) {
+        ProcessReference pr = new ProcessReference(mg);
+
+        for (Metadata md : mg.getMetadataList()) {
+            if (md.getType().equals(metadataNameProcessID)) {
+                pr.setOtherProcessId(md.getValue());
+            } else if (md.getType().equals(metadataNameDocstructID)) {
+                pr.setOtherDocstructId(md.getValue());
+            } else if (md.getType().equals(metadataNamePageNumber)) {
+                pr.setOtherImageNumber(md.getValue());
+            } else if (md.getType().equals(metadataNameLabel)) {
+                pr.setOtherProcessName(md.getValue());
+            }
+        }
+        return pr;
     }
 
     public void saveMetadata() {
@@ -660,7 +653,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             reference.setProcessId(processid);
             reference.setDocstructId(identifier); // identifier of selected docstruct
             reference.setProcessName(publicationElement.getTitle()); //main title
-            reference.setImageNumber(String.valueOf(currentPage.getOrder()));
+            reference.setImageNumber(String.valueOf(currentPage.getOrder() + 1));
             reference.setOtherProcessId(otherProcessId);
             reference.setOtherProcessName(otherProcessTitle);
             reference.setOtherDocstructId(null); // keep it empty, we link to the process itself
