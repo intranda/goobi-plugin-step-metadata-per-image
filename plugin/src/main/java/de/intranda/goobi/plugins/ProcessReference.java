@@ -26,29 +26,30 @@ import ugh.dl.MetadataGroup;
 @Getter
 @Setter
 public class ProcessReference {
-
+    
     // process id
-    private Metadata processId;
+    private String processId;
     // display this name as label
-    private Metadata processName;
+    private String processName;
 
     // image number, if link is set to a specific image
-    private Metadata imageNumber;
+    private String imageNumber;
 
     // contains the docstruct identifier, if link is set to a specific docstruct
-    private Metadata docstructId;
+    private String docstructId;
 
     // new, deleted or changed
-    private Metadata status;// = "changed";
+    private String status = "changed";
 
     // process id of linked process
-    private Metadata otherProcessId;
+    private String otherProcessId;
     // name of linked process
-    private Metadata otherProcessName;
+    private String otherProcessName;
     // image number (might be empty)
-    private Metadata otherImageNumber;
+    private String otherImageNumber;
     // linked docstruct id (might be empty)
-    private Metadata otherDocstructId;
+    private String otherDocstructId;
+
 
     private MetadataGroup group;
 

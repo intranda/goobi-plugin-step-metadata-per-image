@@ -51,6 +51,7 @@ import java.util.UUID;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.cli.helper.StringPair;
@@ -63,6 +64,7 @@ import org.goobi.vocabulary.VocabRecord;
 import org.goobi.vocabulary.Vocabulary;
 
 import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.StorageProvider;
 import de.sub.goobi.helper.exceptions.DAOException;
@@ -92,6 +94,7 @@ import ugh.exceptions.ReadException;
 import ugh.exceptions.TypeNotAllowedForParentException;
 import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
+import ugh.fileformats.mets.MetsMods;
 
 @PluginImplementation
 @Log4j2
@@ -411,6 +414,31 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             }
         }
 
+        //
+
+        List<MetadataGroup> mainReferences = logical.getAllMetadataGroupsByType(referenceMetadataGroupType);
+        if (mainReferences != null) {
+            for (MetadataGroup mg : mainReferences) {
+                ProcessReference pr = new ProcessReference(mg);
+
+                for (Metadata md : mg.getMetadataList()) {
+                    if (md.getType().equals(metadataNameProcessID)) {
+                        pr.setOtherProcessId(md.getValue());
+                    } else if (md.getType().equals(metadataNameDocstructID)) {
+                        pr.setOtherDocstructId(md.getValue());
+                    } else if (md.getType().equals(metadataNamePageNumber)) {
+                        pr.setOtherImageNumber(md.getValue());
+                    } else if (md.getType().equals(metadataNameLabel)) {
+                        pr.setOtherProcessName(md.getValue());
+                    }
+                }
+                pr.setProcessId("" + process.getId());
+                pr.setProcessName(publicationElement.getTitle());
+                publicationElement.getProcessReferences().add(pr);
+            }
+
+        }
+
         // check if a logical docstruct exists for each image
         DocStruct physical = digitalDocument.getPhysicalDocStruct();
         int order = 0;
@@ -480,7 +508,28 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
                 // TODO metadata for rating
 
-                // TODO metadata groups for references
+                List<MetadataGroup> references = pe.getDocstruct().getAllMetadataGroupsByType(referenceMetadataGroupType);
+                for (MetadataGroup mg : references) {
+                    ProcessReference pr = new ProcessReference(mg);
+
+                    for (Metadata md : mg.getMetadataList()) {
+                        if (md.getType().equals(metadataNameProcessID)) {
+                            pr.setOtherProcessId(md.getValue());
+                        } else if (md.getType().equals(metadataNameDocstructID)) {
+                            pr.setOtherDocstructId(md.getValue());
+                        } else if (md.getType().equals(metadataNamePageNumber)) {
+                            pr.setOtherImageNumber(md.getValue());
+                        } else if (md.getType().equals(metadataNameLabel)) {
+                            pr.setOtherProcessName(md.getValue());
+                        }
+                    }
+                    pr.setDocstructId(pe.getIdentifier().getValue());
+                    pr.setProcessId("" + process.getId());
+                    pr.setProcessName(publicationElement.getTitle());
+                    pr.setImageNumber("" + pe.getOrder());
+                    pe.getProcessReferences().add(pr);
+                }
+
                 pages.add(pe);
             } catch (IOException | SwapException | DAOException | UGHException e) {
                 log.error(e);
@@ -507,12 +556,77 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             // create metadata group for each reference
             for (ProcessReference ref : pe.getProcessReferences()) {
                 // if reference is marked as new, open other process, add reference
+                if ("new".equals(ref.getStatus())) {
+                    try {
+                        MetadataGroup grp = ref.getGroup();
+                        pe.getDocstruct().addMetadataGroup(grp);
+                        Metadata processid = new Metadata(metadataNameProcessID);
+                        processid.setValue(ref.getOtherProcessId());
+                        grp.addMetadata(processid);
 
-                // if reference is marked as delete, open other process, remove reference
+                        Metadata label = new Metadata(metadataNameLabel);
+                        label.setValue(ref.getOtherProcessName());
+                        grp.addMetadata(label);
 
-                // otherwise just store the metadata
-
+                        MetsMods o = new MetsMods(prefs);
+                        String metsFile = ConfigurationHelper.getInstance().getMetadataFolder() + ref.getOtherProcessId() + "/meta.xml";
+                        o.read(metsFile);
+                        DocStruct logical = o.getDigitalDocument().getLogicalDocStruct();
+                        // open other process
+                        // create new reference for other process
+                        MetadataGroup other = new MetadataGroup(referenceMetadataGroupType);
+                        Metadata otherProcessId = new Metadata(metadataNameProcessID);
+                        otherProcessId.setValue(ref.getProcessId());
+                        other.addMetadata(otherProcessId);
+                        Metadata otherLabel = new Metadata(metadataNameLabel);
+                        otherLabel.setValue(ref.getProcessName());
+                        other.addMetadata(otherLabel);
+                        Metadata otherDocstructId = new Metadata(metadataNameDocstructID);
+                        otherDocstructId.setValue(ref.getDocstructId());
+                        other.addMetadata(otherDocstructId);
+                        Metadata otherPageNo = new Metadata(metadataNamePageNumber);
+                        otherPageNo.setValue(ref.getImageNumber());
+                        other.addMetadata(otherPageNo);
+                        logical.addMetadataGroup(other);
+                        o.write(metsFile);
+                    } catch (UGHException e) {
+                        log.error(e);
+                    }
+                }
             }
+
+            for (ProcessReference ref : pe.getDeletedProcessReferences()) {
+                // if reference is marked as delete, open other process, remove reference
+                MetadataGroup grp = ref.getGroup();
+                if (grp.getParent() != null) {
+                    grp.getParent().removeMetadataGroup(grp, true);
+
+                    try {
+                        MetsMods o = new MetsMods(prefs);
+                        String metsFile = ConfigurationHelper.getInstance().getMetadataFolder() + ref.getOtherProcessId() + "/meta.xml";
+                        o.read(metsFile);
+                        DocStruct logical = o.getDigitalDocument().getLogicalDocStruct();
+                        List<MetadataGroup> mgl = logical.getAllMetadataGroupsByType(referenceMetadataGroupType);
+                        for (MetadataGroup mg : mgl) {
+                            String docstructId = null;
+                            for (Metadata metadata : mg.getMetadataList()) {
+                                if (metadata.getType().equals(metadataNameDocstructID)) {
+                                    docstructId = metadata.getValue();
+                                }
+                            }
+                            if (StringUtils.isNotBlank(docstructId) && docstructId.equals(pe.getIdentifier().getValue())) {
+                                mg.getParent().removeMetadataGroup(mg, true);
+                                break;
+                            }
+                        }
+
+                        o.write(metsFile);
+                    } catch (UGHException e) {
+                        log.error(e);
+                    }
+                }
+            }
+
             // TODO metadata for rating
         }
 
@@ -542,21 +656,19 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         try {
             MetadataGroup mg = new MetadataGroup(referenceMetadataGroupType);
             ProcessReference reference = new ProcessReference(mg);
-            //        reference.setStatus("new");
-            //        reference.setProcessId(processid);
-            //        reference.setDocstructId(identifier); // identifier of selected docstruct
-            //        reference.setProcessName(publicationElement.getTitle()); //main title
-            //        reference.setImageNumber(String.valueOf(currentPage.getOrder()));
-            //
-            //        reference.setOtherProcessId(otherProcessId);
-            //        reference.setOtherProcessName(otherProcessTitle);
-            //        reference.setOtherDocstructId(null); // keep it empty, we link to the process itself
-            //        reference.setOtherImageNumber(null);// keep it empty, we link to the process itself
+            reference.setStatus("new");
+            reference.setProcessId(processid);
+            reference.setDocstructId(identifier); // identifier of selected docstruct
+            reference.setProcessName(publicationElement.getTitle()); //main title
+            reference.setImageNumber(String.valueOf(currentPage.getOrder()));
+            reference.setOtherProcessId(otherProcessId);
+            reference.setOtherProcessName(otherProcessTitle);
+            reference.setOtherDocstructId(null); // keep it empty, we link to the process itself
+            reference.setOtherImageNumber(null);// keep it empty, we link to the process itself
 
             currentPage.getProcessReferences().add(reference);
         } catch (MetadataTypeNotAllowedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e);
         }
 
         // reset search results, searchvalue
