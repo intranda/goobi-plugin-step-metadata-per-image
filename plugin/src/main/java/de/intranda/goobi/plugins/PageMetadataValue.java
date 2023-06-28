@@ -67,7 +67,6 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
 
     @Override
     public String getValue() {
-        System.out.println(metadata.getType().getName() + " - " + metadata.getValue());
         return metadata.getValue();
     }
 
@@ -111,6 +110,16 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
 
     @Override
     public void importGndData() {
+        for (NormData normdata : currentData) {
+            if ("NORM_IDENTIFIER".equals(normdata.getKey())) {
+                gndNumber = normdata.getValues().get(0).getText();
+                metadata.setAutorityFile("gnd", "http://d-nb.info/gnd/", gndNumber);
+            } else if ("NORM_NAME".equals(normdata.getKey())) {
+                String value = normdata.getValues().get(0).getText();
+                metadata.setValue(value);
+            }
+        }
+
     }
 
     @Override
