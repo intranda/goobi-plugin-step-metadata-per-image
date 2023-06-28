@@ -52,6 +52,9 @@ public class PageElement {
     @Setter
     private Metadata identifier;
 
+    @Setter
+    private boolean selected = false; // indicates if this page was selected for mass manipulation
+
     public PageElement(DocStruct docstruct, DocStruct page, Image image, int order) {
         this.docstruct = docstruct;
         this.page = page;

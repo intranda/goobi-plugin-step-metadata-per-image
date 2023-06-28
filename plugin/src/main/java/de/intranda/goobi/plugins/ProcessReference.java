@@ -20,13 +20,12 @@ package de.intranda.goobi.plugins;
 
 import lombok.Getter;
 import lombok.Setter;
-import ugh.dl.Metadata;
 import ugh.dl.MetadataGroup;
 
 @Getter
 @Setter
 public class ProcessReference {
-    
+
     // process id
     private String processId;
     // display this name as label

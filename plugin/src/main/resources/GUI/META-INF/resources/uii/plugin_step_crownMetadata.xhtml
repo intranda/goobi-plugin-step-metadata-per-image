@@ -428,7 +428,7 @@
                                                 id="gnd"
                                                 name="gnd"
                                                 label="#{msgs[field.label]}"
-                                                field="#{field}"
+                                                field="#{entry}"
                                                 help="#{msgs.help}"
                                                 fieldStyle="form-control"
                                                 displayAsRequired="#{field.required}"
@@ -441,13 +441,13 @@
                                                 id="geonames"
                                                 name="geonames"
                                                 label="#{msgs[field.label]}"
-                                                field="#{field}"
+                                                field="#{entry}"
                                                 help="#{msgs.help}"
                                                 fieldStyle="form-control"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="true"
-                                                submitDataAction="#{field.importGeonamesData()}" />
+                                                submitDataAction="#{entry.importGeonamesData()}" />
                                         </ui:fragment>
 
                                         <h:panelGroup

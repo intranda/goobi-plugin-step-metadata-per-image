@@ -18,24 +18,11 @@
 
 package de.intranda.goobi.plugins;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.geonames.Style;
-import org.geonames.Toponym;
-import org.geonames.ToponymSearchCriteria;
-import org.geonames.ToponymSearchResult;
-import org.geonames.WebService;
-import org.goobi.production.properties.GeonamesSearchProperty;
-import org.goobi.production.properties.GndSearchProperty;
 import org.goobi.production.properties.MultiSelectProperty;
 
-import de.intranda.digiverso.normdataimporter.NormDataImporter;
-import de.intranda.digiverso.normdataimporter.model.NormData;
-import de.sub.goobi.config.ConfigurationHelper;
-import de.sub.goobi.helper.Helper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -46,7 +33,7 @@ import ugh.exceptions.MetadataTypeNotAllowedException;
 @Getter
 @Setter
 @Log4j2
-public class PageMetadataField implements MultiSelectProperty<String>, GndSearchProperty, GeonamesSearchProperty {
+public class PageMetadataField implements MultiSelectProperty<String> {
 
     private List<PageMetadataValue> values = new ArrayList<>();
 
@@ -157,83 +144,5 @@ public class PageMetadataField implements MultiSelectProperty<String>, GndSearch
 
     }
 
-    private String searchValue;
-    private String searchOption;
-    private List<List<NormData>> dataList;
-    private List<NormData> currentData;
-    private boolean showNoHits;
-    private String value;
-    private String gndNumber;
-    private String geonamesNumber;
-    private Toponym currentToponym;
-    private List<Toponym> resultList;
-    private int totalResults;
-
-    @Override
-    public void importGeonamesData() {
-        value = currentToponym.getName();
-        geonamesNumber= "" + currentToponym.getGeoNameId();
-
-        currentToponym = null;
-        resultList=null;
-        totalResults=0;
-    }
-
-
-    @Override
-    public void importGndData() {
-    }
-
-    @Override
-    public void searchGnd() {
-        String val = "";
-        if (StringUtils.isBlank(getSearchOption()) && StringUtils.isBlank(getSearchValue())) {
-            setShowNoHits(true);
-            return;
-        }
-        if (StringUtils.isBlank(getSearchOption())) {
-            val = "dnb.nid=" + getSearchValue();
-        } else {
-            val = getSearchOption() + " and BBG=" + getSearchValue();
-        }
-        URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/woe/" + val);
-        String string = url.toString()
-                .replace("Ä", "%C3%84")
-                .replace("Ö", "%C3%96")
-                .replace("Ü", "%C3%9C")
-                .replace("ä", "%C3%A4")
-                .replace("ö", "%C3%B6")
-                .replace("ü", "%C3%BC")
-                .replace("ß", "%C3%9F");
-        if (ConfigurationHelper.getInstance().isUseProxy()) {
-            setDataList(NormDataImporter.importNormDataList(string, 3, ConfigurationHelper.getInstance().getProxyUrl(),
-                    ConfigurationHelper.getInstance().getProxyPort()));
-        } else {
-            setDataList(NormDataImporter.importNormDataList(string, 3, null, 0));
-        }
-        setShowNoHits(getDataList() == null || getDataList().isEmpty());
-    }
-
-    @Override
-    public void searchGeonames() {
-        String credentials = ConfigurationHelper.getInstance().getGeonamesCredentials();
-        if (credentials != null) {
-            WebService.setUserName(credentials);
-            ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-            searchCriteria.setNameEquals(searchValue);
-            searchCriteria.setStyle(Style.FULL);
-
-            try {
-                ToponymSearchResult searchResult = WebService.search(searchCriteria);
-                resultList = searchResult.getToponyms();
-                totalResults = searchResult.getTotalResultsCount();
-            } catch (Exception e) {
-                log.error(e);
-            }
-            setShowNoHits(getResultList() == null || getResultList().isEmpty());
-        } else {
-            Helper.setFehlerMeldung("geonamesList", "Missing data", "mets_geoname_account_inactive");
-        }
-    }
 
 }
