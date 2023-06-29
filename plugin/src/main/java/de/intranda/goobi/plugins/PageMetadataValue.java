@@ -29,11 +29,13 @@ import org.geonames.ToponymSearchResult;
 import org.geonames.WebService;
 import org.goobi.production.properties.GeonamesSearchProperty;
 import org.goobi.production.properties.GndSearchProperty;
+import org.goobi.production.properties.ViafSearchProperty;
 
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
+import de.sub.goobi.metadaten.search.ViafSearch;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -42,13 +44,15 @@ import ugh.dl.Metadata;
 @Getter
 @Setter
 @Log4j2
-public class PageMetadataValue implements GndSearchProperty, GeonamesSearchProperty {
+public class PageMetadataValue implements GndSearchProperty, GeonamesSearchProperty , ViafSearchProperty {
 
     private String validationMessage;
     private Metadata metadata;
 
     private boolean required;
     private String validationRegex;
+
+    private ViafSearch viafSearch = new ViafSearch();
 
     public PageMetadataValue(Metadata metadata, String validationRegex, boolean required) {
         this.metadata = metadata;
@@ -87,6 +91,18 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
         metadata.setAutorityFile("geonames","http://www.geonames.org/", number);
     }
 
+
+
+    @Override
+    public String getViafNumber() {
+        return metadata.getAuthorityValue();
+    }
+
+    @Override
+    public void setViafNumber(String number) {
+        // do nothing
+    }
+
     private String searchValue;
     private String searchOption;
     private List<List<NormData>> dataList;
@@ -119,6 +135,12 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
                 metadata.setValue(value);
             }
         }
+
+    }
+
+    @Override
+    public void importViafData() {
+        viafSearch.getMetadata(metadata);
 
     }
 
@@ -172,6 +194,12 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
         } else {
             Helper.setFehlerMeldung("geonamesList", "Missing data", "mets_geoname_account_inactive");
         }
+    }
+
+
+    @Override
+    public void searchViaf() {
+        viafSearch.performSearchRequest();
     }
 
 }

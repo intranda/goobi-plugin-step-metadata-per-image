@@ -451,6 +451,19 @@
                                                 submitDataAction="#{entry.importGeonamesData()}" />
                                         </ui:fragment>
 
+                                        <ui:fragment rendered="#{field.displayType=='viaf'}">
+                                            <intranda:formInputViaf
+                                                id="viaf"
+                                                name="viaf"
+                                                label="#{msgs[field.label]}"
+                                                field="#{entry}"
+                                                help="#{msgs.help}"
+                                                fieldStyle="form-control"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                displayLabel="true" />
+                                        </ui:fragment>
+
                                         <h:panelGroup
                                             layout="block"
                                             rendered="#{!entry.valid}"
