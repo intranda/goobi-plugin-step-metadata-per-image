@@ -36,7 +36,15 @@
         <field label="Vocabulary" metadataField="PublisherName" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
             <vocabulary>Biography Type</vocabulary>                 
         </field>
+<!--         
+        <field label="gnd" metadataField="TitleDocMainShort" repeatable="false" displayType="gnd" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
 
+        <field label="geonames" metadataField="TitleDocMainShort" repeatable="false" displayType="geonames" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
+
+         <field label="viaf" metadataField="LegislativeBody" repeatable="false" displayType="viaf" defaultValue="" required="false" validation="" readonly="false" 
+        searchFields="210__a; 111__a; 100__a; 110__a; 150__a; 151__a;" displayFields="001=NORM_IDENTIFIER; 0247_a=URI; 1001_a=NORM_NAME; 1001_d=NORM_LIFEPERIOD; 1001_q=NORM_SEX; 375__a=NORM_SEX;"
+        validationErrorMessage="Muss ausgefüllt sein"></field>
+ -->
 
 <!-- identifier field is searched automatically, it does not need a configuration-->
         <searchfield>TitleDocMain</searchfield>

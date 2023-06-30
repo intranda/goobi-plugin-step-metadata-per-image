@@ -161,7 +161,7 @@ public class MetadataPerImagePluginTest {
         //        EasyMock.expect(Helper.getCurrentUser()).andReturn(null).anyTimes();
         //        EasyMock.expect(Helper.getTranslation(EasyMock.anyString(), EasyMock.anyString(), EasyMock.anyString())).andReturn("").anyTimes();
         Helper.setFehlerMeldung(EasyMock.anyString());
-
+        EasyMock.expect(Helper.getTranslation(EasyMock.anyString())).andReturn("fixture").anyTimes();
         PowerMock.replay(Helper.class);
 
         FacesContext facesContext = EasyMock.createMock(FacesContext.class);

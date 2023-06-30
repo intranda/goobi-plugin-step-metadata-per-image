@@ -44,17 +44,19 @@ import ugh.dl.Metadata;
 @Getter
 @Setter
 @Log4j2
-public class PageMetadataValue implements GndSearchProperty, GeonamesSearchProperty , ViafSearchProperty {
+public class PageMetadataValue implements GndSearchProperty, GeonamesSearchProperty, ViafSearchProperty {
 
     private String validationMessage;
     private Metadata metadata;
 
     private boolean required;
     private String validationRegex;
+    private String viafSearchFields;
+    private String viafDisplayFields;
 
     private ViafSearch viafSearch = new ViafSearch();
 
-    public PageMetadataValue(Metadata metadata, String validationRegex, boolean required) {
+    public PageMetadataValue(Metadata metadata, String validationRegex, boolean required, String viafSearchFields, String viafDisplayFields) {
         this.metadata = metadata;
         this.validationRegex = validationRegex;
         this.required = required;
@@ -62,8 +64,10 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
 
     public boolean isValid() {
         if (required && StringUtils.isBlank(getValue())) {
+            // required field is empty
             return false;
-        } else if (StringUtils.isNotBlank(validationMessage) && StringUtils.isNotBlank(getValue()) && !getValue().matches(validationMessage)) {
+        } else if (StringUtils.isNotBlank(validationRegex) && StringUtils.isNotBlank(getValue()) && !getValue().matches(validationRegex)) {
+            // configured regular expression does not match with value
             return false;
         }
         return true;
@@ -79,19 +83,15 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
         metadata.setValue(value);
     }
 
-
     @Override
     public String getGeonamesNumber() {
         return metadata.getAuthorityValue();
     }
 
-
     @Override
     public void setGeonamesNumber(String number) {
-        metadata.setAutorityFile("geonames","http://www.geonames.org/", number);
+        metadata.setAutorityFile("geonames", "http://www.geonames.org/", number);
     }
-
-
 
     @Override
     public String getViafNumber() {
@@ -115,14 +115,13 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
 
     @Override
     public void importGeonamesData() {
-        metadata.setValue( currentToponym.getName());
+        metadata.setValue(currentToponym.getName());
         metadata.setAutorityFile("geonames", "http://www.geonames.org/", "" + currentToponym.getGeoNameId());
 
         currentToponym = null;
-        resultList=null;
-        totalResults=0;
+        resultList = null;
+        totalResults = 0;
     }
-
 
     @Override
     public void importGndData() {
@@ -196,9 +195,10 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
         }
     }
 
-
     @Override
     public void searchViaf() {
+        viafSearch.setSource(viafSearchFields);
+        viafSearch.setField(viafDisplayFields);
         viafSearch.performSearchRequest();
     }
 

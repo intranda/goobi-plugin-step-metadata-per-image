@@ -184,6 +184,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             field.setValidationErrorMessage(hc.getString("@validationErrorMessage", ""));
 
             field.setMetadataType(prefs.getMetadataTypeByName(hc.getString("@metadataField")));
+            field.setViafSearchFields(hc.getString("@searchFields"));
+            field.setViafDisplayFields(hc.getString("@displayFields"));
 
             switch (field.getDisplayType()) {
                 case "select":
@@ -462,7 +464,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                     if (pe.getDocstruct().getAllMetadata() != null) {
                         for (Metadata md : pe.getDocstruct().getAllMetadata()) {
                             if (md.getType().getName().equals(field.getMetadataField())) {
-                                field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
+                                field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired(), field.getViafSearchFields(),
+                                        field.getViafDisplayFields()));
                             }
                         }
                     }
@@ -474,7 +477,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                             Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
                             md.setValue(field.getDefaultValue());
                             pe.getDocstruct().addMetadata(md);
-                            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired()));
+                            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired(), field.getViafSearchFields(),
+                                    field.getViafDisplayFields()));
                         } catch (MetadataTypeNotAllowedException e) {
                             log.error(e);
                         }

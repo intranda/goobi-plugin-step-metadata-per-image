@@ -46,6 +46,8 @@ public class PageMetadataField implements MultiSelectProperty<String> {
     private String validation;
     private boolean readonly;
     private String validationErrorMessage;
+    private String viafSearchFields;
+    private String viafDisplayFields;
 
     private List<String> valueList;
 
@@ -136,13 +138,12 @@ public class PageMetadataField implements MultiSelectProperty<String> {
         try {
             Metadata md = new Metadata(metadataType);
             md.setValue(value);
-            PageMetadataValue pmv = new PageMetadataValue(md, validation, required);
+            PageMetadataValue pmv = new PageMetadataValue(md, validation, required, viafSearchFields, viafDisplayFields);
             values.add(pmv);
         } catch (MetadataTypeNotAllowedException e) {
             // ignore this, it will not occur
         }
 
     }
-
 
 }
