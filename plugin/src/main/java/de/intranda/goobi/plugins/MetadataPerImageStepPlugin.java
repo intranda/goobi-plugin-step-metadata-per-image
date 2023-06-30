@@ -184,8 +184,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             field.setValidationErrorMessage(hc.getString("@validationErrorMessage", ""));
 
             field.setMetadataType(prefs.getMetadataTypeByName(hc.getString("@metadataField")));
-            field.setViafSearchFields(hc.getString("@searchFields"));
-            field.setViafDisplayFields(hc.getString("@displayFields"));
+            field.setViafSearchFields(hc.getString("@searchFields", ""));
+            field.setViafDisplayFields(hc.getString("@displayFields", ""));
 
             switch (field.getDisplayType()) {
                 case "select":

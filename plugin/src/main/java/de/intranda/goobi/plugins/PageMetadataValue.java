@@ -60,6 +60,8 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
         this.metadata = metadata;
         this.validationRegex = validationRegex;
         this.required = required;
+        this.viafSearchFields = viafSearchFields;
+        this.viafDisplayFields = viafDisplayFields;
     }
 
     public boolean isValid() {

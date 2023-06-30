@@ -68,6 +68,8 @@ public class PageMetadataField implements MultiSelectProperty<String> {
         readonly = other.isReadonly();
         validationErrorMessage = other.getValidationErrorMessage();
         valueList = other.getValueList();
+        viafSearchFields = other.getViafSearchFields();
+        viafDisplayFields = other.getViafDisplayFields();
         metadataType = other.getMetadataType();
     }
 
