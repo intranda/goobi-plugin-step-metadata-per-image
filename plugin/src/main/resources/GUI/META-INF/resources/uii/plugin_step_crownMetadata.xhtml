@@ -364,7 +364,7 @@
                             </div>
 
                             <!-- right side -->
-                            <div style="display: grid; grid-template-columns: auto 100px;">
+                            <div>
                                 <!-- metadata list -->
                                 <ui:repeat
                                     var="field"
@@ -373,123 +373,118 @@
                                     <ui:repeat
                                         var="entry"
                                         value="#{field.values}">
-                                        <div>
-                                            <ui:fragment rendered="#{field.displayType=='input'}">
-                                                <intranda:formInputTextAjax
-                                                    id="input"
-                                                    name="input"
-                                                    label="#{msgs[field.label]}"
-                                                    field="#{entry.value}"
-                                                    help="#{msgs.helpProcessStepTitle}"
-                                                    displayAsRequired="#{field.required}"
-                                                    required="false"
-                                                    readonly="#{field.readonly}"
-                                                    fieldStyle="#{entry.valid ? '' : 'invalid'}"
-                                                    execute="@this"
-                                                    render="@form" />
-                                            </ui:fragment>
-                                            <!-- TODO Button area add/remove/search -->
 
-                                            <ui:fragment rendered="#{field.displayType=='textarea'}">
-                                                <intranda:formInputTextAreaAjax
-                                                    id="area"
-                                                    name="area"
-                                                    label="#{msgs[field.label]}"
-                                                    field="#{entry.value}"
-                                                    help="#{msgs.helpProcessStepTitle}"
-                                                    displayAsRequired="#{field.required}"
-                                                    required="false"
-                                                    readonly="#{field.readonly}"
-                                                    fieldStyle="#{entry.valid ? '' : 'invalid'}"
-                                                    execute="@this"
-                                                    render="@form" />
-                                            </ui:fragment>
 
-                                            <ui:fragment rendered="#{field.displayType=='select'}">
-                                                <intranda:formInputDropDownAjax
-                                                    id="select"
-                                                    ajaxEvent="change"
-                                                    ajaxRender="@form"
-                                                    label="#{msgs[field.label]}"
-                                                    field="#{entry.value}"
-                                                    help="#{msgs.helpLdapAuthenticationType}"
-                                                    name="select"
-                                                    displayAsRequired="#{field.required}"
-                                                    required="false"
-                                                    selectItems="#{field.valueList}"
-                                                    fieldStyle="form-control #{entry.valid ? '' : 'invalid'}"
-                                                    var="item"
-                                                    itemLabel="#{item}"
-                                                    itemValue="#{item}" />
-                                            </ui:fragment>
+                                        <ui:fragment rendered="#{field.displayType=='input'}">
+                                            <intranda:formInputTextAjax
+                                                id="input"
+                                                name="input"
+                                                label="#{msgs[field.label]}"
+                                                field="#{entry.value}"
+                                                help="#{msgs.helpProcessStepTitle}"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                readonly="#{field.readonly}"
+                                                fieldStyle="#{entry.valid ? '' : 'invalid'}"
+                                                execute="@this"
+                                                render="@form"
+                                                displayLabel="false">
+                                                <ui:include src="field_label.xhtml" />
+                                            </intranda:formInputTextAjax>
+                                        </ui:fragment>
 
-                                            <ui:fragment rendered="#{field.displayType=='gnd'}">
-                                                <intranda:formInputGnd
-                                                    id="gnd"
-                                                    name="gnd"
-                                                    label="#{msgs[field.label]}"
-                                                    field="#{entry}"
-                                                    help="#{msgs.help}"
-                                                    fieldStyle="form-control"
-                                                    displayAsRequired="#{field.required}"
-                                                    required="false"
-                                                    displayLabel="true" />
-                                            </ui:fragment>
+                                        <ui:fragment rendered="#{field.displayType=='textarea'}">
+                                            <intranda:formInputTextAreaAjax
+                                                id="area"
+                                                name="area"
+                                                label="#{msgs[field.label]}"
+                                                field="#{entry.value}"
+                                                help="#{msgs.helpProcessStepTitle}"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                readonly="#{field.readonly}"
+                                                fieldStyle="#{entry.valid ? '' : 'invalid'}"
+                                                execute="@this"
+                                                render="@form"
+                                                displayLabel="false">
+                                                <ui:include src="field_label.xhtml" />
+                                            </intranda:formInputTextAreaAjax>
+                                        </ui:fragment>
 
-                                            <ui:fragment rendered="#{field.displayType=='geonames'}">
-                                                <intranda:formInputGeonames
-                                                    id="geonames"
-                                                    name="geonames"
-                                                    label="#{msgs[field.label]}"
-                                                    field="#{entry}"
-                                                    help="#{msgs.help}"
-                                                    fieldStyle="form-control"
-                                                    displayAsRequired="#{field.required}"
-                                                    required="false"
-                                                    displayLabel="true"
-                                                    submitDataAction="#{entry.importGeonamesData()}" />
-                                            </ui:fragment>
+                                        <ui:fragment rendered="#{field.displayType=='select'}">
+                                            <intranda:formInputDropDownAjax
+                                                id="select"
+                                                ajaxEvent="change"
+                                                ajaxRender="@form"
+                                                label="#{msgs[field.label]}"
+                                                field="#{entry.value}"
+                                                help="#{msgs.helpLdapAuthenticationType}"
+                                                name="select"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                selectItems="#{field.valueList}"
+                                                fieldStyle="form-control #{entry.valid ? '' : 'invalid'}"
+                                                var="item"
+                                                itemLabel="#{item}"
+                                                itemValue="#{item}"
+                                                displayLabel="false" />
+                                            <ui:include src="field_label.xhtml" />
+                                        </ui:fragment>
 
-                                            <ui:fragment rendered="#{field.displayType=='viaf'}">
-                                                <intranda:formInputViaf
-                                                    id="viaf"
-                                                    name="viaf"
-                                                    label="#{msgs[field.label]}"
-                                                    field="#{entry}"
-                                                    help="#{msgs.help}"
-                                                    fieldStyle="form-control"
-                                                    displayAsRequired="#{field.required}"
-                                                    required="false"
-                                                    displayLabel="true" />
-                                            </ui:fragment>
+                                        <ui:fragment rendered="#{field.displayType=='gnd'}">
+                                            <intranda:formInputGnd
+                                                id="gnd"
+                                                name="gnd"
+                                                label="#{msgs[field.label]}"
+                                                field="#{entry}"
+                                                help="#{msgs.help}"
+                                                fieldStyle="form-control"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                displayLabel="false" />
+                                            <ui:include src="field_label.xhtml" />
+                                        </ui:fragment>
 
-                                            <h:panelGroup
-                                                layout="block"
-                                                rendered="#{!entry.valid}"
-                                                styleClass="w-100 font-danger validation-message">
+                                        <ui:fragment rendered="#{field.displayType=='geonames'}">
+                                            <intranda:formInputGeonames
+                                                id="geonames"
+                                                name="geonames"
+                                                label="#{msgs[field.label]}"
+                                                field="#{entry}"
+                                                help="#{msgs.help}"
+                                                fieldStyle="form-control"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                submitDataAction="#{entry.importGeonamesData()}"
+                                                displayLabel="false" />
+                                            <ui:include src="field_label.xhtml" />
+                                        </ui:fragment>
 
+                                        <ui:fragment rendered="#{field.displayType=='viaf'}">
+                                            <intranda:formInputViaf
+                                                id="viaf"
+                                                name="viaf"
+                                                label="#{msgs[field.label]}"
+                                                field="#{entry}"
+                                                help="#{msgs.help}"
+                                                fieldStyle="form-control"
+                                                displayAsRequired="#{field.required}"
+                                                required="false"
+                                                displayLabel="false" />
+                                            <ui:include src="field_label.xhtml" />
+                                        </ui:fragment>
+
+                                        <h:panelGroup
+                                            layout="block"
+                                            rendered="#{!entry.valid}"
+                                            styleClass="w-100 font-danger validation-message row">
+                                            <div class="col-12 col-md-3"></div>
+                                            <div class="col-12 col-md-9">
                                                 <i class="fa fa-exclamation-circle warning-icon error" />
                                                 <h:outputText value="#{field.validationErrorMessage}" />
-                                            </h:panelGroup>
-                                        </div>
-                                        <div class="buttonarea">
-                                            <!-- button area -->
-                                            <button
-                                                class="btn btn-blank me-2"
-                                                jsf:id="duplicateField"
-                                                jsf:rendered="#{field.displayDuplicationButton}"
-                                                jsf:action="#{field.addNewValue}">
-                                                <i class="fa fa-plus" />
-                                            </button>
+                                            </div>
+                                        </h:panelGroup>
 
-                                            <button
-                                                class="btn btn-blank me-2"
-                                                jsf:id="removeField"
-                                                jsf:rendered="#{field.displayDeletionButton}"
-                                                jsf:action="#{field.removeValue(entry)}">
-                                                <i class="fa fa-minus" />
-                                            </button>
-                                        </div>
                                     </ui:repeat>
                                     <ui:fragment rendered="#{field.displayType=='multiselect'}">
                                         <intranda:formInputMultiSelect
@@ -506,9 +501,6 @@
                                             displayAsRequired="#{field.required}"
                                             required="false"
                                             displayLabel="true" />
-                                        <div>
-                                            <!--  empty div to meet grid layout -->
-                                        </div>
                                     </ui:fragment>
 
 

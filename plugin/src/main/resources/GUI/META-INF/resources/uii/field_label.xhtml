@@ -1,0 +1,37 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:x="http://myfaces.apache.org/tomahawk"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG">
+    
+    <composite:interface>
+    </composite:interface>
+
+    <composite:implementation>
+
+        <intranda:formLabel
+            labelRequired="#{field.required}"
+            label="#{msgs[field.label]}"
+            labelFor="for">
+            <button
+                class="btn btn-blank me-2 float-end"
+                jsf:id="removeField"
+                jsf:rendered="#{field.displayDeletionButton}"
+                jsf:action="#{field.removeValue(entry)}">
+                <i class="fa fa-minus" />
+            </button>
+            <button
+                class="btn btn-blank me-2 float-end"
+                jsf:id="duplicateField"
+                jsf:rendered="#{field.displayDuplicationButton}"
+                jsf:action="#{field.addNewValue}">
+                <i class="fa fa-plus" />
+            </button>
+        </intranda:formLabel>
+    </composite:implementation>
+</ui:composition>
