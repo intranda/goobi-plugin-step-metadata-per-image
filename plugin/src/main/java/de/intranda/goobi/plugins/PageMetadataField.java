@@ -21,6 +21,7 @@ package de.intranda.goobi.plugins;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.goobi.production.properties.MultiSelectProperty;
 
 import lombok.Getter;
@@ -137,15 +138,34 @@ public class PageMetadataField implements MultiSelectProperty<String> {
 
     @Override
     public void setCurrentValue(String value) {
-        try {
-            Metadata md = new Metadata(metadataType);
-            md.setValue(value);
-            PageMetadataValue pmv = new PageMetadataValue(md, validation, required, viafSearchFields, viafDisplayFields);
-            values.add(pmv);
-        } catch (MetadataTypeNotAllowedException e) {
-            // ignore this, it will not occur
+        if (StringUtils.isNotBlank(value)) {
+            try {
+                Metadata md = new Metadata(metadataType);
+                md.setValue(value);
+                PageMetadataValue pmv = new PageMetadataValue(md, validation, required, viafSearchFields, viafDisplayFields);
+                values.add(pmv);
+            } catch (MetadataTypeNotAllowedException e) {
+                // ignore this, it will not occur
+            }
         }
 
     }
 
+    public boolean isDisplayDuplicationButton() {
+        return !"multiselect".equals(displayType) && repeatable;
+    }
+
+    public boolean isDisplayDeletionButton() {
+        return !"multiselect".equals(displayType) && repeatable && values.size() > 1;
+    }
+
+    public void addNewValue() {
+        try {
+            Metadata md = new Metadata(metadataType);
+            PageMetadataValue val = new PageMetadataValue(md, validation, required, viafSearchFields, viafDisplayFields);
+            values.add(val);
+        } catch (MetadataTypeNotAllowedException e) {
+            // ignore this, it will not occur
+        }
+    }
 }
