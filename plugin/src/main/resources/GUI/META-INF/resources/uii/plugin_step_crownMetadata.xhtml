@@ -427,8 +427,9 @@
                                                 var="item"
                                                 itemLabel="#{item}"
                                                 itemValue="#{item}"
-                                                displayLabel="false" />
-                                            <ui:include src="field_label.xhtml" />
+                                                displayLabel="false">
+                                                <ui:include src="field_label.xhtml" />
+                                            </intranda:formInputDropDownAjax>
                                         </ui:fragment>
 
                                         <ui:fragment rendered="#{field.displayType=='gnd'}">
@@ -441,8 +442,9 @@
                                                 fieldStyle="form-control"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
-                                                displayLabel="false" />
-                                            <ui:include src="field_label.xhtml" />
+                                                displayLabel="false" >
+                                                <ui:include src="field_label.xhtml" />
+                                            </intranda:formInputGnd>
                                         </ui:fragment>
 
                                         <ui:fragment rendered="#{field.displayType=='geonames'}">
@@ -456,8 +458,9 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 submitDataAction="#{entry.importGeonamesData()}"
-                                                displayLabel="false" />
+                                                displayLabel="false">
                                             <ui:include src="field_label.xhtml" />
+                                            </intranda:formInputGeonames>
                                         </ui:fragment>
 
                                         <ui:fragment rendered="#{field.displayType=='viaf'}">
@@ -470,8 +473,9 @@
                                                 fieldStyle="form-control"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
-                                                displayLabel="false" />
+                                                displayLabel="false" >
                                             <ui:include src="field_label.xhtml" />
+                                            </intranda:formInputViaf>
                                         </ui:fragment>
 
                                         <h:panelGroup
@@ -603,7 +607,6 @@
         <script type="text/javascript">
 									window.onload = function() {
 										loadImages();
-										console.log(intrandaImages);
 									}
 
 									jsf.ajax.addOnEvent(function(data) {
