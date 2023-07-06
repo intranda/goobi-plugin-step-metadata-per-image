@@ -26,14 +26,12 @@ import org.goobi.production.properties.MultiSelectProperty;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 import ugh.dl.Metadata;
 import ugh.dl.MetadataType;
 import ugh.exceptions.MetadataTypeNotAllowedException;
 
 @Getter
 @Setter
-@Log4j2
 public class PageMetadataField implements MultiSelectProperty<String> {
 
     private List<PageMetadataValue> values = new ArrayList<>();

@@ -8,7 +8,7 @@
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG">
-    
+
     <composite:interface>
     </composite:interface>
 
@@ -16,8 +16,23 @@
 
         <intranda:formLabel
             labelRequired="#{field.required}"
-            label="#{msgs[field.label]}"
-            >
+            label="#{msgs[field.label]}">
+
+            <button
+                class="btn btn-blank me-2 float-end"
+                jsf:id="copyContent"
+                jsf:onclick="$('#metadataAddBox').modal('show');"
+                jsf:rendered="#{!field.readonly}"
+                >
+                <f:setPropertyActionListener
+                    value="#{field}"
+                    target="#{AktuelleSchritteForm.myPlugin.selectedField}" />
+                <f:ajax
+                    execute="@this"
+                    render="metadataAddBoxContent" />
+                <i class="fa fa-files-o" />
+            </button>
+
             <button
                 class="btn btn-blank me-2 float-end"
                 jsf:id="removeField"

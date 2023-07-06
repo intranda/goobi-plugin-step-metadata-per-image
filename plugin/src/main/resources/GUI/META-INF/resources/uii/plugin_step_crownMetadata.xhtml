@@ -195,7 +195,7 @@
                             <ui:fragment rendered="#{!AktuelleSchritteForm.myPlugin.publicationElement.processReferences.isEmpty()}">
                                 <div class="row">
                                     <div class="col-12 col-md-3 control-label">
-                                        <h:outputText value="#{msgs.plugin_step_metadata_per_image_references}" />
+                                        <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_references}" />
                                     </div>
 
                                     <div class="col-12 col-md-9">
@@ -511,7 +511,7 @@
                                 </ui:repeat>
                                 <div class="row">
                                     <div class="col-12 col-md-3 control-label">
-                                        <h:outputText value="#{msgs.plugin_step_metadata_per_image_references}" />
+                                        <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_references}" />
                                     </div>
 
                                     <div class="col-12 col-md-9">
@@ -538,12 +538,12 @@
                                         </ui:repeat>
                                         <!--  link processes -->
                                         <button
-                                            title="#{msgs.plugin_step_metadata_per_image_addLink}"
+                                            title="#{msgs.plugin_intranda_step_metadata_per_image_addLink}"
                                             class="btn btn-blank"
                                             data-toggle="tooltip"
                                             jsf:id="processSearchBoxButton"
                                             jsf:onclick="$('#processSearchBox').modal('show');">
-                                            <h:outputText value="#{msgs.plugin_step_metadata_per_image_addLink}" />
+                                            <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_addLink}" />
                                             <f:ajax
                                                 execute="@this"
                                                 render="processSearchBoxContent" />
@@ -600,6 +600,8 @@
 
         <ui:include src="process_search_modal.xhtml" />
         <ui:include src="image_modal.xhtml" />
+        <ui:include src="metadata_add_modal.xhtml" />
+        
 
 
 

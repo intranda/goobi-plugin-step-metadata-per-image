@@ -12,11 +12,11 @@
         <project>*</project>
         <step>*</step>
 
-        <field label="Input, required" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue=" - bitte eintragen - " required="true" validation="\w+" validationErrorMessage="field is required" readonly="false"></field>
-        <field label="Input, repeatable, not required" metadataField="DocLanguage" repeatable="true" displayType="input" defaultValue="" required="false"></field>
+        <field label="Pflichtfeld" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue=" - bitte eintragen - " required="true" validation="\w+" validationErrorMessage="field is required" readonly="false"></field>
+        <field label="Wiederholbares Feld" metadataField="DocLanguage" repeatable="true" displayType="input" defaultValue="" required="false"></field>
         <field label="Textarea" metadataField="Abstract" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
 
-        <field label="Multiselect" metadataField="SubjectTopic" repeatable="true" displayType="multiselect" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+        <field label="Mehrfachauswahl" metadataField="SubjectTopic" repeatable="true" displayType="multiselect" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
             <field>value A</field>
             <field>value B</field>
             <field>value C</field>
@@ -27,27 +27,30 @@
             <field>value H</field>
             <field>value I</field>
         </field>
-        <field label="Select field" metadataField="Classification" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+        <field label="Dropdown" metadataField="Classification" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
             <field>value A</field>
             <field>value B</field>
             <field>value C</field>                    
         </field>
 
-        <field label="Vocabulary" metadataField="PublisherName" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
+        <field label="Vokabluar" metadataField="PublisherName" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
             <vocabulary>Biography Type</vocabulary>                 
         </field>
-<!--         
-        <field label="gnd" metadataField="TitleDocMainShort" repeatable="false" displayType="gnd" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
 
-        <field label="geonames" metadataField="TitleDocMainShort" repeatable="false" displayType="geonames" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
 
-         <field label="viaf" metadataField="LegislativeBody" repeatable="false" displayType="viaf" defaultValue="" required="false" validation="" readonly="false" 
-        searchFields="210__a; 111__a; 100__a; 110__a; 150__a; 151__a;" displayFields="001=NORM_IDENTIFIER; 0247_a=URI; 1001_a=NORM_NAME; 1001_d=NORM_LIFEPERIOD; 1001_q=NORM_SEX; 375__a=NORM_SEX;"
-        validationErrorMessage="Muss ausgefüllt sein"></field>
- -->
+        <field label="GND" metadataField="AccessLicense" repeatable="false" displayType="gnd" defaultValue="" required="false" readonly="false" >
+        </field>
+        <field label="Geonames" metadataField="TitleDocMainShort" repeatable="false" displayType="geonames" defaultValue="" required="false" readonly="false" >
+        </field>
+   
+        <field label="VIAF" metadataField="LegislativeBody" repeatable="false" displayType="viaf" defaultValue="" required="false" readonly="false" searchFields="210__a; 111__a; 100__a; 110__a; 150__a; 151__a;" displayFields="001=NORM_IDENTIFIER; 0247_a=URI; 1001_a=NORM_NAME; 1001_d=NORM_LIFEPERIOD; 1001_q=NORM_SEX; 375__a=NORM_SEX;"
+>
+        </field>
 
-<!-- identifier field is searched automatically, it does not need a configuration-->
+
         <searchfield>TitleDocMain</searchfield>
+        <searchfield>shelfmarksource</searchfield>
+        <searchfield>CatalogIDDigital</searchfield>
 
         <display>
             <field>TitleDocMain</field>
@@ -55,8 +58,7 @@
             <field>PublicationYear</field>
             <field>PlaceOfPublication</field>
             <field>CatalogIDDigital</field>
-            <field>AccessLicense</field>
-        </display>              
+        </display>
 
         <identifierField>_urn</identifierField>
         <docstructName>Chapter</docstructName>
@@ -68,10 +70,6 @@
             <image>RelationImageNumber</image>
             <label>RelationLabel</label>
         </reference>
-
-
     </config>
-
-
 
 </config_plugin>

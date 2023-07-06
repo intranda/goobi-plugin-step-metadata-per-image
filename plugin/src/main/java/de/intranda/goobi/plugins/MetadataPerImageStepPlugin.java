@@ -149,6 +149,15 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     @Getter
     private transient PublicationElement publicationElement;
 
+    @Getter
+    private transient PageMetadataField selectedField;
+
+    @Getter
+    @Setter
+    private String additionType;
+    @Getter
+    private transient PageMetadataValue selectedValue;
+
     // metadata names
     private MetadataType identifierField;
     private MetadataGroupType referenceMetadataGroupType;
@@ -671,6 +680,85 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         // reset search results, searchvalue
         searchValue = "";
         processDataList.clear();
+    }
+
+    public void setSelectedField(PageMetadataField field) {
+
+        this.selectedField = new PageMetadataField(field);
+
+        try {
+            Metadata md = new Metadata(prefs.getMetadataTypeByName(selectedField.getMetadataField()));
+            md.setValue(selectedField.getDefaultValue());
+            selectedValue = new PageMetadataValue(md, selectedField.getValidation(), selectedField.isRequired(), selectedField.getViafSearchFields(),
+                    selectedField.getViafDisplayFields());
+            selectedField.addValue(selectedValue);
+        } catch (MetadataTypeNotAllowedException e) {
+            log.error(e);
+        }
+    }
+
+    public void importValue() {
+        // do nothing, if field is empty
+
+        for (PageElement pe : pages) {
+            for (PageMetadataField pmf : pe.getMetadata()) {
+                if (pmf.getMetadataField().equals(selectedField.getMetadataField())) {
+                    switch (additionType) {
+                        case "new":
+                            // first, check if all existing fields are filled
+                            for (PageMetadataValue val : pmf.getValues()) {
+                                if (StringUtils.isBlank(val.getValue())) {
+                                    val.setValue(selectedValue.getValue());
+                                    val.getMetadata()
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                    break;
+                                }
+                            }
+
+                            // if no empty field exists, create a new one
+                            try {
+                                Metadata md = new Metadata(prefs.getMetadataTypeByName(selectedField.getMetadataField()));
+                                md.setValue(selectedValue.getValue());
+                                md.setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                        selectedValue.getMetadata().getAuthorityValue());
+                                pe.getDocstruct().addMetadata(md);
+                                PageMetadataValue value = new PageMetadataValue(md, selectedField.getValidation(), selectedField.isRequired(),
+                                        selectedField.getViafSearchFields(), selectedField.getViafDisplayFields());
+                                pmf.addValue(value);
+                            } catch (MetadataTypeNotAllowedException | DocStructHasNoTypeException e) {
+                                log.error(e);
+                            }
+                            break;
+
+                        case "empty":
+                            // check if an empty field exists
+                            for (PageMetadataValue val : pmf.getValues()) {
+                                if (StringUtils.isBlank(val.getValue())) {
+                                    val.setValue(selectedValue.getValue());
+                                    val.getMetadata()
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                    break;
+                                }
+                            }
+                            break;
+                        case "overwrite":
+                            // use first field
+                            PageMetadataValue val = pmf.getValues().get(0);
+                            val.setValue(selectedValue.getValue());
+                            val.getMetadata()
+                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                    selectedValue.getMetadata().getAuthorityValue());
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                }
+            }
+        }
     }
 
 }
