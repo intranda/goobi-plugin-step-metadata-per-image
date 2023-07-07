@@ -48,13 +48,26 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
 
     private String validationMessage;
     private Metadata metadata;
-
     private boolean required;
     private String validationRegex;
+
+    // gnd search fields
+    private String searchValue;
+    private String searchOption;
+    private List<List<NormData>> dataList;
+    private List<NormData> currentData;
+    private boolean showNoHits;
+    private String gndNumber;
+
+    // geonames search fields
+    private Toponym currentToponym;
+    private List<Toponym> resultList;
+    private int totalResults;
+
+    // viaf search fields
+    private ViafSearch viafSearch = new ViafSearch();
     private String viafSearchFields;
     private String viafDisplayFields;
-
-    private ViafSearch viafSearch = new ViafSearch();
 
     public PageMetadataValue(Metadata metadata, String validationRegex, boolean required, String viafSearchFields, String viafDisplayFields) {
         this.metadata = metadata;
@@ -105,16 +118,6 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
         // do nothing
     }
 
-    private String searchValue;
-    private String searchOption;
-    private List<List<NormData>> dataList;
-    private List<NormData> currentData;
-    private boolean showNoHits;
-    private String gndNumber;
-    private Toponym currentToponym;
-    private List<Toponym> resultList;
-    private int totalResults;
-
     @Override
     public void importGeonamesData() {
         metadata.setValue(currentToponym.getName());
@@ -153,9 +156,9 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
             return;
         }
         if (StringUtils.isBlank(getSearchOption())) {
-            val = "dnb.nid=" + getSearchValue();
+            val = "dnb.nid=" + searchValue;
         } else {
-            val = getSearchOption() + " and BBG=" + getSearchValue();
+            val = searchValue + " and BBG=" + searchOption;
         }
         URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/woe/" + val);
         String string = url.toString()
