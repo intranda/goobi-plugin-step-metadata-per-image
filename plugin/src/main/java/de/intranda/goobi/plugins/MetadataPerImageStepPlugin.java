@@ -165,6 +165,9 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     private MetadataType metadataNameDocstructID;
     private MetadataType metadataNamePageNumber;
     private MetadataType metadataNameLabel;
+
+    private MetadataType ratingField;
+
     private List<String> searchFields = new ArrayList<>();
     private List<String> processDisplayFields = new ArrayList<>();
 
@@ -234,6 +237,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         metadataNameDocstructID = prefs.getMetadataTypeByName(myconfig.getString("/reference/docstruct"));
         metadataNamePageNumber = prefs.getMetadataTypeByName(myconfig.getString("/reference/image"));
         metadataNameLabel = prefs.getMetadataTypeByName(myconfig.getString("/reference/label"));
+
+        ratingField = prefs.getMetadataTypeByName(myconfig.getString("/rating"));
     }
 
     @Override
@@ -358,7 +363,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     }
 
     @Override
-    public boolean execute() {
+    public boolean execute() { //NOSONAR
 
         // get all images from media folder
         String folderName;
@@ -454,16 +459,14 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 }
                 // if not, create doscstruct
                 if (pe == null) {
-                    try {
-                        DocStruct ds = digitalDocument.createDocStruct(docstruct);
-                        ds.addReferenceTo(pageStruct, "logical_physical");
-                        pe = new PageElement(ds, pageStruct, image, order);
-                        logical.addChild(ds);
-                    } catch (UGHException e) {
-                        log.error(e);
-                        return false;
-                    }
+                    pe = createDocstruct(digitalDocument, logical, order, pageStruct, image);
                 }
+
+                // abort, if its still null
+                if (pe == null) {
+                    return false;
+                }
+
                 order++;
 
                 // for each configured metadata field
@@ -480,18 +483,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                     }
 
                     if (field.getValues().isEmpty() && !"multiselect".equals(field.getDisplayType())) {
-                        // new metadata
-                        // default value
-                        try {
-                            Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
-                            md.setValue(field.getDefaultValue());
-                            pe.getDocstruct().addMetadata(md);
-                            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired(), field.getViafSearchFields(),
-                                    field.getViafDisplayFields()));
-                        } catch (MetadataTypeNotAllowedException e) {
-                            log.error(e);
-                        }
-
+                        createField(pe, field);
                     }
                 }
 
@@ -507,8 +499,17 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 }
                 pe.setIdentifier(identifier);
 
-                // TODO metadata for rating
+                // metadata for rating
+                mdl = pe.getDocstruct().getAllMetadataByType(ratingField);
+                if (!mdl.isEmpty()) {
+                    pe.setRatingMetadata(mdl.get(0));
+                } else {
+                    Metadata rating = new Metadata(ratingField);
+                    pe.setRatingMetadata(rating);
+                    pe.getDocstruct().addMetadata(rating);
+                }
 
+                // all references
                 List<MetadataGroup> references = pe.getDocstruct().getAllMetadataGroupsByType(referenceMetadataGroupType);
                 for (MetadataGroup mg : references) {
                     ProcessReference pr = parseReference(mg);
@@ -526,6 +527,34 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         }
 
         return true;
+    }
+
+    private PageElement createDocstruct(DigitalDocument digitalDocument, DocStruct logical, int order, DocStruct pageStruct, Image image) {
+        PageElement pe = null;
+        try {
+            DocStruct ds = digitalDocument.createDocStruct(docstruct);
+            ds.addReferenceTo(pageStruct, "logical_physical");
+            pe = new PageElement(ds, pageStruct, image, order);
+            logical.addChild(ds);
+        } catch (UGHException e) {
+            log.error(e);
+            return null;
+        }
+        return pe;
+    }
+
+    private void createField(PageElement pe, PageMetadataField field) {
+        // new metadata
+        // default value
+        try {
+            Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
+            md.setValue(field.getDefaultValue());
+            pe.getDocstruct().addMetadata(md);
+            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired(), field.getViafSearchFields(),
+                    field.getViafDisplayFields()));
+        } catch (MetadataTypeNotAllowedException e) {
+            log.error(e);
+        }
     }
 
     private ProcessReference parseReference(MetadataGroup mg) {
@@ -633,7 +662,6 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 }
             }
 
-            // TODO metadata for rating
         }
 
         try {
@@ -710,8 +738,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -737,8 +765,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -748,8 +776,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                             PageMetadataValue val = pmf.getValues().get(0);
                             val.setValue(selectedValue.getValue());
                             val.getMetadata()
-                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
-                                    selectedValue.getMetadata().getAuthorityValue());
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                            selectedValue.getMetadata().getAuthorityValue());
                             break;
 
                         default:

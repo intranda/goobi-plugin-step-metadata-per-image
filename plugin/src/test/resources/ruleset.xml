@@ -1405,6 +1405,7 @@
     <metadata num="*">IllustratorArtist</metadata>
     <metadata num="*">LegislativeBody</metadata>
     <metadata num="1o">_urn</metadata>
+    <metadata num="1o">Counter</metadata>    
   </DocStrctType>
   <DocStrctType>
     <Name>Faszikel</Name>

@@ -49,7 +49,9 @@
         </display>
 
         <identifierField>_urn</identifierField>
-        <docstructName>Chapter</docstructName>                      
+        <docstructName>Chapter</docstructName>
+        <rating>Counter</rating>
+                              
     </config>
 
 </config_plugin>

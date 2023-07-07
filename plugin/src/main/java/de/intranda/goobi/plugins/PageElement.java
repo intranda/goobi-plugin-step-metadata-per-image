@@ -21,6 +21,8 @@ package de.intranda.goobi.plugins;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import de.sub.goobi.metadaten.Image;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +45,7 @@ public class PageElement {
     private List<ProcessReference> deletedProcessReferences = new ArrayList<>();
 
     @Setter
-    private int rating = 0;
+    private Metadata ratingMetadata;
 
     private int order = 0;
     @Setter
@@ -65,6 +67,19 @@ public class PageElement {
     public void deleteProcessReference() {
         processReferences.remove(selectedReference);
         deletedProcessReferences.add(selectedReference);
+    }
 
+    public int getRating() {
+        if (ratingMetadata == null || StringUtils.isBlank(ratingMetadata.getValue())) {
+            return 0;
+        }
+        return Integer.parseInt(ratingMetadata.getValue());
+    }
+
+    public void setRating(int rating) {
+        if (ratingMetadata == null) {
+            return;
+        }
+        ratingMetadata.setValue(String.valueOf(rating));
     }
 }

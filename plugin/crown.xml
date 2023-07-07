@@ -1245,6 +1245,39 @@
     <language name="en">License Work</language>
   </MetadataType>
 
+<MetadataType>
+    <Name>RelationProcessID</Name>
+    <language name="de">RelationProcessID</language>
+    <language name="en">RelationProcessID</language>
+  </MetadataType>
+<MetadataType>
+    <Name>RelationDocstructID</Name>
+    <language name="de">RelationDocstructID</language>
+    <language name="en">RelationDocstructID</language>
+  </MetadataType>
+<MetadataType>
+    <Name>RelationLabel</Name>
+    <language name="de">RelationLabel</language>
+    <language name="en">RelationLabel</language>
+  </MetadataType>
+<MetadataType>
+    <Name>RelationImageNumber</Name>
+    <language name="de">ImageNumber</language>
+    <language name="en">ImageNumber</language>
+  </MetadataType>      
+
+  <Group>
+    <Name>Reference</Name>
+    <language name="de">Verweis</language>
+    <language name="en">Reference</language>
+    <metadata DefaultDisplay="true" num="1m">RelationProcessID</metadata>
+    <metadata DefaultDisplay="true" num="1o">RelationDocstructID</metadata>
+    <metadata DefaultDisplay="true" num="1o">RelationImageNumber</metadata>
+    <metadata DefaultDisplay="true" num="1o">RelationLabel</metadata>
+  </Group>
+
+
+
   <DocStrctType topStruct="true">
     <Name>Folder</Name>
     <language name="de">Ordner</language>
@@ -1953,21 +1986,25 @@
     <metadata num="*">SubjectTopic</metadata>
     <metadata num="*">Abstract</metadata>
     <metadata num="*">Classification</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleDocMain</metadata>
+    <metadata num="1o">_urn</metadata>
+    <metadata num="*">DocLanguage</metadata>
+    <metadata num="*">PublisherName</metadata>
+    <metadata num="*">TitleDocMainShort</metadata>
+    <metadata num="*">LegislativeBody</metadata>
+    <metadata num="1o">AccessLicense</metadata>
+<metadata DefaultDisplay="true" num="1o">Counter</metadata>
+    <group num="*">Reference</group>    
+
 
 <!-- plugin test data -->
 
     <metadata num="*">Author</metadata>
-    <metadata num="*">PublisherName</metadata>
-    <metadata num="*">TitleDocMainShort</metadata>
-    <metadata DefaultDisplay="true" num="1o">TitleDocMain</metadata>
     <metadata num="*">_ucc_id</metadata>
-    <metadata num="*">DocLanguage</metadata>
     <metadata num="*">Composer</metadata>
     <metadata num="*">Bearbeiter</metadata>
     <metadata num="*">Artist</metadata>
     <metadata num="*">IllustratorArtist</metadata>
-    <metadata num="*">LegislativeBody</metadata>
-    <metadata num="1o">_urn</metadata>
   </DocStrctType>
   <DocStrctType>
     <Name>Faszikel</Name>
@@ -2557,6 +2594,8 @@
     <metadata num="*">Manufacturer</metadata>
     <metadata num="*">Note</metadata>
     <metadata num="1o">_directionRTL</metadata>
+    <metadata num="1o">NodeId</metadata>
+    <group num="*">Reference</group>    
   </DocStrctType>
   <DocStrctType topStruct="true">
     <Name>Manuscript</Name>
@@ -6878,6 +6917,30 @@
         <InternalName>SubjectTitle</InternalName>
         <WriteXPath>./mods:mods/mods:subject/mods:titleInfo/#mods:title</WriteXPath>
       </Metadata>
+
+
+
+ <Group>
+        <InternalName>Reference</InternalName>
+        <WriteXPath>./mods:mods/#mods:relatedItem[@type='references']</WriteXPath>
+        <Metadata>
+          <InternalName>RelationProcessID</InternalName>
+          <WriteXPath>./#mods:recordInfo/mods:recordIdentifier</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>RelationDocstructID</InternalName>
+          <WriteXPath>./#mods:identifier[@type='docstruct']</WriteXPath>
+        </Metadata> 
+        <Metadata>
+          <InternalName>RelationImageNumber</InternalName>
+          <WriteXPath>./#mods:identifier[@type='imageNumber']</WriteXPath>
+        </Metadata>       
+        <Metadata>
+          <InternalName>RelationLabel</InternalName>
+          <WriteXPath>./#mods:titleInfo/mods:title</WriteXPath>
+        </Metadata>    
+      </Group>
+
       <!-- Subjects end -->
       <!-- Docstructs -->
       <DocStruct>

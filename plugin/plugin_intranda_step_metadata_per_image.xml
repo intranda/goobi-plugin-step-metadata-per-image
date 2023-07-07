@@ -62,6 +62,7 @@
 
         <identifierField>_urn</identifierField>
         <docstructName>Chapter</docstructName>
+        <rating>Counter</rating>
 
         <reference>
             <group>Reference</group>

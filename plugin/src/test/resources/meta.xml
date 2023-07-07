@@ -16,7 +16,6 @@
                     <mods:extension>
                         <goobi:goobi>
                             <goobi:metadata name="PublicationYear">2010</goobi:metadata>
-                            <goobi:metadata name="physicalDescriptionExtent">200 S.</goobi:metadata>
                             <goobi:metadata name="OtherTitle">Other title</goobi:metadata>
                             <goobi:metadata name="TitleDocMainShort">Sorting title volume</goobi:metadata>
                             <goobi:metadata name="TitleDocSub1">Sub title volume</goobi:metadata>
