@@ -19,11 +19,11 @@
             label="#{msgs[field.label]}">
 
             <button
+                tabindex="-1"
                 class="btn btn-blank me-2 float-end"
                 jsf:id="copyContent"
                 jsf:onclick="$('#metadataAddBox').modal('show');"
-                jsf:rendered="#{!field.readonly}"
-                >
+                jsf:rendered="#{!field.readonly}">
                 <f:setPropertyActionListener
                     value="#{field}"
                     target="#{AktuelleSchritteForm.myPlugin.selectedField}" />
@@ -34,6 +34,7 @@
             </button>
 
             <button
+                tabindex="-1"
                 class="btn btn-blank me-2 float-end"
                 jsf:id="removeField"
                 jsf:rendered="#{field.displayDeletionButton}"
@@ -41,6 +42,7 @@
                 <i class="fa fa-minus" />
             </button>
             <button
+                tabindex="-1"
                 class="btn btn-blank me-2 float-end"
                 jsf:id="duplicateField"
                 jsf:rendered="#{field.displayDuplicationButton}"

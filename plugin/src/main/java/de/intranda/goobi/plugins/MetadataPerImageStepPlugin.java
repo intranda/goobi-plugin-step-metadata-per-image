@@ -173,6 +173,10 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
     private DocStructType docstruct;
 
+    @Getter
+    @Setter
+    private String focusField;
+
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -738,8 +742,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -765,8 +769,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -776,8 +780,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                             PageMetadataValue val = pmf.getValues().get(0);
                             val.setValue(selectedValue.getValue());
                             val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
-                                            selectedValue.getMetadata().getAuthorityValue());
+                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                    selectedValue.getMetadata().getAuthorityValue());
                             break;
 
                         default:

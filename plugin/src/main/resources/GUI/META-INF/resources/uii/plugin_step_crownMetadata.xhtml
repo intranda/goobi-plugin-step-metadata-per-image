@@ -115,8 +115,10 @@
 </style>
 
 
-        <h:form id="myform">
-
+        <h:form id="myform" prependId="false">
+            <h:inputHidden
+                id="focusField"
+                value="#{AktuelleSchritteForm.myPlugin.focusField}" />
             <intranda:box
                 boxType="primary"
                 boxTitle="false"
@@ -130,12 +132,14 @@
 
 
                         <h:commandLink
+                            tabindex="-1"
                             id="id10"
                             action="#{NavigationForm.Reload}"
                             styleClass="btn d-flex align-items-center btn--title-action">
                             <i class="fa fa-refresh" />
                         </h:commandLink>
                         <h:commandLink
+                            tabindex="-1"
                             action="#{AktuelleSchritteForm.myPlugin.saveMetadata}"
                             styleClass="btn d-flex align-items-center btn--title-action"
                             title="#{msgs.speichern}">
@@ -144,8 +148,8 @@
                                 property="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
                         </h:commandLink>
-                        
                         <h:commandLink
+                            tabindex="-1"
                             id="id11"
                             action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}"
                             styleClass="btn d-flex align-items-center btn--title-action"
@@ -158,6 +162,7 @@
                         </h:commandLink>
 
                         <h:commandLink
+                            tabindex="-1"
                             id="id12"
                             action="#{AktuelleSchritteForm.myPlugin.cancel}"
                             styleClass="btn d-flex align-items-center btn--title-action"
@@ -180,8 +185,8 @@
                         </div>
                         <!-- right side -->
                         <div>
-
                             <intranda:formOutputText
+                                tabindex="-1"
                                 id="title"
                                 name="title"
                                 label="#{msgs['process_grid_TitleDocMain']}"
@@ -192,13 +197,13 @@
                                 var="metadata"
                                 value="#{AktuelleSchritteForm.myPlugin.publicationElement.metadataList}">
                                 <intranda:formOutputText
+                                    tabindex="-1"
                                     id="metadata"
                                     name="metadata"
                                     label="#{msgs['process_grid_'.concat(metadata.one)]}"
                                     field="#{metadata.two}"
                                     help="#{msgs.helpProcessStepTitle}"
                                     required="false" />
-
                             </x:dataList>
 
                             <ui:fragment rendered="#{!AktuelleSchritteForm.myPlugin.publicationElement.processReferences.isEmpty()}">
@@ -212,8 +217,8 @@
                                             var="reference"
                                             value="#{AktuelleSchritteForm.myPlugin.publicationElement.processReferences}">
                                             <div class="btn btn-blank me-2">
-                                                <span> <h:outputText
-                                                        value="#{reference.otherProcessName} #{msgs.lw_currentImageNumber} #{reference.otherImageNumber}" />
+                                                <span>
+                                                    <h:outputText value="#{reference.otherProcessName} #{msgs.lw_currentImageNumber} #{reference.otherImageNumber}" />
                                                 </span>
 
                                             </div>
@@ -250,6 +255,7 @@
 
 
                                             <button
+                                                tabindex="-1"
                                                 style="padding: 0;"
                                                 title="#{page.image.tooltip}"
                                                 class="colorbox-image"
@@ -289,6 +295,7 @@
                                                 <ul class="float-end">
                                                     <li class="star">
                                                         <button
+                                                            tabindex="-1"
                                                             class="btn btn--icon"
                                                             jsf:id="rating1">
                                                             <f:ajax
@@ -304,6 +311,7 @@
                                                     </li>
                                                     <li class="star">
                                                         <button
+                                                            tabindex="-1"
                                                             class="btn btn--icon"
                                                             jsf:id="rating2">
                                                             <f:ajax
@@ -321,6 +329,7 @@
                                                     <li class="star">
 
                                                         <button
+                                                            tabindex="-1"
                                                             class="btn btn--icon"
                                                             jsf:id="rating3">
                                                             <f:ajax
@@ -337,6 +346,7 @@
                                                     <li class="star">
 
                                                         <button
+                                                            tabindex="-1"
                                                             class="btn btn--icon"
                                                             jsf:id="rating4">
                                                             <f:ajax
@@ -352,6 +362,7 @@
                                                     </li>
                                                     <li class="star">
                                                         <button
+                                                            tabindex="-1"
                                                             class="btn btn--icon"
                                                             jsf:id="rating5">
                                                             <f:ajax
@@ -384,7 +395,9 @@
                                         value="#{field.values}">
 
 
-                                        <ui:fragment rendered="#{field.displayType=='input'}">
+                                        <h:panelGroup
+                                            rendered="#{field.displayType=='input'}"
+                                            id="inputfield">
                                             <intranda:formInputTextAjax
                                                 id="input"
                                                 name="input"
@@ -395,14 +408,18 @@
                                                 required="false"
                                                 readonly="#{field.readonly}"
                                                 fieldStyle="#{entry.valid ? '' : 'invalid'}"
-                                                execute="@this"
-                                                render="@form"
-                                                displayLabel="false">
+                                                execute="@this :focusField"
+                                                render=":#{cc.clientId}field"
+                                                displayLabel="false"
+                                                onfocus="focusField(this);">
                                                 <ui:include src="field_label.xhtml" />
                                             </intranda:formInputTextAjax>
-                                        </ui:fragment>
+                                            <ui:include src="field_validation.xhtml" />
+                                        </h:panelGroup>
 
-                                        <ui:fragment rendered="#{field.displayType=='textarea'}">
+                                        <h:panelGroup
+                                            rendered="#{field.displayType=='textarea'}"
+                                            id="areafield">
                                             <intranda:formInputTextAreaAjax
                                                 id="area"
                                                 name="area"
@@ -413,18 +430,21 @@
                                                 required="false"
                                                 readonly="#{field.readonly}"
                                                 fieldStyle="#{entry.valid ? '' : 'invalid'}"
-                                                execute="@this"
-                                                render="@form"
+                                                execute="@this :focusField"
+                                                render=":#{cc.clientId}field"
                                                 displayLabel="false">
                                                 <ui:include src="field_label.xhtml" />
+                                                <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputTextAreaAjax>
-                                        </ui:fragment>
+                                        </h:panelGroup>
 
-                                        <ui:fragment rendered="#{field.displayType=='select'}">
+                                        <h:panelGroup
+                                            rendered="#{field.displayType=='select'}"
+                                            id="selectfield">
                                             <intranda:formInputDropDownAjax
                                                 id="select"
                                                 ajaxEvent="change"
-                                                ajaxRender="@form"
+                                                ajaxRender=":#{cc.clientId}field"
                                                 label="#{msgs[field.label]}"
                                                 field="#{entry.value}"
                                                 help="#{msgs.helpLdapAuthenticationType}"
@@ -436,10 +456,12 @@
                                                 var="item"
                                                 itemLabel="#{item}"
                                                 itemValue="#{item}"
-                                                displayLabel="false">
+                                                displayLabel="false"
+                                                onfocus="focusField(this);">
                                                 <ui:include src="field_label.xhtml" />
+                                                <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputDropDownAjax>
-                                        </ui:fragment>
+                                        </h:panelGroup>
 
                                         <ui:fragment rendered="#{field.displayType=='gnd'}">
                                             <intranda:formInputGnd
@@ -451,8 +473,10 @@
                                                 fieldStyle="form-control"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
-                                                displayLabel="false" >
+                                                displayLabel="false"
+                                                onfocus="focusField(this);">
                                                 <ui:include src="field_label.xhtml" />
+                                                <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputGnd>
                                         </ui:fragment>
 
@@ -467,8 +491,10 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 submitDataAction="#{entry.importGeonamesData()}"
-                                                displayLabel="false">
-                                            <ui:include src="field_label.xhtml" />
+                                                displayLabel="false"
+                                                onfocus="focusField(this);">
+                                                <ui:include src="field_label.xhtml" />
+                                                <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputGeonames>
                                         </ui:fragment>
 
@@ -482,22 +508,12 @@
                                                 fieldStyle="form-control"
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
-                                                displayLabel="false" >
-                                            <ui:include src="field_label.xhtml" />
+                                                displayLabel="false"
+                                                onfocus="focusField(this);">
+                                                <ui:include src="field_label.xhtml" />
+                                                <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputViaf>
                                         </ui:fragment>
-
-                                        <h:panelGroup
-                                            layout="block"
-                                            rendered="#{!entry.valid}"
-                                            styleClass="w-100 font-danger validation-message row">
-                                            <div class="col-12 col-md-3"></div>
-                                            <div class="col-12 col-md-9">
-                                                <i class="fa fa-exclamation-circle warning-icon error" />
-                                                <h:outputText value="#{field.validationErrorMessage}" />
-                                            </div>
-                                        </h:panelGroup>
-
                                     </ui:repeat>
                                     <ui:fragment rendered="#{field.displayType=='multiselect'}">
                                         <intranda:formInputMultiSelect
@@ -513,7 +529,9 @@
                                             fieldStyle="form-control"
                                             displayAsRequired="#{field.required}"
                                             required="false"
-                                            displayLabel="true" />
+                                            displayLabel="true"
+                                            onfocus="focusField(this);" />
+                                        <ui:include src="field_validation.xhtml" />
                                     </ui:fragment>
 
 
@@ -534,7 +552,9 @@
                                                 jsf:id="removeReference"
                                                 class="btn btn-blank me-2"
                                                 jsf:action="#{page.deleteProcessReference}">
-                                                <i class="fa fa-minus-circle"></i> <span> <h:outputText value="#{reference.otherProcessName}" />
+                                                <i class="fa fa-minus-circle"></i>
+                                                <span>
+                                                    <h:outputText value="#{reference.otherProcessName}" />
                                                 </span>
                                                 <f:setPropertyActionListener
                                                     value="#{reference}"
@@ -568,8 +588,6 @@
                         <br />
                         <hr />
                     </ui:repeat>
-
-
                 </div>
 
 
@@ -579,7 +597,9 @@
                         class="btn btn-success me-2"
                         jsf:id="saveMetadata"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.saveMetadata}">
-                        <i class="fa fa-floppy-o"></i> <span> <h:outputText value="#{msgs.speichern}" />
+                        <i class="fa fa-floppy-o"></i>
+                        <span>
+                            <h:outputText value="#{msgs.speichern}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
@@ -591,7 +611,9 @@
                         class="btn btn-blank me-2"
                         jsf:id="absenden"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <i class="fa fa-close"></i> <span> <h:outputText value="#{msgs.pluginLeave}" />
+                        <i class="fa fa-close"></i>
+                        <span>
+                            <h:outputText value="#{msgs.pluginLeave}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
@@ -610,36 +632,48 @@
         <ui:include src="process_search_modal.xhtml" />
         <ui:include src="image_modal.xhtml" />
         <ui:include src="metadata_add_modal.xhtml" />
-        
+
 
 
 
 
         <script type="text/javascript">
-									window.onload = function() {
-										loadImages();
-									}
+                                    function focusField( elem ) {
+                                       document.getElementById( "#focusField" ).value = elem.id;
+                                    }
 
-									jsf.ajax.addOnEvent(function(data) {
-										var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
+                                    function updateFocus() {
+                                         var focus = $( '#focusField' ).val();
+                                          const inp = document.getElementById( focus );
+                                          if ( inp != null ) {
+                                            inp.focus();
+                                         }
+                                    }
 
-										switch (ajaxstatus) {
-										case "begin": // This is called right before ajax request is been sent.
+                                    window.onload = function() {
+                                        loadImages();
+                                    }
 
-											break;
-
-										case "complete": // This is called right after ajax response is received.
-
-											break;
-
-										case "success": // This is called when ajax response is successfully processed.
-
-											loadImages();
-
-											break;
-										}
-									});
-								</script>
+                                    jsf.ajax.addOnEvent( function( data ) {
+                                        var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
+                                        
+                                        switch ( ajaxstatus ) {
+                                            case "begin": // This is called right before ajax request is been sent.
+                                            
+                                                break;
+                                            
+                                            case "complete": // This is called right after ajax response is received.
+                                            
+                                                break;
+                                            
+                                            case "success": // This is called when ajax response is successfully processed.
+                                            
+                                                loadImages();
+                                                updateFocus();
+                                                break;
+                                        }
+                                    } );
+                                </script>
 
 
     </ui:define>
