@@ -115,7 +115,9 @@
 </style>
 
 
-        <h:form id="myform" prependId="false">
+        <h:form
+            id="myform"
+            prependId="false">
             <h:inputHidden
                 id="focusField"
                 value="#{AktuelleSchritteForm.myPlugin.focusField}" />
@@ -638,20 +640,39 @@
 
 
         <script type="text/javascript">
+                                    function saveScrollPosition() {
+                                        var scrolled_val = $( document ).scrollTop().valueOf();
+                                        sessionStorage.setItem( "jumpToScrollPosition", scrolled_val );
+                                    }
+
+                                    function loadScrollPosition() {
+                                        if ( sessionStorage.getItem( "jumpToScrollPosition" ) !== null ) {
+                                            
+                                            var scrollPositionFromLastPage = sessionStorage.getItem( "jumpToScrollPosition" );
+                                            
+                                            $( "body, html" ).animate( {
+                                                scrollTop: scrollPositionFromLastPage
+                                            }, 250 ).offset().top;
+                                            sessionStorage.removeItem( "jumpToScrollPosition" );
+                                        }
+                                        
+                                    }
+
                                     function focusField( elem ) {
-                                       document.getElementById( "#focusField" ).value = elem.id;
+                                        document.getElementById( "#focusField" ).value = elem.id;
                                     }
 
                                     function updateFocus() {
-                                         var focus = $( '#focusField' ).val();
-                                          const inp = document.getElementById( focus );
-                                          if ( inp != null ) {
+                                        var focus = $( '#focusField' ).val();
+                                        const inp = document.getElementById( focus );
+                                        if ( inp != null ) {
                                             inp.focus();
-                                         }
+                                        }
                                     }
 
                                     window.onload = function() {
                                         loadImages();
+                                        loadScrollPosition();
                                     }
 
                                     jsf.ajax.addOnEvent( function( data ) {
@@ -659,7 +680,7 @@
                                         
                                         switch ( ajaxstatus ) {
                                             case "begin": // This is called right before ajax request is been sent.
-                                            
+                                                saveScrollPosition();
                                                 break;
                                             
                                             case "complete": // This is called right after ajax response is received.
@@ -667,7 +688,7 @@
                                                 break;
                                             
                                             case "success": // This is called when ajax response is successfully processed.
-                                            
+                                                loadScrollPosition();
                                                 loadImages();
                                                 updateFocus();
                                                 break;
