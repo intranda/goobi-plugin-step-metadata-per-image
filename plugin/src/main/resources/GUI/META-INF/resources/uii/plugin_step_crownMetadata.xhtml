@@ -386,7 +386,7 @@
                             </div>
 
                             <!-- right side -->
-                            <div>
+                            <div class="inputfields">
                                 <!-- metadata list -->
                                 <ui:repeat
                                     var="field"
@@ -640,24 +640,32 @@
 
 
         <script type="text/javascript">
+                                    $( document ).ready( function() {
+                                        saveScrollPosition();
+                                        loadScrollPositionAndJump();
+                                    } );
+                                    
                                     function saveScrollPosition() {
-                                        var scrolled_val = $( document ).scrollTop().valueOf();
-                                        sessionStorage.setItem( "jumpToScrollPosition", scrolled_val );
+                                        $( '.inputfields button' ).on( 'click', function() {
+                                            var scrolled_val = $( document ).scrollTop().valueOf();
+                                            // console.log(scrolled_val+ ' = scroll value');
+                                            sessionStorage.setItem( "jumpToScrollPosition", scrolled_val );
+                                            // console.log('page is at ' + scrolled_val + 'px set in session storage');
+                                        } );
                                     }
-
-                                    function loadScrollPosition() {
+                                    function loadScrollPositionAndJump() {
+                                        
                                         if ( sessionStorage.getItem( "jumpToScrollPosition" ) !== null ) {
+                                            // console.log('scroll pos from last page exists');
                                             
                                             var scrollPositionFromLastPage = sessionStorage.getItem( "jumpToScrollPosition" );
                                             
-                                            $( "body, html" ).animate( {
-                                                scrollTop: scrollPositionFromLastPage
-                                            }, 250 ).offset().top;
-                                            sessionStorage.removeItem( "jumpToScrollPosition" );
+                                            $( "body, html" ).scrollTop( scrollPositionFromLastPage );
+                                            //$("body, html").animate({scrollTop: scrollPositionFromLastPage}, 250).offset().top;
+                                            // console.log('jump now to ' + scrollPositionFromLastPage + 'px and remove session storage item');
+                                            
                                         }
-                                        
                                     }
-
                                     function focusField( elem ) {
                                         document.getElementById( "#focusField" ).value = elem.id;
                                     }
@@ -672,7 +680,6 @@
 
                                     window.onload = function() {
                                         loadImages();
-                                        loadScrollPosition();
                                     }
 
                                     jsf.ajax.addOnEvent( function( data ) {
@@ -680,7 +687,6 @@
                                         
                                         switch ( ajaxstatus ) {
                                             case "begin": // This is called right before ajax request is been sent.
-                                                saveScrollPosition();
                                                 break;
                                             
                                             case "complete": // This is called right after ajax response is received.
@@ -688,9 +694,9 @@
                                                 break;
                                             
                                             case "success": // This is called when ajax response is successfully processed.
-                                                loadScrollPosition();
                                                 loadImages();
                                                 updateFocus();
+                                                loadScrollPositionAndJump();
                                                 break;
                                         }
                                     } );
