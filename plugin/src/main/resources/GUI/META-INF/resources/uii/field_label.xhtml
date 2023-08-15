@@ -40,6 +40,7 @@
                 jsf:rendered="#{field.displayDeletionButton}"
                 jsf:action="#{field.removeValue(entry)}">
                 <i class="fa fa-minus" />
+                <f:ajax execute="@this" render="@form"/>
             </button>
             <button
                 tabindex="-1"
@@ -48,6 +49,7 @@
                 jsf:rendered="#{field.displayDuplicationButton}"
                 jsf:action="#{field.addNewValue}">
                 <i class="fa fa-plus" />
+                <f:ajax execute="@this" render="@form"/>
             </button>
         </intranda:formLabel>
     </composite:implementation>

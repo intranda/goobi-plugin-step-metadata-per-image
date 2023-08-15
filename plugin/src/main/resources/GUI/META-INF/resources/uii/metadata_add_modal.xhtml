@@ -184,24 +184,30 @@
                                 </intranda:formInputViaf>
                             </ui:fragment>
                         </div>
-                        
-                        
+
+
                         <div class="modal-footer">
-                                    <button
-                                        type="button" 
-                                        class="btn btn-blank"
-                                        data-bs-dismiss="modal"
-                                        aria-hidden="true">#{msgs.abbrechen}</button>
-                                    <button
-                                        jsf:id="importData"
-                                        class="btn btn-success"
-                                        jsf:action="#{AktuelleSchritteForm.myPlugin.importValue}">
-                                        <i class="fa fa-floppy-o" />
-                                        <span>
-                                            <h:outputText value="#{msgs.speichern}" />
-                                        </span>
-                                    </button>
-                                </div>
+                            <button
+                                type="button"
+                                class="btn btn-blank"
+                                data-bs-dismiss="modal"
+                                aria-hidden="true">#{msgs.abbrechen}</button>
+                            <button
+                                jsf:id="importData"
+                                class="btn btn-success"
+                                jsf:onclick="$('#metadataAddBox').modal('hide');"
+                                jsf:action="#{AktuelleSchritteForm.myPlugin.importValue}">
+                                <i class="fa fa-floppy-o" />
+                                <f:ajax
+                                    execute="@this"
+                                    render=":myform"></f:ajax>
+
+
+                                <span>
+                                    <h:outputText value="#{msgs.speichern}" />
+                                </span>
+                            </button>
+                        </div>
                     </h:form>
                 </h:panelGroup>
             </div>
