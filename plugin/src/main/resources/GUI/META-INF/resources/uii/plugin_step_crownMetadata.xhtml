@@ -466,7 +466,7 @@
                                         </h:panelGroup>
 
                                         <ui:fragment rendered="#{field.displayType=='gnd'}">
-                                            <intranda:formInputGnd
+                                            <intranda:formInputGndAjax
                                                 id="gnd"
                                                 name="gnd"
                                                 label="#{msgs[field.label]}"
@@ -476,14 +476,15 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);">
+                                                onfocus="focusField(this);"
+                                                render="@form">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
-                                            </intranda:formInputGnd>
+                                            </intranda:formInputGndAjax>
                                         </ui:fragment>
 
                                         <ui:fragment rendered="#{field.displayType=='geonames'}">
-                                            <intranda:formInputGeonames
+                                            <intranda:formInputGeonamesAjax
                                                 id="geonames"
                                                 name="geonames"
                                                 label="#{msgs[field.label]}"
@@ -494,14 +495,15 @@
                                                 required="false"
                                                 submitDataAction="#{entry.importGeonamesData()}"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);">
+                                                onfocus="focusField(this);"
+                                                render="@form">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
-                                            </intranda:formInputGeonames>
+                                            </intranda:formInputGeonamesAjax>
                                         </ui:fragment>
 
                                         <ui:fragment rendered="#{field.displayType=='viaf'}">
-                                            <intranda:formInputViaf
+                                            <intranda:formInputViafAjax
                                                 id="viaf"
                                                 name="viaf"
                                                 label="#{msgs[field.label]}"
@@ -511,10 +513,11 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);">
+                                                onfocus="focusField(this);"
+                                                render="@form">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
-                                            </intranda:formInputViaf>
+                                            </intranda:formInputViafAjax>
                                         </ui:fragment>
                                     </ui:repeat>
                                     <ui:fragment rendered="#{field.displayType=='multiselect'}">
@@ -648,7 +651,7 @@
                                     function saveScrollPosition() {
                                         $( '.inputfields button:not(.modal-dialog button)' ).on( 'click', function() {
                                             var scrolled_val = $( document ).scrollTop().valueOf();
-                                             console.log(scrolled_val+ ' = scroll value');
+                                            console.log( scrolled_val + ' = scroll value' );
                                             sessionStorage.setItem( "jumpToScrollPosition", scrolled_val );
                                             // console.log('page is at ' + scrolled_val + 'px set in session storage');
                                         } );
@@ -660,11 +663,11 @@
                                             
                                             var scrollPositionFromLastPage = sessionStorage.getItem( "jumpToScrollPosition" );
                                             
-                                            window.scrollTo({
+                                            window.scrollTo( {
                                                 top: scrollPositionFromLastPage,
                                                 behavior: 'instant',
-                                              }) 
-                                            sessionStorage.removeItem("jumpToScrollPosition");
+                                            } )
+                                            sessionStorage.removeItem( "jumpToScrollPosition" );
                                             //$("body, html").animate({scrollTop: scrollPositionFromLastPage}, 250).offset().top;
                                             // console.log('jump now to ' + scrollPositionFromLastPage + 'px and remove session storage item');
                                             
