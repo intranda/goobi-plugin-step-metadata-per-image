@@ -112,6 +112,16 @@
 .modal-results {
     max-height: calc(100vh - 100px);
 }
+
+.font-danger.validation-message {
+    color: var(--clr-box-hot);
+}
+
+.warning-icon {
+    padding-left: 3px; 
+    font-size: 18px;
+    margin-right: 5px;
+}
 </style>
 
 
@@ -541,7 +551,7 @@
 
 
                                 </ui:repeat>
-                                <div class="row">
+                                <div class="row mt-3">
                                     <div class="col-12 col-md-3 control-label">
                                         <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_references}" />
                                     </div>

@@ -51,41 +51,38 @@
                                 <h:outputText value="#{AktuelleSchritteForm.myPlugin.selectedField.label}" />
                             </h2>
 
-                            <p>
-                                <h:outputText value="explanation area" />
-                            </p>
+                            <div class="mb-3 mt-3">
+                                <!-- toggle -->
+                                <h:selectOneRadio
+                                    rendered="#{AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
+                                    styleClass="select-radio select-radio-horizontal"
+                                    value="#{AktuelleSchritteForm.myPlugin.additionType}">
+                                    <f:selectItem
+                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
+                                        itemValue="overwrite" />
+                                    <f:selectItem
+                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
+                                        itemValue="empty" />
+                                    <f:selectItem
+                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_newField}"
+                                        itemValue="new" />
+                                    <f:ajax execute="@this" />
+                                </h:selectOneRadio>
+                                <h:selectOneRadio
+                                    rendered="#{!AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
+                                    styleClass="select-radio select-radio-horizontal"
+                                    value="#{AktuelleSchritteForm.myPlugin.additionType}">
+                                    <f:selectItem
+                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
+                                        itemValue="overwrite" />
+                                    <f:selectItem
+                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
+                                        itemValue="empty" />
+                                    <f:ajax execute="@this" />
+                                </h:selectOneRadio>
 
-                            <!-- toggle -->
-                            <h:selectOneRadio
-                                rendered="#{AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
-                                styleClass="select-radio select-radio-horizontal"
-                                value="#{AktuelleSchritteForm.myPlugin.additionType}">
-                                <f:selectItem
-                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
-                                    itemValue="overwrite" />
-                                <f:selectItem
-                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
-                                    itemValue="empty" />
-                                <f:selectItem
-                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_newField}"
-                                    itemValue="new" />
-                                <f:ajax execute="@this" />
-                            </h:selectOneRadio>
-                            <h:selectOneRadio
-                                rendered="#{!AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
-                                styleClass="select-radio select-radio-horizontal"
-                                value="#{AktuelleSchritteForm.myPlugin.additionType}">
-                                <f:selectItem
-                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
-                                    itemValue="overwrite" />
-                                <f:selectItem
-                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
-                                    itemValue="empty" />
-                                <f:ajax execute="@this" />
-                            </h:selectOneRadio>
-
-
-
+                            </div>
+                            <hr />
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='input'}">
                                 <intranda:formInputTextAjax
                                     id="input"
