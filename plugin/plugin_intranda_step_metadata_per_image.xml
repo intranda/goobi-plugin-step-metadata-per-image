@@ -12,6 +12,23 @@
         <project>*</project>
         <step>*</step>
 
+        <field label="Titel" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue="" required="true" validation=".+" validationErrorMessage="Das Feld ist ein Pflichtfeld"
+            readonly="false"></field>
+        <field label="Beschreibung" metadataField="ContentDescription" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false"
+            validationErrorMessage="Muss ausgefüllt sein"></field>
+        <field label="Schlagwort" metadataField="SubjectTopic" repeatable="true" displayType="gnd" defaultValue="" required="false" readonly="false">
+        </field>
+
+        <field label="Typ" metadataField="SubjectForm" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false" validationErrorMessage="field is required">
+            <field>Kronreif</field>
+            <field>Stirnplatte</field>
+            <field>Grundplatte</field>
+            <field>Scharnierstift</field>
+            <field>Scharnierrohr</field>
+            <field>Fassung</field>
+        </field>
+
+<!-- 
         <field label="Pflichtfeld" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue=" - bitte eintragen - " required="true" validation="\w+" validationErrorMessage="field is required" readonly="false"></field>
         <field label="Wiederholbares Feld" metadataField="DocLanguage" repeatable="true" displayType="input" defaultValue="" required="false"></field>
         <field label="Textarea" metadataField="Abstract" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
@@ -46,22 +63,20 @@
         <field label="VIAF" metadataField="LegislativeBody" repeatable="false" displayType="viaf" defaultValue="" required="false" readonly="false" searchFields="210__a; 111__a; 100__a; 110__a; 150__a; 151__a;" displayFields="001=NORM_IDENTIFIER; 0247_a=URI; 1001_a=NORM_NAME; 1001_d=NORM_LIFEPERIOD; 1001_q=NORM_SEX; 375__a=NORM_SEX;"
 >
         </field>
-
+-->
 
         <searchfield>TitleDocMain</searchfield>
-        <searchfield>shelfmarksource</searchfield>
+        <searchfield>ContentDescription</searchfield>
         <searchfield>CatalogIDDigital</searchfield>
 
         <display>
             <field>TitleDocMain</field>
-            <field>PublisherName</field>
-            <field>PublicationYear</field>
-            <field>PlaceOfPublication</field>
+            <field>ContentDescription</field>
             <field>CatalogIDDigital</field>
         </display>
 
         <identifierField>_urn</identifierField>
-        <docstructName>Chapter</docstructName>
+        <docstructName>CrownComponent</docstructName>
         <rating>Counter</rating>
 
         <reference>
@@ -72,5 +87,4 @@
             <label>RelationLabel</label>
         </reference>
     </config>
-
 </config_plugin>

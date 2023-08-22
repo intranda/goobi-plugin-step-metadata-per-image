@@ -22,15 +22,13 @@
             aria-labelledby="processSearchBox"
             aria-hidden="true">
             <div
-                class="modal-dialog modal-dialog-scrollable"
+                class="modal-dialog modal-xl modal-dialog-scrollable"
                 role="document">
                 <h:panelGroup
                     styleClass="modal-content"
                     layout="block"
                     id="processSearchBoxContent">
-                    <h:form
-                        styleClass="form-horizontal"
-                        prependId="false">
+                   
                         <div class="modal-header">
                             <h4
                                 class="modal-title"
@@ -42,22 +40,25 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                         <h:form
+                        styleClass="form-horizontal"
+                        prependId="false">
                             <p>
                                 <h:outputText
                                     value="#{msgs.plugin_intranda_step_metadata_per_image_processSearchDescription}"
                                     escape="false" />
                             </p>
                             <div class="row">
-                                <div class="col-12 col-md-9">
+                                <div class="col-12 col-md-10">
                                     <h:inputText
                                         pt:aria-label="#{msgs.plugin_intranda_step_metadata_per_image_searchTerm}"
                                         styleClass="form-control"
                                         value="#{AktuelleSchritteForm.myPlugin.searchValue}" />
                                 </div>
-                                <div class="col-12 col-md-3">
+                                <div class="col-12 col-md-2">
                                     <button
                                         jsf:id="processSearchAction"
-                                        class="btn btn-blank"
+                                        class="btn btn-blank float-end"
                                         jsf:action="#{AktuelleSchritteForm.myPlugin.processSearch}">
                                         <i
                                             class="fa fa-search"
@@ -72,7 +73,7 @@
                             <h:panelGroup
                                 id="processSearchlist"
                                 layout="block"
-                                styleClass="modal-dialog-scrollable modal-results">
+                                styleClass="modal-results">
                                 <x:dataList
                                     value="#{AktuelleSchritteForm.myPlugin.processDataList}"
                                     var="proc">
@@ -101,7 +102,7 @@
                                         <div class="col-12 col-md-2">
                                             <button
                                                 jsf:id="selectProcess"
-                                                class="btn btn-success"
+                                                class="btn btn-success float-end"
                                                 jsf:action="#{AktuelleSchritteForm.myPlugin.addReference}">
                                                 <i class="fa fa-check"></i>
                                                 <f:setPropertyActionListener
@@ -113,8 +114,8 @@
                                     <hr />
                                 </x:dataList>
                             </h:panelGroup>
-                        </div>
                     </h:form>
+                        </div>
                 </h:panelGroup>
             </div>
         </h:panelGroup>

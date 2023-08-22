@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Preferences>
+
+  <MetadataType>
+    <Name>UUID</Name>
+    <language name="de">UUID</language>
+    <language name="en">UUID</language>
+  </MetadataType>
   <MetadataType>
     <Name>URN</Name>
     <language name="de">URN</language>
@@ -1586,6 +1592,7 @@
     <metadata num="1o">_electronicEdition</metadata>
     <metadata num="*">_ucc_id</metadata>
     <metadata num="*" DefaultDisplay="true">Subject</metadata>
+    <group num="*">Reference</group>     
   </DocStrctType>
 
   <!-- Übersicht -->
@@ -1624,6 +1631,15 @@
  	<metadata num="1o" DefaultDisplay="true">TitleDocMain</metadata>
     <metadata num="*" DefaultDisplay="true">Description</metadata>
     <metadata num="*" DefaultDisplay="true">Subject</metadata>
+
+    <group num="*">Reference</group>
+    <metadata num="1o">UUID</metadata>
+    <metadata num="1o">Counter</metadata>
+    <metadata num="*" >SubjectTopic</metadata>
+    <metadata num="1o">ContentDescription</metadata>
+    <metadata num="1o">SubjectForm</metadata>
+
+    
   </DocStrctType>
   
   <!-- Messpunkt -->
@@ -1990,21 +2006,20 @@
     <metadata num="1o">_urn</metadata>
     <metadata num="*">DocLanguage</metadata>
     <metadata num="*">PublisherName</metadata>
-    <metadata num="*">TitleDocMainShort</metadata>
-    <metadata num="*">LegislativeBody</metadata>
-    <metadata num="1o">AccessLicense</metadata>
-<metadata DefaultDisplay="true" num="1o">Counter</metadata>
-    <group num="*">Reference</group>    
+
+<group num="*">Reference</group>    
 
 
 <!-- plugin test data -->
 
     <metadata num="*">Author</metadata>
+    <metadata num="*">TitleDocMainShort</metadata>
     <metadata num="*">_ucc_id</metadata>
     <metadata num="*">Composer</metadata>
     <metadata num="*">Bearbeiter</metadata>
     <metadata num="*">Artist</metadata>
     <metadata num="*">IllustratorArtist</metadata>
+    <metadata num="*">LegislativeBody</metadata>
   </DocStrctType>
   <DocStrctType>
     <Name>Faszikel</Name>
@@ -2594,8 +2609,7 @@
     <metadata num="*">Manufacturer</metadata>
     <metadata num="*">Note</metadata>
     <metadata num="1o">_directionRTL</metadata>
-    <metadata num="1o">NodeId</metadata>
-    <group num="*">Reference</group>    
+<group num="*">Reference</group>    
   </DocStrctType>
   <DocStrctType topStruct="true">
     <Name>Manuscript</Name>
@@ -6157,6 +6171,10 @@
         <InternalName>CatalogIDSource</InternalName>
         <WriteXPath>./mods:mods/#mods:identifier[@type='PPNanalog']
                 </WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>UUID</InternalName>
+        <WriteXPath>./mods:mods/#mods:identifier[@type='uuid']</WriteXPath>
       </Metadata>
       <Metadata>
         <InternalName>CatalogIDPredecessorPeriodical</InternalName>

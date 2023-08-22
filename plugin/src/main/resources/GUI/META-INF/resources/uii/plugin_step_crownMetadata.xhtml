@@ -122,6 +122,12 @@
     font-size: 18px;
     margin-right: 5px;
 }
+
+.modal-dialog-scrollable {
+/*  height: calc(100% - 200px);  */
+}
+
+
 </style>
 
 
@@ -464,7 +470,7 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 selectItems="#{field.valueList}"
-                                                fieldStyle="form-control #{entry.valid ? '' : 'invalid'}"
+                                                fieldStyle="form-control #{entry.valid ? '' : 'invalid'} form-select"
                                                 var="item"
                                                 itemLabel="#{item}"
                                                 itemValue="#{item}"
