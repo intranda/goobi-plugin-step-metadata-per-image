@@ -103,6 +103,7 @@
     display: grid;
     grid-template-columns: 40% auto;
     grid-template-rows: auto;
+    margin-top: 5px;
 }
 
 .form-control.invalid, .form-select.invalid {
@@ -462,7 +463,7 @@
                                             <intranda:formInputDropDownAjax
                                                 id="select"
                                                 ajaxEvent="change"
-                                                ajaxRender=":#{cc.clientId}field"
+                                                ajaxRender="@this"
                                                 label="#{msgs[field.label]}"
                                                 field="#{entry.value}"
                                                 help="#{msgs.helpLdapAuthenticationType}"
