@@ -119,16 +119,15 @@
 }
 
 .warning-icon {
-    padding-left: 3px; 
+    padding-left: 3px;
     font-size: 18px;
     margin-right: 5px;
 }
 
 .modal-dialog-scrollable {
-/*  height: calc(100% - 200px);  */
+    /*  height: calc(100% - 200px);  */
+    
 }
-
-
 </style>
 
 
@@ -430,7 +429,7 @@
                                                 execute="@this :focusField"
                                                 render=":#{cc.clientId}field"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);">
+                                                onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                                 <ui:include src="field_label.xhtml" />
                                             </intranda:formInputTextAjax>
                                             <ui:include src="field_validation.xhtml" />
@@ -463,7 +462,7 @@
                                             <intranda:formInputDropDownAjax
                                                 id="select"
                                                 ajaxEvent="change"
-                                                ajaxRender="@this"
+                                                ajaxRender=":#{cc.clientId}field"
                                                 label="#{msgs[field.label]}"
                                                 field="#{entry.value}"
                                                 help="#{msgs.helpLdapAuthenticationType}"
@@ -476,7 +475,7 @@
                                                 itemLabel="#{item}"
                                                 itemValue="#{item}"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);">
+                                                onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputDropDownAjax>
@@ -493,7 +492,7 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);"
+                                                onfocus="document.getElementById( 'focusField' ).value = this.id;"
                                                 render="@form">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
@@ -512,7 +511,7 @@
                                                 required="false"
                                                 submitDataAction="#{entry.importGeonamesData()}"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);"
+                                                onfocus="document.getElementById( 'focusField' ).value = this.id;"
                                                 render="@form">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
@@ -530,14 +529,16 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="false"
-                                                onfocus="focusField(this);"
+                                                onfocus="document.getElementById( 'focusField' ).value = this.id;"
                                                 render="@form">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputViafAjax>
                                         </ui:fragment>
                                     </ui:repeat>
-                                    <ui:fragment rendered="#{field.displayType=='multiselect'}">
+                                    <h:panelGroup
+                                        rendered="#{field.displayType=='multiselect'}"
+                                        id="multiselectfield">
                                         <intranda:formInputMultiSelect
                                             id="multiselect"
                                             name="multiselect"
@@ -552,10 +553,10 @@
                                             displayAsRequired="#{field.required}"
                                             required="false"
                                             displayLabel="true"
-                                            onfocus="focusField(this);" />
+                                            render=":#{cc.clientId}field"
+                                            onfocus="document.getElementById( 'focusField' ).value = this.id;" />
                                         <ui:include src="field_validation.xhtml" />
-                                    </ui:fragment>
-
+                                    </h:panelGroup>
 
                                 </ui:repeat>
                                 <div class="row mt-3">
@@ -690,15 +691,14 @@
                                             
                                         }
                                     }
-                                    function focusField( elem ) {
-                                        document.getElementById( "#focusField" ).value = elem.id;
-                                    }
-
+                                    
                                     function updateFocus() {
                                         var focus = $( '#focusField' ).val();
-                                        const inp = document.getElementById( focus );
-                                        if ( inp != null ) {
-                                            inp.focus();
+                                        if ( focus != null ) {
+                                            const inp = document.getElementById( focus );
+                                            if ( inp != null ) {
+                                                inp.focus();
+                                            }
                                         }
                                     }
 
