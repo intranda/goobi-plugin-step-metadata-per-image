@@ -303,14 +303,14 @@
 
 
                                         <!-- image name -->
-                                        <div class="label-grid">
+                                       
                                             <div>
                                                 <h:outputText value="#{page.image.imageName}" />
                                             </div>
                                             <!-- rating -->
 
                                             <div jsf:id="rating">
-                                                <ul class="float-end">
+                                                <ul style="padding-left: 0;">
                                                     <li class="star">
                                                         <button
                                                             tabindex="-1"
@@ -396,7 +396,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -555,7 +555,7 @@
                                             displayLabel="true"
                                             render=":#{cc.clientId}field"
                                             onfocus="document.getElementById( 'focusField' ).value = this.id;" />
-                                        <ui:include src="field_validation.xhtml" />
+<!--                                         <ui:include src="field_validation.xhtml" /> -->
                                     </h:panelGroup>
 
                                 </ui:repeat>
