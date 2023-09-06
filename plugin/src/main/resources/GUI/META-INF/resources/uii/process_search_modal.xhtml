@@ -13,34 +13,29 @@
     </composite:interface>
 
     <composite:implementation>
-        <h:panelGroup
-            styleClass="modal p-4 py-md-5"
-            layout="block"
+    
+    
+        <div
+            class="modal fade"
             id="processSearchBox"
             tabindex="-1"
             role="dialog"
-            aria-labelledby="processSearchBox"
-            aria-hidden="true">
+            aria-labelledby="processSearchBox">
             <div
-                class="modal-dialog modal-xl modal-dialog-scrollable"
+                class="modal-dialog"
                 role="document">
-                <h:panelGroup
-                    styleClass="modal-content"
-                    layout="block"
-                    id="processSearchBoxContent">
-                   
-                        <div class="modal-header">
-                            <h4
-                                class="modal-title"
-                                style="width: 90%">#{msgs.plugin_intranda_step_metadata_per_image_processSearch}</h4>
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                         <h:form
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h4 class="modal-title" id="myModalLabel">
+                            <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_processSearch}" />
+                        </h4>
+                        <button type="button" class="btn text-white"
+                            title="#{msgs.abbrechen}" data-bs-dismiss="modal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <h:panelGroup class="modal-body" id="processSearchBoxContent">
+                        <h:form
                         styleClass="form-horizontal"
                         prependId="false">
                             <p>
@@ -114,11 +109,11 @@
                                     <hr />
                                 </x:dataList>
                             </h:panelGroup>
-                    </h:form>
-                        </div>
-                </h:panelGroup>
+                        </h:form>
+                    </h:panelGroup>
+                    
+                </div>
             </div>
-        </h:panelGroup>
-
+        </div>
     </composite:implementation>
 </ui:composition>

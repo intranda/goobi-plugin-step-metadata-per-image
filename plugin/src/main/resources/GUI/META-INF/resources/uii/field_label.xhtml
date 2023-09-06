@@ -20,6 +20,8 @@
 
             <button
                 tabindex="-1"
+                title="#{msgs.plugin_intranda_step_metadata_per_image_copy}"
+                data-toggle="tooltip"
                 class="btn btn-blank me-2 float-end"
                 jsf:id="copyContent"
                 jsf:onclick="$('#metadataAddBox').modal('show');"
@@ -35,6 +37,8 @@
 
             <button
                 tabindex="-1"
+                title="#{msgs.plugin_intranda_step_metadata_per_image_delete}"
+                data-toggle="tooltip"
                 class="btn btn-blank me-2 float-end"
                 jsf:id="removeField"
                 jsf:rendered="#{field.displayDeletionButton}"
@@ -44,6 +48,8 @@
             </button>
             <button
                 tabindex="-1"
+                title="#{msgs.plugin_intranda_step_metadata_per_image_add}"
+                data-toggle="tooltip"
                 class="btn btn-blank me-2 float-end"
                 jsf:id="duplicateField"
                 jsf:rendered="#{field.displayDuplicationButton}"

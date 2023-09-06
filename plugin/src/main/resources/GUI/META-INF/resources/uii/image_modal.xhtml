@@ -13,7 +13,7 @@
     </composite:interface>
 
     <composite:implementation>
-         <h:panelGroup
+        <h:panelGroup
             styleClass="modal p-4 py-md-5"
             layout="block"
             id="imageBox"
@@ -21,35 +21,28 @@
             role="dialog"
             aria-labelledby="imageBox"
             aria-hidden="true">
-            <div
-                class="modal-dialog"
+            <h:panelGroup
+                id="imageBoxContent"
+                class="modal-dialog mw-75"
                 role="document">
-                <h:panelGroup
-                    styleClass="modal-content"
-                    layout="block"
-                    id="imageBoxContent">
-                    <h:form
-                        styleClass="form-horizontal"
-                        prependId="false">
-                        <div class="modal-header">
-                            <h4
-                                class="modal-title"
-                                style="width: 90%">#{AktuelleSchritteForm.myPlugin.imageName}</h4>
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <img
-                                src="#{AktuelleSchritteForm.myPlugin.imageUrl}"
-                                style="width: 100%" />
-                        </div>
-                    </h:form>
-                </h:panelGroup>
-            </div>
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h4 class="modal-title" id="myModalLabel">
+                            <h:outputText value="#{AktuelleSchritteForm.myPlugin.imageName}" />
+                        </h4>
+                        <button type="button" class="btn text-white"
+                            title="#{msgs.abbrechen}" data-bs-dismiss="modal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img data-bs-dismiss="modal"
+                            src="#{AktuelleSchritteForm.myPlugin.imageUrl}"
+                            style="width: 100%" />
+                    </div>
+                </div>
+            </h:panelGroup>
         </h:panelGroup>
-
-    </composite:implementation>
+        </composite:implementation>
 </ui:composition>
+

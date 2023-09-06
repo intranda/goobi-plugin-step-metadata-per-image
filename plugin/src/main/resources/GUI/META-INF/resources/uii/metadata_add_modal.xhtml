@@ -18,195 +18,184 @@
 
     <composite:implementation>
         <h:panelGroup
-            styleClass="modal p-4 py-md-5"
+            styleClass="modal fade"
             layout="block"
             id="metadataAddBox"
             tabindex="-1"
             role="dialog"
             aria-labelledby="metadataAddBox"
-            aria-hidden="true">
+            aria-hidden="true"> 
+            
             <div
-                class="modal-dialog modal-dialog-scrollable"
+                class="modal-dialog"
                 role="document">
-                <h:panelGroup
-                    styleClass="modal-content"
-                    layout="block"
-                    id="metadataAddBoxContent">
-                    <h:form
-                        styleClass="form-horizontal"
-                        prependId="false">
-                        <div class="modal-header">
-                            <h4
-                                class="modal-title"
-                                style="width: 90%">#{msgs.plugin_intranda_step_metadata_per_image_metadataAdd}</h4>
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h4 class="modal-title" id="myModalLabel">
+                            <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_metadataAdd}" />
+                        </h4>
+                        <button type="button" class="btn text-white"
+                            title="#{msgs.abbrechen}" data-bs-dismiss="modal">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>
+                            <h:outputText value="#{AktuelleSchritteForm.myPlugin.selectedField.label}" />
+                        </h5>
+
+                        <div class="mb-3 mt-3">
+                            <!-- toggle -->
+                            <h:selectOneRadio
+                                rendered="#{AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
+                                styleClass="select-radio select-radio-horizontal"
+                                value="#{AktuelleSchritteForm.myPlugin.additionType}">
+                                <f:selectItem
+                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
+                                    itemValue="overwrite" />
+                                <f:selectItem
+                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
+                                    itemValue="empty" />
+                                <f:selectItem
+                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_newField}"
+                                    itemValue="new" />
+                                <f:ajax execute="@this" />
+                            </h:selectOneRadio>
+                            <h:selectOneRadio
+                                rendered="#{!AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
+                                styleClass="select-radio select-radio-horizontal"
+                                value="#{AktuelleSchritteForm.myPlugin.additionType}">
+                                <f:selectItem
+                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
+                                    itemValue="overwrite" />
+                                <f:selectItem
+                                    itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
+                                    itemValue="empty" />
+                                <f:ajax execute="@this" />
+                            </h:selectOneRadio>
+
                         </div>
-                        <div class="modal-body">
+                        <hr />
+                        <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='input'}">
+                            <intranda:formInputTextAjax
+                                id="input"
+                                name="input"
+                                field="#{AktuelleSchritteForm.myPlugin.selectedValue.value}"
+                                help="#{msgs.helpProcessStepTitle}"
+                                displayAsRequired="false"
+                                readonly="false"
+                                required="false"
+                                fieldStyle="#{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
+                                execute="@this"
+                                render="@form"
+                                label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
+                                displayLabel="true">
+                            </intranda:formInputTextAjax>
+                        </ui:fragment>
 
-                            <h2>
-                                <h:outputText value="#{AktuelleSchritteForm.myPlugin.selectedField.label}" />
-                            </h2>
+                        <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='textarea'}">
+                            <intranda:formInputTextAreaAjax
+                                id="area"
+                                name="area"
+                                field="#{AktuelleSchritteForm.myPlugin.selectedValue.value}"
+                                help="#{msgs.helpProcessStepTitle}"
+                                displayAsRequired="false"
+                                readonly="false"
+                                required="false"
+                                fieldStyle="#{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
+                                execute="@this"
+                                render="@form"
+                                label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
+                                displayLabel="true">
+                            </intranda:formInputTextAreaAjax>
+                        </ui:fragment>
 
-                            <div class="mb-3 mt-3">
-                                <!-- toggle -->
-                                <h:selectOneRadio
-                                    rendered="#{AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
-                                    styleClass="select-radio select-radio-horizontal"
-                                    value="#{AktuelleSchritteForm.myPlugin.additionType}">
-                                    <f:selectItem
-                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
-                                        itemValue="overwrite" />
-                                    <f:selectItem
-                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
-                                        itemValue="empty" />
-                                    <f:selectItem
-                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_newField}"
-                                        itemValue="new" />
-                                    <f:ajax execute="@this" />
-                                </h:selectOneRadio>
-                                <h:selectOneRadio
-                                    rendered="#{!AktuelleSchritteForm.myPlugin.selectedField.repeatable}"
-                                    styleClass="select-radio select-radio-horizontal"
-                                    value="#{AktuelleSchritteForm.myPlugin.additionType}">
-                                    <f:selectItem
-                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_overwriteField}"
-                                        itemValue="overwrite" />
-                                    <f:selectItem
-                                        itemLabel="#{msgs.plugin_intranda_step_metadata_per_image_emptyField}"
-                                        itemValue="empty" />
-                                    <f:ajax execute="@this" />
-                                </h:selectOneRadio>
+                        <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='select'}">
+                            <intranda:formInputDropDownAjax
+                                id="select"
+                                ajaxEvent="change"
+                                ajaxRender="@form"
+                                field="#{AktuelleSchritteForm.myPlugin.selectedValue.value}"
+                                help="#{msgs.helpLdapAuthenticationType}"
+                                name="select"
+                                displayAsRequired="false"
+                                readonly="false"
+                                required="false"
+                                selectItems="#{AktuelleSchritteForm.myPlugin.selectedField.valueList}"
+                                fieldStyle="form-control #{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
+                                var="item"
+                                itemLabel="#{item}"
+                                itemValue="#{item}"
+                                label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
+                                displayLabel="true">
+                            </intranda:formInputDropDownAjax>
+                        </ui:fragment>
 
-                            </div>
-                            <hr />
-                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='input'}">
-                                <intranda:formInputTextAjax
-                                    id="input"
-                                    name="input"
-                                    field="#{AktuelleSchritteForm.myPlugin.selectedValue.value}"
-                                    help="#{msgs.helpProcessStepTitle}"
-                                    displayAsRequired="false"
-                                    readonly="false"
-                                    required="false"
-                                    fieldStyle="#{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
-                                    execute="@this"
-                                    render="@form"
-                                    label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
-                                    displayLabel="true">
-                                </intranda:formInputTextAjax>
-                            </ui:fragment>
+                        <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='gnd'}">
+                            <intranda:formInputGnd
+                                id="gnd"
+                                name="gnd"
+                                field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
+                                help="#{msgs.help}"
+                                fieldStyle="form-control"
+                                displayAsRequired="false"
+                                required="false"
+                                label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
+                                displayLabel="true">
+                            </intranda:formInputGnd>
+                        </ui:fragment>
 
-                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='textarea'}">
-                                <intranda:formInputTextAreaAjax
-                                    id="area"
-                                    name="area"
-                                    field="#{AktuelleSchritteForm.myPlugin.selectedValue.value}"
-                                    help="#{msgs.helpProcessStepTitle}"
-                                    displayAsRequired="false"
-                                    readonly="false"
-                                    required="false"
-                                    fieldStyle="#{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
-                                    execute="@this"
-                                    render="@form"
-                                    label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
-                                    displayLabel="true">
-                                </intranda:formInputTextAreaAjax>
-                            </ui:fragment>
+                        <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='geonames'}">
+                            <intranda:formInputGeonames
+                                id="geonames"
+                                name="geonames"
+                                field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
+                                help="#{msgs.help}"
+                                fieldStyle="form-control"
+                                displayAsRequired="false"
+                                required="false"
+                                submitDataAction="#{AktuelleSchritteForm.myPlugin.selectedValue.importGeonamesData()}"
+                                label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
+                                displayLabel="true">
+                            </intranda:formInputGeonames>
+                        </ui:fragment>
 
-                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='select'}">
-                                <intranda:formInputDropDownAjax
-                                    id="select"
-                                    ajaxEvent="change"
-                                    ajaxRender="@form"
-                                    field="#{AktuelleSchritteForm.myPlugin.selectedValue.value}"
-                                    help="#{msgs.helpLdapAuthenticationType}"
-                                    name="select"
-                                    displayAsRequired="false"
-                                    readonly="false"
-                                    required="false"
-                                    selectItems="#{AktuelleSchritteForm.myPlugin.selectedField.valueList}"
-                                    fieldStyle="form-control #{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
-                                    var="item"
-                                    itemLabel="#{item}"
-                                    itemValue="#{item}"
-                                    label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
-                                    displayLabel="true">
-                                </intranda:formInputDropDownAjax>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='gnd'}">
-                                <intranda:formInputGnd
-                                    id="gnd"
-                                    name="gnd"
-                                    field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
-                                    help="#{msgs.help}"
-                                    fieldStyle="form-control"
-                                    displayAsRequired="false"
-                                    required="false"
-                                    label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
-                                    displayLabel="true">
-                                </intranda:formInputGnd>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='geonames'}">
-                                <intranda:formInputGeonames
-                                    id="geonames"
-                                    name="geonames"
-                                    field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
-                                    help="#{msgs.help}"
-                                    fieldStyle="form-control"
-                                    displayAsRequired="false"
-                                    required="false"
-                                    submitDataAction="#{AktuelleSchritteForm.myPlugin.selectedValue.importGeonamesData()}"
-                                    label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
-                                    displayLabel="true">
-                                </intranda:formInputGeonames>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='viaf'}">
-                                <intranda:formInputViaf
-                                    id="viaf"
-                                    name="viaf"
-                                    field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
-                                    help="#{msgs.help}"
-                                    fieldStyle="form-control"
-                                    displayAsRequired="false"
-                                    required="false"
-                                    label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
-                                    displayLabel="true">
-                                </intranda:formInputViaf>
-                            </ui:fragment>
-                        </div>
-
-
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-blank"
-                                data-bs-dismiss="modal"
-                                aria-hidden="true">#{msgs.abbrechen}</button>
-                            <button
-                                jsf:id="importData"
-                                class="btn btn-success"
-                                jsf:onclick="$('#metadataAddBox').modal('hide');"
-                                jsf:action="#{AktuelleSchritteForm.myPlugin.importValue}">
-                                <i class="fa fa-floppy-o" />
-                                <f:ajax
-                                    execute="@this"
-                                    render=":myform"></f:ajax>
-
-
-                                <span>
-                                    <h:outputText value="#{msgs.speichern}" />
-                                </span>
-                            </button>
-                        </div>
-                    </h:form>
-                </h:panelGroup>
+                        <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='viaf'}">
+                            <intranda:formInputViaf
+                                id="viaf"
+                                name="viaf"
+                                field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
+                                help="#{msgs.help}"
+                                fieldStyle="form-control"
+                                displayAsRequired="false"
+                                required="false"
+                                label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
+                                displayLabel="true">
+                            </intranda:formInputViaf>
+                        </ui:fragment>                       
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-blank"
+                            data-bs-dismiss="modal"
+                            aria-hidden="true">#{msgs.abbrechen}</button>
+                        <button
+                            jsf:id="importData"
+                            class="btn btn-success"
+                            jsf:onclick="$('#metadataAddBox').modal('hide');"
+                            jsf:action="#{AktuelleSchritteForm.myPlugin.importValue}">
+                            <i class="fa fa-floppy-o" />
+                            <f:ajax
+                                execute="@this"
+                                render=":myform"></f:ajax>
+                            <span>
+                                <h:outputText value="#{msgs.speichern}" />
+                            </span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </h:panelGroup>
 
