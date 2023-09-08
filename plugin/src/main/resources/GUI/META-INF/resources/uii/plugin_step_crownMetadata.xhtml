@@ -72,7 +72,6 @@
 
 
         <style>
-
 .star {
     display: block;
     float: left;
@@ -100,6 +99,9 @@
     margin-right: 5px;
 }
 
+.form_field {
+    margin-bottom: 4px;
+}
 </style>
 
 
@@ -168,7 +170,7 @@
 
 
                 <div class="p-4">
-                  
+
                     <!-- HEADER ROW -->
                     <div class="row">
                         <div class="col-8">
@@ -180,46 +182,44 @@
                                 field="#{AktuelleSchritteForm.myPlugin.publicationElement.title}"
                                 help="#{msgs.helpProcessStepTitle}"
                                 required="false" />
-                                <x:dataList
-                                    var="metadata"
-                                    value="#{AktuelleSchritteForm.myPlugin.publicationElement.metadataList}">
-                                    <intranda:formOutputText
-                                        tabindex="-1"
-                                        id="metadata"
-                                        name="metadata"
-                                        label="#{msgs['process_grid_'.concat(metadata.one)]}"
-                                        field="#{metadata.two}"
-                                        help="#{msgs.helpProcessStepTitle}"
-                                        required="false" />
-                                </x:dataList>
+                            <x:dataList
+                                var="metadata"
+                                value="#{AktuelleSchritteForm.myPlugin.publicationElement.metadataList}">
+                                <intranda:formOutputText
+                                    tabindex="-1"
+                                    id="metadata"
+                                    name="metadata"
+                                    label="#{msgs['process_grid_'.concat(metadata.one)]}"
+                                    field="#{metadata.two}"
+                                    help="#{msgs.helpProcessStepTitle}"
+                                    required="false" />
+                            </x:dataList>
 
-                                <ui:fragment rendered="#{!AktuelleSchritteForm.myPlugin.publicationElement.processReferences.isEmpty()}">
-                                    <div class="row">
-                                        <div class="col-12 col-md-3 control-label">
-                                            <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_references}" />
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <ui:repeat
-                                                var="reference"
-                                                value="#{AktuelleSchritteForm.myPlugin.publicationElement.processReferences}">
-                                                <div class="btn btn-blank me-2">
-                                                    <span>
-                                                        <h:outputText value="#{reference.otherProcessName} #{msgs.lw_currentImageNumber} #{reference.otherImageNumber}" />
-                                                    </span>
-    
-                                                </div>
-                                                <br />
-                                            </ui:repeat>
-                                        </div>
+                            <ui:fragment rendered="#{!AktuelleSchritteForm.myPlugin.publicationElement.processReferences.isEmpty()}">
+                                <div class="row">
+                                    <div class="col-12 col-md-3 control-label">
+                                        <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_references}" />
                                     </div>
-                                </ui:fragment>
-                            </div>
-                        <div class="col-4">
-                      
+                                    <div class="col-12 col-md-9">
+                                        <ui:repeat
+                                            var="reference"
+                                            value="#{AktuelleSchritteForm.myPlugin.publicationElement.processReferences}">
+                                            <div class="btn btn-blank me-2">
+                                                <span> <h:outputText
+                                                        value="#{reference.otherProcessName} #{msgs.lw_currentImageNumber} #{reference.otherImageNumber}" />
+                                                </span>
+
+                                            </div>
+                                            <br />
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </ui:fragment>
                         </div>
+                        <div class="col-4"></div>
                     </div>
                     <!-- // HEADER ROW -->
-                  
+
                     <hr />
 
                     <!-- EACH IMAGE -->
@@ -227,7 +227,7 @@
                         var="page"
                         value="#{AktuelleSchritteForm.myPlugin.pages}"
                         varStatus="myStatus">
-                        
+
                         <div class="row">
                             <div class="col-8 inputfields">
                                 <!-- METADATA EDITION AREA -->
@@ -277,7 +277,8 @@
                                                 fieldStyle="#{entry.valid ? '' : 'invalid'}"
                                                 execute="@this :focusField"
                                                 render=":#{cc.clientId}field"
-                                                displayLabel="false">
+                                                displayLabel="false"
+                                                onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputTextAreaAjax>
@@ -318,8 +319,8 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="false"
-                                                onfocus="document.getElementById( 'focusField' ).value = this.id;"
-                                                render="@form">
+                                                render="@form"
+                                                onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                                 <ui:include src="field_label.xhtml" />
                                                 <ui:include src="field_validation.xhtml" />
                                             </intranda:formInputGndAjax>
@@ -378,7 +379,6 @@
                                             displayLabel="true"
                                             render=":#{cc.clientId}field"
                                             onfocus="document.getElementById( 'focusField' ).value = this.id;" />
-<!--                                         <ui:include src="field_validation.xhtml" /> -->
                                     </h:panelGroup>
 
                                 </ui:repeat>
@@ -396,9 +396,7 @@
                                                 jsf:id="removeReference"
                                                 class="btn btn-blank me-2 mb-2"
                                                 jsf:action="#{page.deleteProcessReference}">
-                                                <i class="fa fa-minus-circle"></i>
-                                                <span>
-                                                    <h:outputText value="#{reference.otherProcessName}" />
+                                                <i class="fa fa-minus-circle"></i> <span> <h:outputText value="#{reference.otherProcessName}" />
                                                 </span>
                                                 <f:setPropertyActionListener
                                                     value="#{reference}"
@@ -427,7 +425,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <!-- // METADATA EDITION AREA -->
                             </div>
 
@@ -469,7 +467,9 @@
                                     </div>
                                     <!-- // IMAGE DISPLAY -->
 
-                                    <div jsf:id="rating" title="#{msgs.plugin_intranda_step_metadata_per_image_rating}">
+                                    <div
+                                        jsf:id="rating"
+                                        title="#{msgs.plugin_intranda_step_metadata_per_image_rating}">
                                         <!-- RATING -->
                                         <ul class="p-0">
                                             <li class="star">
@@ -557,20 +557,22 @@
                                         </ul>
                                         <!-- // RATING -->
                                     </div>
-                                    <!-- FILE NAME -->                                       
-                                    <h:outputText class="float-end" value="#{page.image.imageName}" />
-                                    <!-- // FILE NAME -->                                       
+                                    <!-- FILE NAME -->
+                                    <h:outputText
+                                        class="float-end"
+                                        value="#{page.image.imageName}" />
+                                    <!-- // FILE NAME -->
                                 </div>
-                                    
+
                                 <!-- // RIGHT AREA FOR IMAGE -->
-                                
+
                             </div>
                         </div>
-                        
-                        <hr jsf:rendered="#{not myStatus.last}"/>
+
+                        <hr jsf:rendered="#{not myStatus.last}" />
                     </ui:repeat>
                     <!-- // EACH IMAGE -->
-                    
+
                 </div>
 
 
@@ -580,23 +582,19 @@
                         class="btn btn-blank"
                         jsf:id="absenden"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <i class="fa fa-close"></i>
-                        <span>
-                            <h:outputText value="#{msgs.pluginLeave}" />
+                        <i class="fa fa-close"></i> <span> <h:outputText value="#{msgs.pluginLeave}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
                             value="#{false}" />
                     </button>
-                    
+
                     <!-- Save and finish the task -->
                     <button
                         class="btn btn-success me-3"
                         jsf:id="saveMetadata"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.saveMetadata}">
-                        <i class="fa fa-floppy-o"></i>
-                        <span>
-                            <h:outputText value="#{msgs.speichern}" />
+                        <i class="fa fa-floppy-o"></i> <span> <h:outputText value="#{msgs.speichern}" />
                         </span>
                         <x:updateActionListener
                             property="#{NavigationForm.uiStatus.pluginSimulation}"
@@ -622,69 +620,86 @@
 
 
         <script type="text/javascript">
-                                    $( document ).ready( function() {
-                                        saveScrollPosition();
-                                        loadScrollPositionAndJump();
-                                    } );
-                                    
-                                    function saveScrollPosition() {
-                                        $( '.inputfields button:not(.modal-dialog button)' ).on( 'click', function() {
-                                            var scrolled_val = $( document ).scrollTop().valueOf();
-                                            console.log( scrolled_val + ' = scroll value' );
-                                            sessionStorage.setItem( "jumpToScrollPosition", scrolled_val );
-                                            // console.log('page is at ' + scrolled_val + 'px set in session storage');
-                                        } );
-                                    }
-                                    function loadScrollPositionAndJump() {
-                                        
-                                        if ( sessionStorage.getItem( "jumpToScrollPosition" ) !== null ) {
-                                            // console.log('scroll pos from last page exists');
-                                            
-                                            var scrollPositionFromLastPage = sessionStorage.getItem( "jumpToScrollPosition" );
-                                            
-                                            window.scrollTo( {
-                                                top: scrollPositionFromLastPage,
-                                                behavior: 'instant',
-                                            } )
-                                            sessionStorage.removeItem( "jumpToScrollPosition" );
-                                            //$("body, html").animate({scrollTop: scrollPositionFromLastPage}, 250).offset().top;
-                                            // console.log('jump now to ' + scrollPositionFromLastPage + 'px and remove session storage item');
-                                            
-                                        }
-                                    }
-                                    
-                                    function updateFocus() {
-                                        var focus = $( '#focusField' ).val();
-                                        if ( focus != null ) {
-                                            const inp = document.getElementById( focus );
-                                            if ( inp != null ) {
-                                                inp.focus();
-                                            }
-                                        }
-                                    }
+									$(document).ready(function() {
+										saveScrollPosition();
+										loadScrollPositionAndJump();
+									});
 
-                                    window.onload = function() {
-                                        loadImages();
-                                    }
+									function saveScrollPosition() {
+										$(
+												'.inputfields button:not(.modal-dialog button)')
+												.on(
+														'click',
+														function() {
+															var scrolled_val = $(
+																	document)
+																	.scrollTop()
+																	.valueOf();
+															console
+																	.log(scrolled_val
+																			+ ' = scroll value');
+															sessionStorage
+																	.setItem(
+																			"jumpToScrollPosition",
+																			scrolled_val);
+															// console.log('page is at ' + scrolled_val + 'px set in session storage');
+														});
+									}
+									function loadScrollPositionAndJump() {
 
-                                    jsf.ajax.addOnEvent( function( data ) {
-                                        var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
-                                        
-                                        switch ( ajaxstatus ) {
-                                            case "begin": // This is called right before ajax request is been sent.
-                                                break;
-                                            
-                                            case "complete": // This is called right after ajax response is received.
-                                            
-                                                break;
-                                            
-                                            case "success": // This is called when ajax response is successfully processed.
-                                                loadImages();
-                                                updateFocus();
-                                                break;
-                                        }
-                                    } );
-                                </script>
+										if (sessionStorage
+												.getItem("jumpToScrollPosition") !== null) {
+											// console.log('scroll pos from last page exists');
+
+											var scrollPositionFromLastPage = sessionStorage
+													.getItem("jumpToScrollPosition");
+
+											window
+													.scrollTo({
+														top : scrollPositionFromLastPage,
+														behavior : 'instant',
+													})
+											sessionStorage
+													.removeItem("jumpToScrollPosition");
+											//$("body, html").animate({scrollTop: scrollPositionFromLastPage}, 250).offset().top;
+											// console.log('jump now to ' + scrollPositionFromLastPage + 'px and remove session storage item');
+
+										}
+									}
+
+									function updateFocus() {
+										var focus = $('#focusField').val();
+										if (focus != null) {
+											const inp = document
+													.getElementById(focus);
+											if (inp != null) {
+												inp.focus();
+											}
+										}
+									}
+
+									window.onload = function() {
+										loadImages();
+									}
+
+									jsf.ajax.addOnEvent(function(data) {
+										var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
+
+										switch (ajaxstatus) {
+										case "begin": // This is called right before ajax request is been sent.
+											break;
+
+										case "complete": // This is called right after ajax response is received.
+
+											break;
+
+										case "success": // This is called when ajax response is successfully processed.
+											loadImages();
+											updateFocus();
+											break;
+										}
+									});
+								</script>
 
 
     </ui:define>
