@@ -467,96 +467,21 @@
                                     </div>
                                     <!-- // IMAGE DISPLAY -->
 
-                                    <div
-                                        jsf:id="rating"
-                                        title="#{msgs.plugin_intranda_step_metadata_per_image_rating}">
-                                        <!-- RATING -->
-                                        <ul class="p-0">
-                                            <li class="star">
-                                                <button
-                                                    tabindex="-1"
-                                                    class="btn btn-empty p-0"
-                                                    jsf:id="rating1">
-                                                    <f:ajax
-                                                        execute="@this"
-                                                        render="rating" />
-                                                    <f:setPropertyActionListener
-                                                        value="1"
-                                                        target="#{page.rating}" />
-                                                    <i
-                                                        class="fa fa-star #{page.rating > 0 ? 'active' : ''}"
-                                                        aria-hidden="true"></i>
-                                                </button>
-                                            </li>
-                                            <li class="star">
-                                                <button
-                                                    tabindex="-1"
-                                                    class="btn btn-empty p-0"
-                                                    jsf:id="rating2">
-                                                    <f:ajax
-                                                        execute="@this"
-                                                        render="rating" />
-                                                    <f:setPropertyActionListener
-                                                        value="2"
-                                                        target="#{page.rating}" />
-                                                    <i
-                                                        class="fa fa-star #{page.rating > 1 ? 'active' : ''}"
-                                                        aria-hidden="true"></i>
 
-                                                </button>
-                                            </li>
-                                            <li class="star">
+                                    <intranda:formInputRating
+                                        name="rating"
+                                        label="#{msgs.plugin_intranda_step_metadata_per_image_rating}"
+                                        field="#{page.rating}"
+                                        displayLabel="false"
+                                        execute="@this"
+                                        render="rating"
+                                        style="display: inline;"
+                                        classLeft="d-none"
+                                        classRight="col-12 col-md-12">
+                                        
+                                    </intranda:formInputRating>
 
-                                                <button
-                                                    tabindex="-1"
-                                                    class="btn btn-empty p-0"
-                                                    jsf:id="rating3">
-                                                    <f:ajax
-                                                        execute="@this"
-                                                        render="rating" />
-                                                    <f:setPropertyActionListener
-                                                        value="3"
-                                                        target="#{page.rating}" />
-                                                    <i
-                                                        class="fa fa-star #{page.rating > 2 ? 'active' : ''}"
-                                                        aria-hidden="true"></i>
-                                                </button>
-                                            </li>
-                                            <li class="star">
-                                                <button
-                                                    tabindex="-1"
-                                                    class="btn btn-empty p-0"
-                                                    jsf:id="rating4">
-                                                    <f:ajax
-                                                        execute="@this"
-                                                        render="rating" />
-                                                    <f:setPropertyActionListener
-                                                        value="4"
-                                                        target="#{page.rating}" />
-                                                    <i
-                                                        class="fa fa-star #{page.rating > 3 ? 'active' : ''}"
-                                                        aria-hidden="true"></i>
-                                                </button>
-                                            </li>
-                                            <li class="star">
-                                                <button
-                                                    tabindex="-1"
-                                                    class="btn btn-empty p-0"
-                                                    jsf:id="rating5">
-                                                    <f:ajax
-                                                        execute="@this"
-                                                        render="rating" />
-                                                    <f:setPropertyActionListener
-                                                        value="5"
-                                                        target="#{page.rating}" />
-                                                    <i
-                                                        class="fa fa-star #{page.rating == 5 ? 'active' : ''}"
-                                                        aria-hidden="true"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                        <!-- // RATING -->
-                                    </div>
+
                                     <!-- FILE NAME -->
                                     <h:outputText
                                         class="float-end"
@@ -665,14 +590,14 @@
 									}
 
 									function updateFocus() {
-										var focus = $('#focusField').val();
-										if (focus != null) {
-											const inp = document
-													.getElementById(focus);
-											if (inp != null) {
-												inp.focus();
-											}
-										}
+										// 										var focus = $('#focusField').val();
+										// 										if (focus != null) {
+										// 											const inp = document
+										// 													.getElementById(focus);
+										// 											if (inp != null) {
+										// 												inp.focus();
+										// 											}
+										// 										}
 									}
 
 									window.onload = function() {
