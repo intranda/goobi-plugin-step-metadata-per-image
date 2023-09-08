@@ -635,9 +635,6 @@
 																	document)
 																	.scrollTop()
 																	.valueOf();
-															console
-																	.log(scrolled_val
-																			+ ' = scroll value');
 															sessionStorage
 																	.setItem(
 																			"jumpToScrollPosition",
@@ -694,8 +691,12 @@
 											break;
 
 										case "success": // This is called when ajax response is successfully processed.
+											var source = data.source;
 											loadImages();
-											updateFocus();
+											// dont update focus, if source was a button 
+											if ("BUTTON" != source.nodeName) {
+												updateFocus();
+											}
 											break;
 										}
 									});
