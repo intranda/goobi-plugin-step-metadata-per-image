@@ -590,14 +590,14 @@
 									}
 
 									function updateFocus() {
-										// 										var focus = $('#focusField').val();
-										// 										if (focus != null) {
-										// 											const inp = document
-										// 													.getElementById(focus);
-										// 											if (inp != null) {
-										// 												inp.focus();
-										// 											}
-										// 										}
+																				var focus = $('#focusField').val();
+																				if (focus != null) {
+																					const inp = document
+																							.getElementById(focus);
+																					if (inp != null) {
+																						inp.focus();
+																					}
+																				}
 									}
 
 									window.onload = function() {
@@ -619,7 +619,7 @@
 											var source = data.source;
 											loadImages();
 											// dont update focus, if source was a button 
-											if ("BUTTON" != source.nodeName) {
+											if ("SELECT" == source.nodeName) {
 												updateFocus();
 											}
 											break;
