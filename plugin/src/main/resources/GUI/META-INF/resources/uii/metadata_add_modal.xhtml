@@ -97,7 +97,7 @@
                                     required="false"
                                     fieldStyle="#{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
                                     execute="@this"
-                                    render="@form"
+                                    render="@this"
                                     label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
                                     displayLabel="true">
                                 </intranda:formInputTextAjax>
@@ -114,7 +114,7 @@
                                     required="false"
                                     fieldStyle="#{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
                                     execute="@this"
-                                    render="@form"
+                                    render="@this"
                                     label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
                                     displayLabel="true">
                                 </intranda:formInputTextAreaAjax>
@@ -124,7 +124,7 @@
                                 <intranda:formInputDropDownAjax
                                     id="select"
                                     ajaxEvent="change"
-                                    ajaxRender="@form"
+                                    ajaxRender="@this"
                                     field="#{AktuelleSchritteForm.myPlugin.selectedValue.value}"
                                     help="#{msgs.helpLdapAuthenticationType}"
                                     name="select"
@@ -142,9 +142,10 @@
                             </ui:fragment>
 
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='gnd'}">
-                                <intranda:formInputGnd
+                                <intranda:formInputGndAjax
                                     id="gnd"
                                     name="gnd"
+                                    render="@form"
                                     field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
                                     help="#{msgs.help}"
                                     fieldStyle="form-control"
@@ -152,36 +153,38 @@
                                     required="false"
                                     label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
                                     displayLabel="true">
-                                </intranda:formInputGnd>
+                                </intranda:formInputGndAjax>
                             </ui:fragment>
 
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='geonames'}">
-                                <intranda:formInputGeonames
+                                <intranda:formInputGeonamesAjax
                                     id="geonames"
                                     name="geonames"
                                     field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
                                     help="#{msgs.help}"
+                                    render="@form"
                                     fieldStyle="form-control"
                                     displayAsRequired="false"
                                     required="false"
                                     submitDataAction="#{AktuelleSchritteForm.myPlugin.selectedValue.importGeonamesData()}"
                                     label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
                                     displayLabel="true">
-                                </intranda:formInputGeonames>
+                                </intranda:formInputGeonamesAjax>
                             </ui:fragment>
 
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='viaf'}">
-                                <intranda:formInputViaf
+                                <intranda:formInputViafAjax
                                     id="viaf"
                                     name="viaf"
                                     field="#{AktuelleSchritteForm.myPlugin.selectedValue}"
                                     help="#{msgs.help}"
+                                    render="@form"
                                     fieldStyle="form-control"
                                     displayAsRequired="false"
                                     required="false"
                                     label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
                                     displayLabel="true">
-                                </intranda:formInputViaf>
+                                </intranda:formInputViafAjax>
                             </ui:fragment>
 
                         </div>
