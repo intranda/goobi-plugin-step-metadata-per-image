@@ -48,6 +48,8 @@ public class PageMetadataField implements MultiSelectProperty<String> {
     private String viafSearchFields;
     private String viafDisplayFields;
 
+    private String helpText;
+
     private List<String> valueList;
 
     private MetadataType metadataType;
@@ -70,6 +72,7 @@ public class PageMetadataField implements MultiSelectProperty<String> {
         viafSearchFields = other.getViafSearchFields();
         viafDisplayFields = other.getViafDisplayFields();
         metadataType = other.getMetadataType();
+        helpText = other.helpText;
     }
 
     public void addValue(PageMetadataValue value) {

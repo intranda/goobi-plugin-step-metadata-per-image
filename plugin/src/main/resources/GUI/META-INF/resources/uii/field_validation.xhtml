@@ -17,11 +17,11 @@
         <h:panelGroup
             layout="block"
             rendered="#{!entry.valid}"
-            styleClass="w-100 font-danger validation-message row">
+            styleClass="w-100 font-danger validation-message row mb-2">
             <div class="col-12 col-md-3"></div>
             <div class="col-12 col-md-9">
                 <i class="fa fa-exclamation-circle warning-icon error" />
-                <h:outputText value="#{field.validationErrorMessage}" />
+                <h:outputText value="#{msgs[field.validationErrorMessage]}" />
             </div>
         </h:panelGroup>
     </composite:implementation>

@@ -203,6 +203,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             field.setViafSearchFields(hc.getString("@searchFields", ""));
             field.setViafDisplayFields(hc.getString("@displayFields", ""));
 
+            field.setHelpText(hc.getString("@helpText", ""));
+
             switch (field.getDisplayType()) {
                 case "select":
                 case "multiselect":
