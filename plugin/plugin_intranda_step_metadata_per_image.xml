@@ -11,27 +11,149 @@
         <!-- which projects to use for (can be more then one, otherwise use *) -->
         <project>*</project>
         <step>*</step>
-
-        <field label="Titel" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue="" required="true" validation=".+" validationErrorMessage="Das Feld ist ein Pflichtfeld"
-            readonly="false"></field>
+<!--  -->
+        <field label="Titel" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue="" required="false" validation=".+" validationErrorMessage="Das Feld ist ein Pflichtfeld" helpText="Hier kann ein Titel für das Bild eingetragen werden" readonly="false"></field>
         <field label="Beschreibung" metadataField="ContentDescription" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false"
-            validationErrorMessage="Muss ausgefüllt sein"></field>
-        <field label="Schlagwort" metadataField="SubjectTopic" repeatable="true" displayType="gnd" defaultValue="" required="false" readonly="false">
+            validationErrorMessage="Muss ausgefüllt sein" helpText="Hier kann der Inhalt des Bildes beschrieben werden."></field>
+        <field label="Schlagwort" metadataField="SubjectTopic" repeatable="true" displayType="gnd" defaultValue="" required="false" readonly="false" helpText="Erfassung von GND Schlagworten.">
         </field>
 
-        <field label="Typ" metadataField="SubjectForm" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false" validationErrorMessage="field is required">
-            <field>Kronreif</field>
-            <field>Stirnplatte</field>
+        <field label="Komponente" metadataField="SubjectForm" repeatable="false" displayType="multiselect" defaultValue="" required="false" readonly="false" validationErrorMessage="field is required" helpText="Wählen Sie hier die auf dem Bild zu sehenden Komponenten aus.">
+            <field>Stege</field>
+            <field>Zarge</field>
             <field>Grundplatte</field>
-            <field>Scharnierstift</field>
+            <field>Tülle</field>
+            <field>Pendilienröhrchen</field>
             <field>Scharnierrohr</field>
-            <field>Fassung</field>
+            <field>Schanierrohr Lasche</field>
+            <field>Schanierrohr Niete</field>
+            <field>Scharnierstift</field>
+            <field>Grundplattenperldrahtumsäumung</field>
+            <field>Span für GrUm</field>
+            <field>Grundplattenfiligrandekor</field>
+            <field>Brücke (zwischen Hochfassungen)</field>
+            <field>Röhrchen mit Einzelgranalie</field>
+            <field>Röhrchen mit Kugelpyramide</field>
+            <field>C-Volutenbündel</field>
+            <field>Perldrahtring mit Einzelgranalie</field>
+            <field>Rundstab</field>
+            <field>Klammer</field>
+            <field>Dorn</field>
+            <field>Lilienpalmette</field>
+            <field>Perlschnur</field>
+            <field>Manschette</field>
+            <field>Bienenkorb mit Einzelgranalie</field>
+            <field>Perldraht </field>
+            <field>Kerbdraht</field>
+            <field>Hochfassung für Stein mit dreifingrigen Krallen</field>
+            <field>Hochfassung für Perle in Dreiergruppe</field>
+            <field>Hochfassung für Stein mit Krappen</field>
+            <field>Hochfassung für Perle mit Einsteckstiften</field>
+            <field>1. Perldrahtring</field>
+            <field>Röhrchen</field>
+            <field>2. Perldrahtring</field>
+            <field>3. Perldrahtring</field>
+            <field>Granalie</field>
+            <field>Kralle</field>
+            <field>Krallenschaft</field>
+            <field>Schlaufe</field>
+            <field>Einsteckstift</field>
+            <field>Krappe</field>
+            <field>Krappenband</field>
+            <field>Arkadenfassung für Stein mit dreifingrigen Krallen</field>
+            <field>Lochfassung für Stein mit Zarge</field>
+            <field>Lochfassung für Perle mit Einsteckstiften</field>
+            <field>Gestelzte Kastenfassung für Stein mit Zarge</field>
+            <field>Kastenfassung</field>
+            <field>Löcher (herstellungszeitlich)</field>
+            <field>Lochfiligran</field>
+            <field>Arkadenfiligran</field>
+            <field>Unterkante</field>
         </field>
 
-<!-- 
-        <field label="Pflichtfeld" metadataField="TitleDocMain" repeatable="false" displayType="input" defaultValue=" - bitte eintragen - " required="true" validation="\w+" validationErrorMessage="field is required" readonly="false"></field>
-        <field label="Wiederholbares Feld" metadataField="DocLanguage" repeatable="true" displayType="input" defaultValue="" required="false"></field>
-        <field label="Textarea" metadataField="Abstract" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt sein"></field>
+        <field label="Material" metadataField="MaterialDescription" repeatable="false" displayType="multiselect" defaultValue="" required="false" readonly="false"
+            validationErrorMessage="field is required" helpText="Wählen Sie hier die auf dem Bild zu sehenden Materialien aus.">
+            <field>Gold</field>
+            <field>Edelstein - Saphir</field>
+            <field>Edelstein - Smaragd</field>
+            <field>Edelstein - Granat</field>
+            <field>Edelstein - Spinell</field>
+            <field>Edelstein - Amethyst</field>
+            <field>Edelstein - Chalcedon</field>
+            <field>Edelstein - Glas</field>
+            <field>Perle - Süßwasserperle</field>
+            <field>Perle - Salzwasserperle</field>
+            <field>Email - gelb</field>
+            <field>Email - hellblau</field>
+            <field>Email - inkarnat</field>
+            <field>Email - rot</field>
+            <field>Email - türkis</field>
+            <field>Email - weiß</field>
+            <field>Email - blau</field>
+            <field>Email - dunkelblau</field>
+            <field>Email - hellgrün</field>
+            <field>Email - braun</field>
+            <field>Email - schwarz</field>
+            <field>Email - dunkelgrün</field>
+            <field>Niello</field>
+            <field>Wachs</field>
+            <field>Holz</field>
+            <field>Textil</field>
+            <field>Kupferlegierung</field>
+            <field>Silber</field>
+            <field>Eisen</field>
+        </field>
+   
+        <field label="Merkmal" metadataField="Characteristic" repeatable="false" displayType="multiselect" defaultValue="" required="false" readonly="false" 
+        helpText="Wählen Sie hier die auf dem Bild zu sehenden Bearbeitungen aus.">
+            <field>Werkzeugspur</field>
+            <field>Abdruck Punzenspitze</field>
+            <field>Bohrloch</field>
+            <field>Behandlung</field>
+            <field>Einschlüsse</field>
+            <field>ausgeschliffene Einschlüsse</field>
+            <field>Abrieb im Bohrloch</field>
+            <field>Bohrloch gefüllt</field>
+            <field>Äquatorlinie</field>
+            <field>Perlmutterstruktur</field>
+
+        </field>
+
+
+        <field label="Schadensbild" metadataField="DamagePattern" repeatable="false" displayType="select" defaultValue="" required="true" readonly="false"
+            validationErrorMessage="field is required" helpText="Wählen Sie hier die auf dem Bild zu sehenden Fehlertypen aus.">>
+            <field>fehlende Teile</field>
+            <field>Riss</field>
+            <field>aufgerissene Lötverbindung</field>
+            <field>Verfärbung</field>
+            <field>Deformierung</field>
+            <field>Abhebung vom Grundblech</field>
+            <field>Bruch</field>
+            <field>Anhaftung, pulvrig</field>
+            <field>Anhaftung, wachsartig</field>
+            <field>Anhaftung, dickkrustig</field>
+            <field>verschmorte Oberfläche</field>
+            <field>eingeschmolzene Teile</field>
+            <field>Verfärbung, rötlich</field>
+        </field>
+
+        <field label="Typ" metadataField="ImageType" repeatable="false" displayType="select" defaultValue="" required="false" readonly="false" validationErrorMessage="field is required" helpText="Bildtyp.">
+            <field>Gesamtansicht 3D-Mikroskopie, Foto mit Maßen</field>
+            <field>Rückseite 3D-Mikroskopie, Film</field>
+            <field>Rückseite 3D-Mikroskopie, NPS</field>
+            <field>externes Licht 3D-Mikroskopie, 3D Aufnahme</field>
+            <field>Durchlicht Fotografie</field>
+            <field>UV-Licht Analysedaten, Raman</field>
+            <field>Infrarot Analysedaten, PL</field>
+            <field>Falschfarbendarstellung Analysedaten, RFA</field>
+            <field>Falschfarbendarstellung Analysedaten, FORS</field>
+        </field>
+
+   
+        <!--
+        <field label="Wiederholbares Feld" metadataField="DocLanguage" repeatable="true" displayType="input" defaultValue=" - bitte eintragen - " required="false"></field>
+        <field label="Textarea" metadataField="Abstract" repeatable="false" displayType="textarea" defaultValue="" required="false" validation="" readonly="false" validationErrorMessage="Muss ausgefüllt
+        sein"></field>
 
         <field label="Mehrfachauswahl" metadataField="SubjectTopic" repeatable="true" displayType="multiselect" defaultValue="" required="false" readonly="false"  validationErrorMessage="field is required">
             <field>value A</field>
@@ -60,7 +182,8 @@
         <field label="Geonames" metadataField="TitleDocMainShort" repeatable="false" displayType="geonames" defaultValue="" required="false" readonly="false" >
         </field>
    
-        <field label="VIAF" metadataField="LegislativeBody" repeatable="false" displayType="viaf" defaultValue="" required="false" readonly="false" searchFields="210__a; 111__a; 100__a; 110__a; 150__a; 151__a;" displayFields="001=NORM_IDENTIFIER; 0247_a=URI; 1001_a=NORM_NAME; 1001_d=NORM_LIFEPERIOD; 1001_q=NORM_SEX; 375__a=NORM_SEX;"
+        <field label="VIAF" metadataField="LegislativeBody" repeatable="false" displayType="viaf" defaultValue="" required="false" readonly="false" searchFields="210__a; 111__a; 100__a; 110__a; 150__a;
+        151__a;" displayFields="001=NORM_IDENTIFIER; 0247_a=URI; 1001_a=NORM_NAME; 1001_d=NORM_LIFEPERIOD; 1001_q=NORM_SEX; 375__a=NORM_SEX;"
 >
         </field>
 -->
@@ -87,4 +210,5 @@
             <label>RelationLabel</label>
         </reference>
     </config>
+
 </config_plugin>
