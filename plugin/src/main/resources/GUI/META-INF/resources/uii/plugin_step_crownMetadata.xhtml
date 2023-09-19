@@ -244,9 +244,7 @@
                                             rendered="#{field.displayType=='input'}"
                                             id="inputfield">
                                             <intranda:formInputTextAjax
-                                            
-                                            style="margin-bottom: 5px;"
-                                            
+                                                style="margin-bottom: 5px;"
                                                 id="input"
                                                 name="input"
                                                 label="#{msgs[field.label]}"
@@ -269,7 +267,7 @@
                                             rendered="#{field.displayType=='textarea'}"
                                             id="areafield">
                                             <intranda:formInputTextAreaAjax
-                                            style="margin-bottom: 5px;"
+                                                style="margin-bottom: 5px;"
                                                 id="area"
                                                 name="area"
                                                 label="#{msgs[field.label]}"
@@ -292,7 +290,7 @@
                                             rendered="#{field.displayType=='select'}"
                                             id="selectfield">
                                             <intranda:formInputDropDownAjax
-                                            style="margin-bottom: 5px;"
+                                                style="margin-bottom: 5px;"
                                                 id="select"
                                                 ajaxEvent="change"
                                                 ajaxRender=":#{cc.clientId}field"
@@ -317,7 +315,7 @@
 
                                         <ui:fragment rendered="#{field.displayType=='gnd'}">
                                             <intranda:formInputGndAjax
-                                            style="margin-bottom: 5px;"
+                                                style="margin-bottom: 5px;"
                                                 id="gnd"
                                                 name="gnd"
                                                 label="#{msgs[field.label]}"
@@ -335,7 +333,7 @@
 
                                         <ui:fragment rendered="#{field.displayType=='geonames'}">
                                             <intranda:formInputGeonamesAjax
-                                            style="margin-bottom: 5px;"
+                                                style="margin-bottom: 5px;"
                                                 id="geonames"
                                                 name="geonames"
                                                 label="#{msgs[field.label]}"
@@ -354,7 +352,7 @@
 
                                         <ui:fragment rendered="#{field.displayType=='viaf'}">
                                             <intranda:formInputViafAjax
-                                            style="margin-bottom: 5px;"
+                                                style="margin-bottom: 5px;"
                                                 id="viaf"
                                                 name="viaf"
                                                 label="#{msgs[field.label]}"
@@ -374,7 +372,7 @@
                                         rendered="#{field.displayType=='multiselect'}"
                                         id="multiselectfield">
                                         <intranda:formInputMultiSelect
-                                        style="margin-bottom: 5px;"
+                                            style="margin-bottom: 5px;"
                                             id="multiselect"
                                             name="multiselect"
                                             label="#{msgs[field.label]}"
@@ -449,6 +447,7 @@
 
                                     <!-- IMAGE DISPLAY -->
                                     <div
+                                        jsf:rendered="#{page.image.type == 'image'}"
                                         class="thumb"
                                         style="max-height: 404px;">
                                         <button
@@ -478,6 +477,21 @@
                                         </button>
                                     </div>
                                     <!-- // IMAGE DISPLAY -->
+
+                                    <!--  // VIDEO DISPLAY -->
+                                    <div
+                                        jsf:rendered="#{page.image.type == 'video'}"
+                                        class="vid">
+                                        <video
+                                            style="height: 404px;"
+                                            width="100%"
+                                            class="videoplayer"
+                                            id="videoplayer"
+                                            controls="controls"
+                                            preload="none"
+                                            src="#{page.image.objectUrl}">
+                                        </video>
+                                    </div>
 
 
                                     <intranda:formInputRating
