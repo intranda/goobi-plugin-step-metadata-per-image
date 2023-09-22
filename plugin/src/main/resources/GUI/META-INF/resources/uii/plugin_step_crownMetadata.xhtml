@@ -229,7 +229,7 @@
                         varStatus="myStatus">
 
                         <div class="row">
-                            <div class="col-8 inputfields">
+                            <div class="col-md-8 inputfields">
                                 <!-- METADATA EDITION AREA -->
                                 <ui:repeat
                                     var="field"
@@ -439,17 +439,14 @@
                                 <!-- // METADATA EDITION AREA -->
                             </div>
 
-                            <div class="col-4">
+                            <div class="col-12 col-md-4">
                                 <!-- RIGHT AREA FOR IMAGE -->
-                                <div
-                                    class="goobi-thumbnail-image float-end"
-                                    style="height: 404px; max-width: 400px">
+                                <div class="goobi-thumbnail-image float-end">
 
                                     <!-- IMAGE DISPLAY -->
                                     <div
                                         jsf:rendered="#{page.image.type == 'image'}"
-                                        class="thumb"
-                                        style="max-height: 404px;">
+                                        class="thumb">
                                         <button
                                             tabindex="-1"
                                             title="#{page.image.tooltip}"
@@ -459,8 +456,7 @@
                                             jsf:id="showBookmark1"
                                             jsf:onclick="$('#imageBox').modal('show');">
                                             <canvas
-                                                class="thumb-canvas"
-                                                style="max-height: 400px;"
+                                                class="thumb-canvas mw-100"
                                                 data-image_small="#{page.image.thumbnailUrl}"
                                                 data-image_large="#{page.image.largeThumbnailUrl}"
                                                 title="#{page.image.tooltip}"
@@ -483,7 +479,6 @@
                                         jsf:rendered="#{page.image.type == 'video'}"
                                         class="vid">
                                         <video
-                                            style="height: 404px;"
                                             width="100%"
                                             class="videoplayer"
                                             id="videoplayer"
