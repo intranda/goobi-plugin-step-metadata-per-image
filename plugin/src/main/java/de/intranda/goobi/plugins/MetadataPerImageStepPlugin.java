@@ -556,8 +556,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             Metadata md = new Metadata(prefs.getMetadataTypeByName(field.getMetadataField()));
             md.setValue(field.getDefaultValue());
             pe.getDocstruct().addMetadata(md);
-            field.addValue(new PageMetadataValue(md, field.getValidation(), field.isRequired(), field.getViafSearchFields(),
-                    field.getViafDisplayFields()));
+            field.addValue(
+                    new PageMetadataValue(md, field.getValidation(), field.isRequired(), field.getViafSearchFields(), field.getViafDisplayFields()));
         } catch (MetadataTypeNotAllowedException e) {
             log.error(e);
         }
@@ -744,8 +744,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -771,8 +771,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -782,8 +782,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                             PageMetadataValue val = pmf.getValues().get(0);
                             val.setValue(selectedValue.getValue());
                             val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
-                                            selectedValue.getMetadata().getAuthorityValue());
+                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                    selectedValue.getMetadata().getAuthorityValue());
                             break;
 
                         default:
@@ -795,4 +795,57 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         }
     }
 
+    public void moveNodeUp(PageElement pageElement) {
+
+        DocStruct ds = pageElement.getDocstruct();
+        DocStruct logical = ds.getParent();
+
+        DocStruct page = pageElement.getPage();
+        DocStruct physical = page.getParent();
+
+        // main element cannot be changed
+        if (logical == null) {
+            return;
+        }
+
+        int index = logical.getAllChildren().indexOf(ds);
+        // first element cannot be moved
+        if (index != 0) {
+
+            logical.getAllChildren().remove(ds);
+            logical.getAllChildren().add(index - 1, ds);
+
+            physical.getAllChildren().remove(page);
+            physical.getAllChildren().add(index - 1, page);
+
+            pages.remove(pageElement);
+            pages.add(index - 1, pageElement);
+        }
+    }
+
+    public void moveNodeDown(PageElement pageElement) {
+
+        DocStruct ds = pageElement.getDocstruct();
+        DocStruct logical = ds.getParent();
+
+        DocStruct page = pageElement.getPage();
+        DocStruct physical = page.getParent();
+
+        // main element cannot be changed
+        if (logical == null) {
+            return;
+        }
+        int max = logical.getAllChildren().size();
+        int index = logical.getAllChildren().indexOf(ds);
+        // last element cannot be moved
+        if (max - 1 > index) {
+            logical.getAllChildren().remove(ds);
+            logical.getAllChildren().add(index + 1, ds);
+            physical.getAllChildren().remove(page);
+            physical.getAllChildren().add(index + 1, page);
+
+            pages.remove(pageElement);
+            pages.add(index + 1, pageElement);
+        }
+    }
 }

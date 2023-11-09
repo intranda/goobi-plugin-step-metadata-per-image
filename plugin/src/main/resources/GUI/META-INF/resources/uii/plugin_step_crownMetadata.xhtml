@@ -228,7 +228,7 @@
                         value="#{AktuelleSchritteForm.myPlugin.pages}"
                         varStatus="myStatus">
 
-                        <div class="row">
+                        <div class="row" id="#{page.pageId}">
                             <div class="col-md-8 inputfields">
                                 <!-- METADATA EDITION AREA -->
                                 <ui:repeat
@@ -437,6 +437,19 @@
                                 </div>
 
                                 <!-- // METADATA EDITION AREA -->
+
+                                <button
+                                    class="btn btn-blank"
+                                    jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeUp(page)}">
+                                    <i class="fa fa-chevron-up"></i>
+                                   <f:ajax execute="@this" render="@form"/>
+                                </button>
+                                <button
+                                    class="btn btn-blank"
+                                    jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeDown(page)}">
+                                    <i class="fa fa-chevron-down"></i>
+                                   <f:ajax execute="@this" render="@form"/>
+                                </button>                                
                             </div>
 
                             <div class="col-12 col-md-4">

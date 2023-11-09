@@ -82,4 +82,8 @@ public class PageElement {
         }
         ratingMetadata.setValue(String.valueOf(rating));
     }
+
+    public String getPageId() {
+        return "id_" + image.getImageName().replaceAll("\\W", "");
+    }
 }
