@@ -111,6 +111,10 @@
             <h:inputHidden
                 id="focusField"
                 value="#{AktuelleSchritteForm.myPlugin.focusField}" />
+                
+            <h:inputHidden
+                id="scrollTo"
+                value="#{AktuelleSchritteForm.myPlugin.scrollTo}" />                
             <intranda:box
                 boxType="primary"
                 boxTitle="false"
@@ -461,19 +465,19 @@
                                 <!-- // METADATA EDITION AREA -->
 
                                 <button
-                                    class="btn btn-blank"
+                                    class="btn btn-blank upButtonSelector"
                                     jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeUp(page)}">
                                     <i class="fa fa-chevron-up"></i>
                                     <f:ajax
-                                        execute="@this"
+                                        execute="@form"
                                         render="@form" />
                                 </button>
                                 <button
-                                    class="btn btn-blank"
+                                    class="btn btn-blank downButtonSelector"
                                     jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeDown(page)}">
                                     <i class="fa fa-chevron-down"></i>
                                     <f:ajax
-                                        execute="@this"
+                                        execute="@form"
                                         render="@form" />
                                 </button>
                             </div>
@@ -682,9 +686,47 @@
 											if ("SELECT" == source.nodeName) {
 												updateFocus();
 											}
+											
+											
+											 console.log("value after update: " + $('#scrollTo').val());
+										//	if (scrollTo != null) {
+												
+			                               //         $("body .element").on("animationend webkitAnimationEnd", function () {
+			                                //          $(scrollTo).removeClass("-blinkItOnce");
+			                               //         });
+			                                //        $("html, body").animate(
+			                                //          {
+			                                            // SCROLL TO THE POSITION MINUS SOME PIXELS
+			                               //             scrollTop: $(scrollTo).offset().top - 50
+			                               //           },
+			                               //           500,
+			                               //           function () {
+			                                            // BECAUSE WE LIKE IT SUPER CLEAR WHERE WE ARE WE ADD SOME EFFECT
+			                                            // EXECUTES WHEN ANIMATION COMPLETE
+			                                       //      $('#scrollTo').val('');
+			                               //           }
+			                               //         );
+			                                 //     }
 											break;
 										}
 									});
+									
+									// SET SCROLL TO VARS ON CLICK
+									$(".upButtonSelector, .downButtonSelector").on("click", function () {
+									  // VAR ELEMENT ID AS STRING VALUE
+									  rememberClickedElementVar = $(this).closest(".row").attr("id");
+									  // VAR ELEMENT AS JQUERY SELECTOR
+									//  rememberClickedElementID = $("#" + rememberClickedElementVar);
+
+									// console.log(rememberClickedElementVar);
+									//console.log(rememberClickedElementID);
+									  
+									 $('#scrollTo').val ( rememberClickedElementVar);	  
+									 console.log("set value before update: "+ $('#scrollTo').val());
+									 
+									});
+									 	
+
 								</script>
 
 

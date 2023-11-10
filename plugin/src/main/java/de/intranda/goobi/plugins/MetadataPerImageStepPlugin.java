@@ -179,6 +179,10 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
     @Getter
     @Setter
+    private String scrollTo;
+
+    @Getter
+    @Setter
     private boolean addReferenceToAll;
 
     @Override
