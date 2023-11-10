@@ -177,6 +177,10 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     @Setter
     private String focusField;
 
+    @Getter
+    @Setter
+    private boolean addReferenceToAll;
+
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -690,11 +694,25 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         String otherProcessTitle = currentProcess.getLabel();
 
         String processid = String.valueOf(process.getId());
-        String identifier = currentPage.getIdentifier().getValue();
+
+        if (addReferenceToAll) {
+            for (PageElement page : pages) {
+                createReference(otherProcessId, otherProcessTitle, processid, page);
+            }
+        } else {
+            createReference(otherProcessId, otherProcessTitle, processid, currentPage);
+        }
 
         // get current Page
 
+        // reset search results, searchvalue
+        searchValue = "";
+        processDataList.clear();
+    }
+
+    private void createReference(String otherProcessId, String otherProcessTitle, String processid, PageElement page) {
         // add reference to other process in page object
+        String identifier = page.getIdentifier().getValue();
         try {
             MetadataGroup mg = new MetadataGroup(referenceMetadataGroupType);
             ProcessReference reference = new ProcessReference(mg);
@@ -702,20 +720,16 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             reference.setProcessId(processid);
             reference.setDocstructId(identifier); // identifier of selected docstruct
             reference.setProcessName(publicationElement.getTitle()); //main title
-            reference.setImageNumber(String.valueOf(currentPage.getOrder() + 1));
+            reference.setImageNumber(String.valueOf(page.getOrder() + 1));
             reference.setOtherProcessId(otherProcessId);
             reference.setOtherProcessName(otherProcessTitle);
             reference.setOtherDocstructId(null); // keep it empty, we link to the process itself
             reference.setOtherImageNumber(null);// keep it empty, we link to the process itself
 
-            currentPage.getProcessReferences().add(reference);
+            page.getProcessReferences().add(reference);
         } catch (MetadataTypeNotAllowedException e) {
             log.error(e);
         }
-
-        // reset search results, searchvalue
-        searchValue = "";
-        processDataList.clear();
     }
 
     public void setSelectedField(PageMetadataField field) {
