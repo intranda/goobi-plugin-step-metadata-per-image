@@ -215,13 +215,15 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                         values = new ArrayList<>();
                         String vocabularyName = hc.getString("/vocabulary");
                         Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
-                        VocabularyManager.getAllRecords(currentVocabulary);
-                        List<VocabRecord> recordList = currentVocabulary.getRecords();
+                        if (currentVocabulary != null) {
+                            VocabularyManager.getAllRecords(currentVocabulary);
+                            List<VocabRecord> recordList = currentVocabulary.getRecords();
 
-                        for (VocabRecord vr : recordList) {
-                            values.add(vr.getTitle());
+                            for (VocabRecord vr : recordList) {
+                                values.add(vr.getTitle());
+                            }
+                            Collections.sort(values);
                         }
-                        Collections.sort(values);
                     }
                     field.setValueList(values);
                     break;
@@ -744,8 +746,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -771,8 +773,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -782,8 +784,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                             PageMetadataValue val = pmf.getValues().get(0);
                             val.setValue(selectedValue.getValue());
                             val.getMetadata()
-                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
-                                    selectedValue.getMetadata().getAuthorityValue());
+                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                            selectedValue.getMetadata().getAuthorityValue());
                             break;
 
                         default:
