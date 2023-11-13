@@ -203,7 +203,11 @@
                                 <f:ajax
                                     execute="@this"
                                     render=":myform"></f:ajax>
-                                <span> <h:outputText value="#{msgs.speichern}" />
+                                <span>
+                                    <h:outputText value="#{msgs.speichern}" />
+                                    <f:setPropertyActionListener
+                                        value=""
+                                        target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
                                 </span>
                             </button>
                         </div>

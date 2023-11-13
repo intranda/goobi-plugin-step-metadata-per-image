@@ -26,7 +26,12 @@
                 jsf:id="clearField"
                 jsf:action="#{field.clearValue(entry)}">
                 <i class="fa fa-trash" />
-                <f:ajax execute="@this" render="@form"/>
+                <f:ajax
+                    execute="@this"
+                    render="@form" />
+                <f:setPropertyActionListener
+                    value=""
+                    target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
             </button>
 
             <button
@@ -44,6 +49,9 @@
                     execute="@this"
                     render="metadataAddBoxContent" />
                 <i class="fa fa-files-o" />
+                <f:setPropertyActionListener
+                    value=""
+                    target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
             </button>
 
             <button
@@ -55,11 +63,16 @@
                 jsf:rendered="#{field.displayDeletionButton}"
                 jsf:action="#{field.removeValue(entry)}">
                 <i class="fa fa-minus" />
-                <f:ajax execute="@this" render="@form"/>
+                <f:ajax
+                    execute="@this"
+                    render="@form" />
+                <f:setPropertyActionListener
+                    value=""
+                    target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
             </button>
-            
-            
-            
+
+
+
             <button
                 tabindex="-1"
                 title="#{msgs.plugin_intranda_step_metadata_per_image_add}"
@@ -69,7 +82,12 @@
                 jsf:rendered="#{field.displayDuplicationButton}"
                 jsf:action="#{field.addNewValue}">
                 <i class="fa fa-plus" />
-                <f:ajax execute="@this" render="@form"/>
+                <f:ajax
+                    execute="@this"
+                    render="@form" />
+                <f:setPropertyActionListener
+                    value=""
+                    target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
             </button>
         </intranda:formLabel>
     </composite:implementation>

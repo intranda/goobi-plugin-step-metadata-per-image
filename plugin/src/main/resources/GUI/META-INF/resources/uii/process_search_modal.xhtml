@@ -13,8 +13,8 @@
     </composite:interface>
 
     <composite:implementation>
-    
-    
+
+
         <div
             class="modal fade"
             id="processSearchBox"
@@ -26,18 +26,25 @@
                 role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
-                        <h4 class="modal-title" id="myModalLabel">
+                        <h4
+                            class="modal-title"
+                            id="myModalLabel">
                             <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_processSearch}" />
                         </h4>
-                        <button type="button" class="btn text-white"
-                            title="#{msgs.abbrechen}" data-bs-dismiss="modal">
+                        <button
+                            type="button"
+                            class="btn text-white"
+                            title="#{msgs.abbrechen}"
+                            data-bs-dismiss="modal">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
-                    <h:panelGroup class="modal-body" id="processSearchBoxContent">
+                    <h:panelGroup
+                        class="modal-body"
+                        id="processSearchBoxContent">
                         <h:form
-                        styleClass="form-horizontal"
-                        prependId="false">
+                            styleClass="form-horizontal"
+                            prependId="false">
                             <p>
                                 <h:outputText
                                     value="#{msgs.plugin_intranda_step_metadata_per_image_processSearchDescription}"
@@ -57,11 +64,16 @@
                                         jsf:action="#{AktuelleSchritteForm.myPlugin.processSearch}">
                                         <i
                                             class="fa fa-search"
-                                            aria-hidden="true"></i> <span> <h:outputText value="#{msgs.search}" />
+                                            aria-hidden="true"></i>
+                                        <span>
+                                            <h:outputText value="#{msgs.search}" />
                                         </span>
                                         <f:ajax
                                             execute="@form"
                                             render="processSearchlist" />
+                                        <f:setPropertyActionListener
+                                            value=""
+                                            target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
                                     </button>
                                 </div>
                             </div>
@@ -69,12 +81,12 @@
                                 id="processSearchlist"
                                 layout="block"
                                 styleClass="modal-results">
-                                
+
                                 <x:dataList
                                     value="#{AktuelleSchritteForm.myPlugin.processDataList}"
                                     var="proc">
                                     <hr class="my-4" />
-                                    
+
                                     <div class="row">
                                         <div class="col-12 col-md-12">
                                             <h4>
@@ -106,15 +118,18 @@
                                                 <f:setPropertyActionListener
                                                     value="#{proc}"
                                                     target="#{AktuelleSchritteForm.myPlugin.currentProcess}" />
+                                                <f:setPropertyActionListener
+                                                    value=""
+                                                    target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
                                             </button>
                                         </div>
                                     </div>
-                                    
+
                                 </x:dataList>
                             </h:panelGroup>
                         </h:form>
                     </h:panelGroup>
-                    
+
                 </div>
             </div>
         </div>
