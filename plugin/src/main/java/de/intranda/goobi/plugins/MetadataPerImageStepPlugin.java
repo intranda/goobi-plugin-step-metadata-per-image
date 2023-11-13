@@ -868,9 +868,4 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             pages.add(index + 1, pageElement);
         }
     }
-
-    public void setScrollTo(String scrollTo) {
-        this.scrollTo = scrollTo;
-        System.out.println("setter: " + scrollTo);
-    }
 }
