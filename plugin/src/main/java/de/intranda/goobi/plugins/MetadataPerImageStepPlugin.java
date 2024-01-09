@@ -787,23 +787,31 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
                         case "empty":
                             // check if an empty field exists
-                            for (PageMetadataValue val : pmf.getValues()) {
-                                if (StringUtils.isBlank(val.getValue())) {
-                                    val.setValue(selectedValue.getValue());
-                                    val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
-                                    break;
+                            if (pmf.getValues().isEmpty()) {
+                                addNewField(pe, pmf);
+                            } else {
+                                for (PageMetadataValue val : pmf.getValues()) {
+                                    if (StringUtils.isBlank(val.getValue())) {
+                                        val.setValue(selectedValue.getValue());
+                                        val.getMetadata()
+                                        .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                        break;
+                                    }
                                 }
                             }
                             break;
                         case "overwrite":
                             // use first field
-                            PageMetadataValue val = pmf.getValues().get(0);
-                            val.setValue(selectedValue.getValue());
-                            val.getMetadata()
-                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
-                                    selectedValue.getMetadata().getAuthorityValue());
+                            if (pmf.getValues().isEmpty()) {
+                                addNewField(pe, pmf);
+                            } else {
+                                PageMetadataValue val = pmf.getValues().get(0);
+                                val.setValue(selectedValue.getValue());
+                                val.getMetadata()
+                                .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                        selectedValue.getMetadata().getAuthorityValue());
+                            }
                             break;
 
                         default:
@@ -812,6 +820,22 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
                 }
             }
+        }
+    }
+
+    private void addNewField(PageElement pe, PageMetadataField pmf) {
+        try {
+            Metadata md = new Metadata(prefs.getMetadataTypeByName(selectedField.getMetadataField()));
+            md.setValue(selectedValue.getValue());
+            md.setValue(selectedValue.getValue());
+            md.setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                    selectedValue.getMetadata().getAuthorityValue());
+            pe.getDocstruct().addMetadata(md);
+            PageMetadataValue value = new PageMetadataValue(md, selectedField.getValidation(), selectedField.isRequired(),
+                    selectedField.getViafSearchFields(), selectedField.getViafDisplayFields());
+            pmf.addValue(value);
+        } catch (MetadataTypeNotAllowedException | DocStructHasNoTypeException e) {
+            log.error(e);
         }
     }
 

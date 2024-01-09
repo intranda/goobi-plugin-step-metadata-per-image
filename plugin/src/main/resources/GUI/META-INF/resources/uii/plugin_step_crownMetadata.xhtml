@@ -406,9 +406,11 @@
                                             itemLabel="#{var}"
                                             displayAsRequired="#{field.required}"
                                             required="false"
-                                            displayLabel="true"
+                                             displayLabel="false"
                                             render=":#{cc.clientId}field"
-                                            onfocus="document.getElementById( 'focusField' ).value = this.id;" />
+                                            onfocus="document.getElementById( 'focusField' ).value = this.id;" >
+                                            <ui:include src="field_label.xhtml" />
+                                            </intranda:formInputMultiSelect>
                                     </h:panelGroup>
 
                                 </ui:repeat>

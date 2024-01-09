@@ -120,7 +120,7 @@
                                 </intranda:formInputTextAreaAjax>
                             </ui:fragment>
 
-                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='select'}">
+                            <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='select' or AktuelleSchritteForm.myPlugin.selectedField.displayType=='multiselect'}">
                                 <intranda:formInputDropDownAjax
                                     id="select"
                                     ajaxEvent="change"
