@@ -411,6 +411,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         // if not, create pagination
 
         MetadatenImagesHelper mih = new MetadatenImagesHelper(prefs, digitalDocument);
+        //TODO
         try {
             mih.createPagination(process, folderName);
         } catch (TypeNotAllowedForParentException | IOException | SwapException | DAOException e) {
@@ -465,6 +466,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         for (DocStruct pageStruct : physical.getAllChildren()) {
             Path imagePath = Paths.get(pageStruct.getImageName());
             try {
+
                 Image image = new Image(process, folderName, imagePath.getFileName().toString(), 1, 800);
                 PageElement pe = null;
                 for (Reference ref : pageStruct.getAllFromReferences()) {
@@ -795,7 +797,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                         val.setValue(selectedValue.getValue());
                                         val.getMetadata()
                                         .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                                selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                                selectedValue.getMetadata().getAuthorityURI(),
+                                                selectedValue.getMetadata().getAuthorityValue());
                                         break;
                                     }
                                 }
@@ -852,12 +855,14 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             return;
         }
 
-        int index = logical.getAllChildren().indexOf(ds);
+        int index = physical.getAllChildren().indexOf(page);
         // first element cannot be moved
         if (index != 0) {
-
             logical.getAllChildren().remove(ds);
             logical.getAllChildren().add(index - 1, ds);
+
+            DocStruct prevPage = physical.getAllChildren().get(index - 1);
+            changePageNo(page, prevPage);
 
             physical.getAllChildren().remove(page);
             physical.getAllChildren().add(index - 1, page);
@@ -879,17 +884,43 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         if (logical == null) {
             return;
         }
-        int max = logical.getAllChildren().size();
-        int index = logical.getAllChildren().indexOf(ds);
+        int max = physical.getAllChildren().size();
+        int index = physical.getAllChildren().indexOf(page);
         // last element cannot be moved
         if (max - 1 > index) {
             logical.getAllChildren().remove(ds);
             logical.getAllChildren().add(index + 1, ds);
+
+            DocStruct nextPage = physical.getAllChildren().get(index + 1);
+            changePageNo(page, nextPage);
+
             physical.getAllChildren().remove(page);
             physical.getAllChildren().add(index + 1, page);
 
             pages.remove(pageElement);
             pages.add(index + 1, pageElement);
         }
+    }
+
+    private void changePageNo(DocStruct page, DocStruct nextPage) {
+        Metadata currentPageNo = null;
+        Metadata otherPageNo = null;
+
+        for (Metadata md : page.getAllMetadata()) {
+            if (md.getType().getName().equals("physPageNumber")) {
+                currentPageNo = md;
+                break;
+            }
+        }
+        for (Metadata md : nextPage.getAllMetadata()) {
+            if (md.getType().getName().equals("physPageNumber")) {
+                otherPageNo = md;
+                break;
+            }
+        }
+
+        String pageNo = currentPageNo.getValue();
+        currentPageNo.setValue(otherPageNo.getValue());
+        otherPageNo.setValue(pageNo);
     }
 }
