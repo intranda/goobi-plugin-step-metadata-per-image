@@ -104,7 +104,7 @@
 }
 
 .inputfields {
- position: relative;
+    position: relative;
 }
 
 .upButtonSelector {
@@ -117,7 +117,6 @@
     bottom: 0;
     left: 40px;
 }
-
 </style>
 
 
@@ -406,11 +405,11 @@
                                             itemLabel="#{var}"
                                             displayAsRequired="#{field.required}"
                                             required="false"
-                                             displayLabel="false"
+                                            displayLabel="false"
                                             render=":#{cc.clientId}field"
-                                            onfocus="document.getElementById( 'focusField' ).value = this.id;" >
+                                            onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                             <ui:include src="field_label.xhtml" />
-                                            </intranda:formInputMultiSelect>
+                                        </intranda:formInputMultiSelect>
                                     </h:panelGroup>
 
                                 </ui:repeat>
@@ -492,29 +491,33 @@
                                 </div>
 
                                 <!-- // METADATA EDITION AREA -->
-
-                                <button
-                                    class="btn btn-blank upButtonSelector"
-                                    jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeUp(page)}">
-                                    <i class="fa fa-chevron-up"></i>
-                                    <f:ajax
-                                        execute="@form"
-                                        render="@form" />
-                                    <f:setPropertyActionListener
-                                        value="#{page.pageId}"
-                                        target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
-                                </button>
-                                <button
-                                    class="btn btn-blank downButtonSelector"
-                                    jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeDown(page)}">
-                                    <i class="fa fa-chevron-down"></i>
-                                    <f:setPropertyActionListener
-                                        value="#{page.pageId}"
-                                        target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
-                                    <f:ajax
-                                        execute="@form"
-                                        render="@form" />
-                                </button>
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-3">
+                                        <button
+                                            class="btn btn-blank upButtonSelector"
+                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeUp(page)}">
+                                            <i class="fa fa-chevron-up"></i>
+                                            <f:ajax
+                                                execute="@form"
+                                                render="@form" />
+                                            <f:setPropertyActionListener
+                                                value="#{page.pageId}"
+                                                target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
+                                        </button>
+                                        <button
+                                            class="btn btn-blank downButtonSelector"
+                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeDown(page)}">
+                                            <i class="fa fa-chevron-down"></i>
+                                            <f:setPropertyActionListener
+                                                value="#{page.pageId}"
+                                                target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
+                                            <f:ajax
+                                                execute="@form"
+                                                render="@form" />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-9"></div>
                             </div>
 
                             <div class="col-12 col-md-6">
