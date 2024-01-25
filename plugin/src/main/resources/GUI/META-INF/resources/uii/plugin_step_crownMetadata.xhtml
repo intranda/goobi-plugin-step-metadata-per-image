@@ -108,14 +108,15 @@
 }
 
 .upButtonSelector {
-    position: absolute;
-    bottom: 0;
+/*     position: absolute; */
+/*     bottom: 0; */
 }
 
 .downButtonSelector {
-    position: absolute;
-    bottom: 0;
-    left: 40px;
+/*     position: absolute; */
+/*     bottom: 0; */
+/*     left: 40px; */
+margin-left: 10px;
 }
 </style>
 
@@ -420,7 +421,7 @@
 
                                         <button
                                             tabindex="-1"
-                                            title="#{msgs.plugin_intranda_step_metadata_per_image_addLinkToProcess}"
+                                            title="#{msgs.plugin_intranda_step_metadata_per_image_referenceAdd}"
                                             data-toggle="tooltip"
                                             class="btn btn-blank me-2 float-end"
                                             jsf:id="addReferenceToAll"
@@ -532,7 +533,6 @@
                                             tabindex="-1"
                                             title="#{page.image.tooltip}"
                                             class="btn btn-empty p-0"
-                                            data-toggle="tooltip"
                                             href="#{page.image.bookmarkUrl}"
                                             jsf:id="showBookmark1"
                                             jsf:onclick="$('#imageBox').modal('show');">
