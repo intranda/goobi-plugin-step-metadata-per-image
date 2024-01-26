@@ -450,7 +450,10 @@ margin-left: 10px;
                                             <button
                                                 jsf:id="removeReference"
                                                 class="btn btn-blank me-2 mb-2"
-                                                jsf:action="#{page.deleteProcessReference}">
+                                                jsf:action="#{page.deleteProcessReference}"
+                                                title="#{msgs.plugin_intranda_step_metadata_per_image_removeLink}" 
+                                                data-toggle="tooltip"
+                                                >
                                                 <i class="fa fa-minus-circle"></i>
                                                 <span>
                                                     <h:outputText value="#{reference.otherProcessName}" />
