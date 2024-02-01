@@ -19,6 +19,7 @@
             label="#{msgs[field.label]}">
 
             <button
+                jsf:rendered="#{field.displayType!='multiselect'}"
                 tabindex="-1"
                 title="#{msgs.plugin_intranda_step_metadata_per_image_delete}"
                 data-toggle="tooltip"

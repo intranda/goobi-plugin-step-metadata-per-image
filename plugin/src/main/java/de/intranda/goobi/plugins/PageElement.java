@@ -80,7 +80,12 @@ public class PageElement {
         if (ratingMetadata == null) {
             return;
         }
-        ratingMetadata.setValue(String.valueOf(rating));
+        String newRating = String.valueOf(rating);
+        if (newRating.equals(ratingMetadata.getValue())) {
+            ratingMetadata.setValue("");
+        } else {
+            ratingMetadata.setValue(String.valueOf(rating));
+        }
     }
 
     public String getPageId() {

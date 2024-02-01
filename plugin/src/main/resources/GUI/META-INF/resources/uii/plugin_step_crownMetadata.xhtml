@@ -165,19 +165,6 @@
                                 property="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
                         </h:commandLink>
-                        <h:commandLink
-                            tabindex="-1"
-                            id="id11"
-                            action="#{AktuelleSchritteForm.SchrittDurchBenutzerAbschliessen}"
-                            styleClass="btn d-flex align-items-center btn--title-action"
-                            rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
-                            title="#{msgs.task_leavePluginAndFinishTask}"
-                            pt:data-toggle="tooltip">
-                            <i class="fa fa-check" />
-                            <x:updateActionListener
-                                property="#{NavigationForm.uiStatus.pluginSimulation}"
-                                value="#{false}" />
-                        </h:commandLink>
 
                         <h:commandLink
                             tabindex="-1"
