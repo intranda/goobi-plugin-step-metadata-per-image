@@ -44,11 +44,14 @@ public class ProcessReference {
     private String otherProcessId;
     // name of linked process
     private String otherProcessName;
+
+    // display external identifier
+    private String otherExternalIdentifier;
+
     // image number (might be empty)
     private String otherImageNumber;
     // linked docstruct id (might be empty)
     private String otherDocstructId;
-
 
     private MetadataGroup group;
 

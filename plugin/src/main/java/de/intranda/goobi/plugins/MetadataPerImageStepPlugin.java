@@ -165,6 +165,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     private MetadataType metadataNameDocstructID;
     private MetadataType metadataNamePageNumber;
     private MetadataType metadataNameLabel;
+    private MetadataType metadataNameIdentifier;
 
     private MetadataType ratingField;
 
@@ -253,7 +254,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         metadataNameDocstructID = prefs.getMetadataTypeByName(myconfig.getString("/reference/docstruct"));
         metadataNamePageNumber = prefs.getMetadataTypeByName(myconfig.getString("/reference/image"));
         metadataNameLabel = prefs.getMetadataTypeByName(myconfig.getString("/reference/label"));
-
+        metadataNameIdentifier = prefs.getMetadataTypeByName(myconfig.getString("/reference/identifier"));
         ratingField = prefs.getMetadataTypeByName(myconfig.getString("/rating"));
     }
 
@@ -331,6 +332,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         for (StringPair pair : metadataList) {
             if ("TitleDocMain".equals(pair.getOne())) {
                 po.setLabel(pair.getTwo());
+            } else if ("CatalogIDDigital".equals(pair.getOne())) {
+                po.setExternalIdentifier(pair.getTwo());
             }
         }
         // add fields in the configured order
@@ -411,7 +414,6 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         // if not, create pagination
 
         MetadatenImagesHelper mih = new MetadatenImagesHelper(prefs, digitalDocument);
-        //TODO
         try {
             mih.createPagination(process, folderName);
         } catch (TypeNotAllowedForParentException | IOException | SwapException | DAOException e) {
@@ -431,7 +433,11 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         for (Metadata md : logical.getAllMetadata()) {
             if ("TitleDocMain".equals(md.getType().getName())) {
                 publicationElement.setTitle(md.getValue());
-            } else {
+            } else if ("CatalogIDDigital".equals(md.getType().getName())) {
+                publicationElement.setIdentifier(md.getValue());
+            }
+
+            else {
                 StringPair sp = new StringPair(md.getType().getName(), md.getValue());
                 processMetadataList.add(sp);
             }
@@ -454,7 +460,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             for (MetadataGroup mg : mainReferences) {
                 ProcessReference pr = parseReference(mg);
                 pr.setProcessId("" + process.getId());
-                pr.setProcessName(publicationElement.getTitle());
+                pr.setProcessName(publicationElement.getTitle() + " - ");
                 publicationElement.getProcessReferences().add(pr);
             }
 
@@ -587,6 +593,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 pr.setOtherImageNumber(md.getValue());
             } else if (md.getType().equals(metadataNameLabel)) {
                 pr.setOtherProcessName(md.getValue());
+            } else if (md.getType().equals(metadataNameIdentifier)) {
+                pr.setOtherExternalIdentifier(md.getValue());
             }
         }
         return pr;
@@ -621,6 +629,10 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                         label.setValue(ref.getOtherProcessName());
                         grp.addMetadata(label);
 
+                        Metadata externalId = new Metadata(metadataNameIdentifier);
+                        externalId.setValue(ref.getOtherExternalIdentifier());
+                        grp.addMetadata(externalId);
+
                         MetsMods o = new MetsMods(prefs);
                         String metsFile = ConfigurationHelper.getInstance().getMetadataFolder() + ref.getOtherProcessId() + "/meta.xml";
                         o.read(metsFile);
@@ -634,6 +646,11 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                         Metadata otherLabel = new Metadata(metadataNameLabel);
                         otherLabel.setValue(ref.getProcessName());
                         other.addMetadata(otherLabel);
+
+                        Metadata otherExternalId = new Metadata(metadataNameIdentifier);
+                        otherExternalId.setValue(getPublicationElement().getIdentifier());
+                        other.addMetadata(otherExternalId);
+
                         Metadata otherDocstructId = new Metadata(metadataNameDocstructID);
                         otherDocstructId.setValue(ref.getDocstructId());
                         other.addMetadata(otherDocstructId);
@@ -698,15 +715,15 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     public void addReference() {
         String otherProcessId = currentProcess.getProcessId();
         String otherProcessTitle = currentProcess.getLabel();
-
+        String externalIdentifier = currentProcess.getExternalIdentifier();
         String processid = String.valueOf(process.getId());
 
         if (addReferenceToAll) {
             for (PageElement page : pages) {
-                createReference(otherProcessId, otherProcessTitle, processid, page);
+                createReference(otherProcessId, otherProcessTitle, processid, externalIdentifier, page);
             }
         } else {
-            createReference(otherProcessId, otherProcessTitle, processid, currentPage);
+            createReference(otherProcessId, otherProcessTitle, processid, externalIdentifier, currentPage);
         }
 
         // get current Page
@@ -716,7 +733,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         processDataList.clear();
     }
 
-    private void createReference(String otherProcessId, String otherProcessTitle, String processid, PageElement page) {
+    private void createReference(String otherProcessId, String otherProcessTitle, String processid, String externalIdentifier, PageElement page) {
         // add reference to other process in page object
         String identifier = page.getIdentifier().getValue();
         try {
@@ -726,6 +743,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             reference.setProcessId(processid);
             reference.setDocstructId(identifier); // identifier of selected docstruct
             reference.setProcessName(publicationElement.getTitle()); //main title
+            reference.setOtherExternalIdentifier(externalIdentifier);
             reference.setImageNumber(String.valueOf(page.getOrder() + 1));
             reference.setOtherProcessId(otherProcessId);
             reference.setOtherProcessName(otherProcessTitle);

@@ -224,7 +224,7 @@ height: 70px;
                                             value="#{AktuelleSchritteForm.myPlugin.publicationElement.processReferences}">
                                             <div class="btn btn-blank me-2">
                                                 <span> <h:outputText
-                                                        value="#{reference.otherProcessName} #{msgs.lw_currentImageNumber} #{reference.otherImageNumber}" />
+                                                        value="#{reference.otherProcessName} (#{reference.otherExternalIdentifier}) #{msgs.lw_currentImageNumber} #{reference.otherImageNumber}" />
                                                 </span>
 
                                             </div>
@@ -451,7 +451,7 @@ height: 70px;
                                                 jsf:action="#{page.deleteProcessReference}"
                                                 title="#{msgs.plugin_intranda_step_metadata_per_image_removeLink}"
                                                 data-toggle="tooltip">
-                                                <i class="fa fa-minus-circle"></i> <span> <h:outputText value="#{reference.otherProcessName}" />
+                                                <i class="fa fa-minus-circle"></i> <span> <h:outputText value="#{reference.otherProcessName} (#{reference.otherExternalIdentifier})" />
                                                 </span>
                                                 <f:setPropertyActionListener
                                                     value="#{reference}"

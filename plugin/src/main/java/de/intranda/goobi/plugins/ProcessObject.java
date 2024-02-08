@@ -32,6 +32,7 @@ public class ProcessObject {
 
     private String processId;
     private String label;
+    private String externalIdentifier;
     private List<StringPair> metadataList = new ArrayList<>();
 
 }

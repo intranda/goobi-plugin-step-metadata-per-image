@@ -34,6 +34,8 @@ public class PublicationElement {
 
     private String type;
 
+    private String identifier;
+
     private List<StringPair> metadataList = new ArrayList<>();
 
     private List<ProcessReference> processReferences = new ArrayList<>();
