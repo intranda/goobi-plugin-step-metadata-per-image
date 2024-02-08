@@ -33,26 +33,25 @@
             <field>value C</field>                    
         </field>
 
+
+
+
         <searchfield>TitleDocMain</searchfield>
-        <searchfield>ContentDescription</searchfield>
+        <searchfield>shelfmarksource</searchfield>
         <searchfield>CatalogIDDigital</searchfield>
+
         <display>
             <field>TitleDocMain</field>
-            <field>ContentDescription</field>
+            <field>PublisherName</field>
+            <field>PublicationYear</field>
+            <field>PlaceOfPublication</field>
             <field>CatalogIDDigital</field>
         </display>
 
         <identifierField>_urn</identifierField>
         <docstructName>Chapter</docstructName>
         <rating>Counter</rating>
-        <reference>
-            <group>Reference</group>
-            <process>RelationProcessID</process>
-            <docstruct>RelationDocstructID</docstruct>
-            <image>RelationImageNumber</image>
-            <identifier>RelationExternalIdentifier</identifier>
-            <label>RelationLabel</label>
-        </reference>
+                              
     </config>
 
 </config_plugin>
