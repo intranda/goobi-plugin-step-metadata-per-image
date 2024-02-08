@@ -467,7 +467,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             Path imagePath = Paths.get(pageStruct.getImageName());
             try {
 
-                Image image = new Image(process, folderName, imagePath.getFileName().toString(), 1, 800);
+                Image image = new Image(process, folderName, imagePath.getFileName().toString(), 1, 600);
                 PageElement pe = null;
                 for (Reference ref : pageStruct.getAllFromReferences()) {
                     // ignore reference is to logical topstruct
@@ -766,8 +766,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                    .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                            selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
+                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                    selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
                             }
@@ -796,9 +796,9 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                     if (StringUtils.isBlank(val.getValue())) {
                                         val.setValue(selectedValue.getValue());
                                         val.getMetadata()
-                                        .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
-                                                selectedValue.getMetadata().getAuthorityURI(),
-                                                selectedValue.getMetadata().getAuthorityValue());
+                                                .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                        selectedValue.getMetadata().getAuthorityURI(),
+                                                        selectedValue.getMetadata().getAuthorityValue());
                                         break;
                                     }
                                 }
@@ -812,8 +812,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 PageMetadataValue val = pmf.getValues().get(0);
                                 val.setValue(selectedValue.getValue());
                                 val.getMetadata()
-                                .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
-                                        selectedValue.getMetadata().getAuthorityValue());
+                                        .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                                selectedValue.getMetadata().getAuthorityValue());
                             }
                             break;
 
@@ -907,13 +907,13 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         Metadata otherPageNo = null;
 
         for (Metadata md : page.getAllMetadata()) {
-            if (md.getType().getName().equals("physPageNumber")) {
+            if ("physPageNumber".equals(md.getType().getName())) {
                 currentPageNo = md;
                 break;
             }
         }
         for (Metadata md : nextPage.getAllMetadata()) {
-            if (md.getType().getName().equals("physPageNumber")) {
+            if ("physPageNumber".equals(md.getType().getName())) {
                 otherPageNo = md;
                 break;
             }
