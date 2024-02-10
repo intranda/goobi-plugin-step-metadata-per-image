@@ -860,8 +860,13 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         }
     }
 
-    public void moveNodeUp(PageElement pageElement) {
-
+    /**
+     * Move element 'up', 'down', 'last' or 'first'
+     *
+     * @param pageElement
+     * @param direction can be 'up', 'down', 'last' or 'first'
+     */
+    public void moveNode(PageElement pageElement, String direction) {
         DocStruct ds = pageElement.getDocstruct();
         DocStruct logical = ds.getParent();
 
@@ -874,50 +879,38 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         }
 
         int index = physical.getAllChildren().indexOf(page);
-        // first element cannot be moved
-        if (index != 0) {
-            logical.getAllChildren().remove(ds);
-            logical.getAllChildren().add(index - 1, ds);
-
-            DocStruct prevPage = physical.getAllChildren().get(index - 1);
-            changePageNo(page, prevPage);
-
-            physical.getAllChildren().remove(page);
-            physical.getAllChildren().add(index - 1, page);
-
-            pages.remove(pageElement);
-            pages.add(index - 1, pageElement);
-        }
-    }
-
-    public void moveNodeDown(PageElement pageElement) {
-
-        DocStruct ds = pageElement.getDocstruct();
-        DocStruct logical = ds.getParent();
-
-        DocStruct page = pageElement.getPage();
-        DocStruct physical = page.getParent();
-
-        // main element cannot be changed
-        if (logical == null) {
-            return;
-        }
         int max = physical.getAllChildren().size();
-        int index = physical.getAllChildren().indexOf(page);
-        // last element cannot be moved
-        if (max - 1 > index) {
-            logical.getAllChildren().remove(ds);
-            logical.getAllChildren().add(index + 1, ds);
 
-            DocStruct nextPage = physical.getAllChildren().get(index + 1);
-            changePageNo(page, nextPage);
-
-            physical.getAllChildren().remove(page);
-            physical.getAllChildren().add(index + 1, page);
-
-            pages.remove(pageElement);
-            pages.add(index + 1, pageElement);
+        // first element cannot be moved upwards
+        if (("up".equals(direction) || "first".equals(direction)) && index == 0) {
+            return;
         }
+
+        // last element cannot be moved downwards
+        if (("down".equals(direction) || "last".equals(direction)) && max - 1 == index) {
+            return;
+        }
+
+        int diff = 0;
+        if ("up".equals(direction)) {
+            diff = index - 1;
+        } else if ("down".equals(direction)) {
+            diff = index + 1;
+        } else if ("last".equals(direction)) {
+            diff = max - 1;
+        }
+
+        logical.getAllChildren().remove(ds);
+        logical.getAllChildren().add(diff, ds);
+
+        DocStruct nextPage = physical.getAllChildren().get(diff);
+        changePageNo(page, nextPage);
+
+        physical.getAllChildren().remove(page);
+        physical.getAllChildren().add(diff, page);
+
+        pages.remove(pageElement);
+        pages.add(diff, pageElement);
     }
 
     private void changePageNo(DocStruct page, DocStruct nextPage) {

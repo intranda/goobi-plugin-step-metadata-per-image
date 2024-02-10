@@ -73,18 +73,6 @@
 
 
         <style>
-.star {
-    display: block;
-    float: left;
-}
-
-.star i {
-    color: #ccc;
-}
-
-.star .active {
-    color: #368ee0;
-}
 
 .form-control.invalid, .form-select.invalid {
     border: 1px solid var(--clr-box-hot);
@@ -108,22 +96,6 @@
     position: relative;
 }
 
-.upButtonSelector {
-    /*     position: absolute; */
-    /*     bottom: 0; */
-    
-}
-
-.downButtonSelector {
-    /*     position: absolute; */
-    /*     bottom: 0; */
-    /*     left: 40px; */
-    margin-left: 10px;
-}
-
-.metsEditorTextArea {
-height: 70px;
-}
 </style>
 
 
@@ -488,30 +460,67 @@ height: 70px;
                                         </button>
                                     </div>
                                 </div>
-
                                 <!-- // METADATA EDITION AREA -->
+
+
+
                                 <div class="row mt-3">
-                                    <div class="col-12 col-md-3">
+                                    <div class="col-12 col-md-3 control-label">
+                                        <!-- MOVE FIRST -->
                                         <button
-                                            class="btn btn-blank upButtonSelector"
-                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeUp(page)}"
+                                            class="btn btn-blank upButtonSelector me-2"
+                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'first')}"
                                             title="#{msgs.moveSeltectedPagesUp}"
-                                            data-toggle="tooltip"
-                                            >
-                                            <i class="fa fa-chevron-up"></i>
-                                            <f:ajax
-                                                execute="@form"
-                                                render="@form" />
+                                            data-toggle="tooltip">
+                                            <i class="fa fa-angle-double-up"></i>
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
+                                            <f:ajax
+                                                execute="@form"
+                                                render="@form" />
                                         </button>
+                                        
+                                        <!-- MOVE UP -->
                                         <button
-                                            class="btn btn-blank downButtonSelector"
-                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNodeDown(page)}"
+                                            class="btn btn-blank upButtonSelector me-3"
+                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'up')}"
+                                            title="#{msgs.moveSeltectedPagesUp}"
+                                            data-toggle="tooltip">
+                                            <i class="fa fa-angle-up"></i>
+                                            <f:setPropertyActionListener
+                                                value="#{page.pageId}"
+                                                target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
+                                            <f:ajax
+                                                execute="@form"
+                                                render="@form" />
+                                        </button>
+                                        
+                                        <!-- CURRENT POSITION IN LIST -->
+                                        <h:outputText value="#{msgs.position}: #{myStatus.index + 1}"/>
+                                        
+                                        <!-- MOVE DOWN -->
+                                        <button
+                                            class="btn btn-blank downButtonSelector ms-3"
+                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'down')}"
                                             title="#{msgs.moveSeltectedPagesDown}"
                                             data-toggle="tooltip">
-                                            <i class="fa fa-chevron-down"></i>
+                                            <i class="fa fa-angle-down"></i>
+                                            <f:setPropertyActionListener
+                                                value="#{page.pageId}"
+                                                target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
+                                            <f:ajax
+                                                execute="@form"
+                                                render="@form" />
+                                        </button>
+                                        
+                                        <!-- MOVE LAST -->
+                                        <button
+                                            class="btn btn-blank downButtonSelector ms-2"
+                                            jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'last')}"
+                                            title="#{msgs.moveSeltectedPagesDown}"
+                                            data-toggle="tooltip">
+                                            <i class="fa fa-angle-double-down"></i>
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -520,8 +529,10 @@ height: 70px;
                                                 render="@form" />
                                         </button>
                                     </div>
+
+                                    <div class="col-12 col-md-9">
+                                    </div>
                                 </div>
-                                <div class="col-12 col-md-9"></div>
                             </div>
 
                             <div class="col-12 col-md-4">
