@@ -900,10 +900,10 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             diff = max - 1;
         }
 
+        DocStruct nextPage = physical.getAllChildren().get(diff);
         logical.getAllChildren().remove(ds);
         logical.getAllChildren().add(diff, ds);
 
-        DocStruct nextPage = physical.getAllChildren().get(diff);
         changePageNo(page, nextPage);
 
         physical.getAllChildren().remove(page);
