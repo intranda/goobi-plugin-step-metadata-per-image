@@ -891,13 +891,9 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             return;
         }
 
-        int diff = 0;
-        if ("up".equals(direction)) {
+        int diff = index + 1;
+        if ("up".equals(direction) || "first".equals(direction)) {
             diff = index - 1;
-        } else if ("down".equals(direction)) {
-            diff = index + 1;
-        } else if ("last".equals(direction)) {
-            diff = max - 1;
         }
 
         DocStruct nextPage = physical.getAllChildren().get(diff);
@@ -911,6 +907,10 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
         pages.remove(pageElement);
         pages.add(diff, pageElement);
+
+        if ("first".equals(direction) || "last".equals(direction)) {
+            moveNode(pageElement, direction);
+        }
     }
 
     private void changePageNo(DocStruct page, DocStruct nextPage) {
