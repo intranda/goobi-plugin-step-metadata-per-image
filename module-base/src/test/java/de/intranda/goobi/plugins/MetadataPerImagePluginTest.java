@@ -151,7 +151,6 @@ public class MetadataPerImagePluginTest {
         EasyMock.expect(configurationHelper.getNumberOfMetaBackups()).andReturn(0).anyTimes();
         EasyMock.expect(configurationHelper.getImagePrefix()).andReturn("\\d{8}").anyTimes();
         EasyMock.expect(configurationHelper.getMetsEditorDefaultPagination()).andReturn("uncounted").anyTimes();
-        EasyMock.expect(configurationHelper.getImageSorting()).andReturn("number").anyTimes();
         EasyMock.replay(configurationHelper);
 
         PowerMock.mockStatic(Helper.class);
