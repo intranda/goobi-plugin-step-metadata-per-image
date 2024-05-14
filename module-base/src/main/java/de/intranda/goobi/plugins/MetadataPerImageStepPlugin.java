@@ -23,12 +23,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import io.goobi.workflow.api.vocabulary.VocabularyAPIManager;
+import io.goobi.workflow.api.vocabulary.jsfwrapper.JSFVocabularyRecord;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -41,8 +44,6 @@ import org.goobi.production.enums.PluginReturnValue;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
-import org.goobi.vocabulary.VocabRecord;
-import org.goobi.vocabulary.Vocabulary;
 
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
@@ -53,7 +54,6 @@ import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.metadaten.Image;
 import de.sub.goobi.metadaten.MetadatenImagesHelper;
 import de.sub.goobi.persistence.managers.ProcessManager;
-import de.sub.goobi.persistence.managers.VocabularyManager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -76,6 +76,8 @@ import ugh.exceptions.TypeNotAllowedForParentException;
 import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
+
+import javax.faces.model.SelectItem;
 
 @PluginImplementation
 @Log4j2
@@ -167,6 +169,9 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     @Setter
     private boolean addReferenceToAll;
 
+    private VocabularyAPIManager vocabularyAPI = VocabularyAPIManager.getInstance();
+
+
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -202,18 +207,16 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                     List<String> values = Arrays.asList(hc.getStringArray("/field"));
 
                     if (values.isEmpty()) {
-                        values = new ArrayList<>();
                         String vocabularyName = hc.getString("/vocabulary");
-                        Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
-                        if (currentVocabulary != null) {
-                            VocabularyManager.getAllRecords(currentVocabulary);
-                            List<VocabRecord> recordList = currentVocabulary.getRecords();
+                        io.goobi.vocabulary.exchange.Vocabulary vocabulary = vocabularyAPI.vocabularies().findByName(vocabularyName);
 
-                            for (VocabRecord vr : recordList) {
-                                values.add(vr.getTitle());
-                            }
-                            Collections.sort(values);
-                        }
+                        // Assume there are not than 1000 hits, otherwise it is not useful anyway..
+                        List<JSFVocabularyRecord> recordList = vocabularyAPI.vocabularyRecords().list(vocabulary.getId(), Optional.of(1000), Optional.empty()).getContent();
+
+                        values = recordList.stream()
+                                .map(JSFVocabularyRecord::getMainValue)
+                                .sorted()
+                                .collect(Collectors.toList());
                     }
                     field.setValueList(values);
                     break;
