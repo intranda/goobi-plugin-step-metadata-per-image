@@ -209,9 +209,8 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                     if (values.isEmpty()) {
                         String vocabularyName = hc.getString("/vocabulary");
                         io.goobi.vocabulary.exchange.Vocabulary vocabulary = vocabularyAPI.vocabularies().findByName(vocabularyName);
-
-                        // Assume there are not than 1000 hits, otherwise it is not useful anyway..
-                        List<JSFVocabularyRecord> recordList = vocabularyAPI.vocabularyRecords().list(vocabulary.getId(), Optional.of(1000), Optional.empty()).getContent();
+                        
+                        List<JSFVocabularyRecord> recordList = vocabularyAPI.vocabularyRecords().all(vocabulary.getId());
 
                         values = recordList.stream()
                                 .map(JSFVocabularyRecord::getMainValue)
