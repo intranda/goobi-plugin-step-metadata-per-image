@@ -349,7 +349,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     }
 
     private String generateSearchQuery() {
-        String escapedValue = StringEscapeUtils.escapeSql(searchValue);
+        String escapedValue = StringEscapeUtils.escapeSql(searchValue.replace("*", "%"));
 
         StringBuilder processIDBuilder = new StringBuilder();
         processIDBuilder.append("SELECT processid, name, value FROM metadata WHERE processid IN ( ");
@@ -374,9 +374,9 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 sub.append("'");
             }
             processIDBuilder.append(sub.toString());
-            processIDBuilder.append(") AND value LIKE '%");
+            processIDBuilder.append(") AND value LIKE '");
             processIDBuilder.append(escapedValue);
-            processIDBuilder.append("%') ");
+            processIDBuilder.append("') ");
         }
         return processIDBuilder.toString();
     }
