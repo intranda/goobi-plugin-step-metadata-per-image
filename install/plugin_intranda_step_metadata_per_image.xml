@@ -207,6 +207,7 @@
             <process>RelationProcessID</process>
             <docstruct>RelationDocstructID</docstruct>
             <image>RelationImageNumber</image>
+            <identifier>RelationExternalIdentifier</identifier>
             <label>RelationLabel</label>
         </reference>
     </config>
