@@ -114,6 +114,7 @@ public class PageMetadataField implements MultiSelectProperty<String> {
         for (PageMetadataValue pmv : values) {
             if (pmv.getValue().equals(value)) {
                 values.remove(pmv);
+                pmv.getMetadata().setValue("");
                 return;
             }
         }
