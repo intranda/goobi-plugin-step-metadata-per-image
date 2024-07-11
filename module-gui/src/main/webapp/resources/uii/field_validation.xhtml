@@ -6,8 +6,7 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:x="http://myfaces.apache.org/tomahawk"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-    xmlns:jsf="http://xmlns.jcp.org/jsf"
-    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG">
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <composite:interface>
     </composite:interface>
@@ -20,7 +19,9 @@
             styleClass="w-100 font-danger validation-message row mb-2">
             <div class="col-12 col-md-3"></div>
             <div class="col-12 col-md-9">
-                <i class="fa fa-exclamation-circle warning-icon error" />
+                <span
+                    class="fa fa-exclamation-circle warning-icon error"
+                    aria-hidden="true" />
                 <h:outputText value="#{msgs[field.validationErrorMessage]}" />
             </div>
         </h:panelGroup>

@@ -26,7 +26,9 @@
                 class="btn btn-blank me-2 float-end"
                 jsf:id="clearField"
                 jsf:action="#{field.clearValue(entry)}">
-                <i class="fa fa-trash" />
+                <span
+                    class="fa fa-trash"
+                    aria-hidden="true" />
                 <f:ajax
                     execute="@this"
                     render="@form" />
@@ -49,7 +51,9 @@
                 <f:ajax
                     execute="@this"
                     render="metadataAddBoxContent" />
-                <i class="fa fa-files-o" />
+                <span
+                    aria-hidden="true"
+                    class="fa fa-files-o" />
                 <f:setPropertyActionListener
                     value=""
                     target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -63,7 +67,9 @@
                 jsf:id="removeField"
                 jsf:rendered="#{field.displayDeletionButton}"
                 jsf:action="#{field.removeValue(entry)}">
-                <i class="fa fa-minus" />
+                <span
+                    aria-hidden="true"
+                    class="fa fa-minus" />
                 <f:ajax
                     execute="@this"
                     render="@form" />
@@ -82,7 +88,9 @@
                 jsf:id="duplicateField"
                 jsf:rendered="#{field.displayDuplicationButton}"
                 jsf:action="#{field.addNewValue}">
-                <i class="fa fa-plus" />
+                <span
+                    aria-hidden="true"
+                    class="fa fa-plus" />
                 <f:ajax
                     execute="@this"
                     render="@form" />

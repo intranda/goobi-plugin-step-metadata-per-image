@@ -6,33 +6,34 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:x="http://myfaces.apache.org/tomahawk"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-    xmlns:jsf="http://xmlns.jcp.org/jsf"
-    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
-
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
     <composite:interface>
     </composite:interface>
-
     <composite:implementation>
         <h:panelGroup
-            styleClass="modal p-4 py-md-5"
+            styleClass="modal"
             layout="block"
             id="imageBox"
             tabindex="-1"
             role="dialog"
-            aria-labelledby="imageBox"
-            aria-hidden="true">
+            aria-labelledby="imageBoxTitle">
             <h:panelGroup
+                layout="block"
                 id="imageBoxContent"
-                class="modal-dialog mw-75"
+                class="modal-dialog modal-fullscreen p-5"
                 role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
-                        <h4 class="modal-title" id="myModalLabel">
+                        <h4
+                            class="modal-title"
+                            id="imageBoxTitle">
                             <h:outputText value="#{AktuelleSchritteForm.myPlugin.imageName}" />
                         </h4>
                         <button type="button" class="btn text-white"
                             title="#{msgs.abbrechen}" data-bs-dismiss="modal" data-toggle="tooltip" >
-                            <i class="fa fa-times"></i>
+                            <span
+                                class="fa fa-times"
+                                aria-hidden="true" />
                         </button>
                     </div>
                     <div class="modal-body">
@@ -45,4 +46,3 @@
         </h:panelGroup>
         </composite:implementation>
 </ui:composition>
-

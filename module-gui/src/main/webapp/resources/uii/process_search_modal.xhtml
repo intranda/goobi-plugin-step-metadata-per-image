@@ -6,8 +6,7 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:x="http://myfaces.apache.org/tomahawk"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-    xmlns:jsf="http://xmlns.jcp.org/jsf"
-    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <composite:interface>
     </composite:interface>
@@ -22,7 +21,7 @@
             role="dialog"
             aria-labelledby="processSearchBox">
             <div
-                class="modal-dialog modal-xl"
+                class="modal-dialog modal-dialog-scrollable modal-xl"
                 role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
@@ -36,10 +35,13 @@
                             class="btn text-white"
                             title="#{msgs.abbrechen}"
                             data-bs-dismiss="modal">
-                            <i class="fa fa-times"></i>
+                            <span
+                                class="fa fa-times"
+                                aria-hidden="true" />
                         </button>
                     </div>
                     <h:panelGroup
+                        display="block"
                         class="modal-body"
                         id="processSearchBoxContent">
                         <h:form
@@ -62,9 +64,9 @@
                                         jsf:id="processSearchAction"
                                         class="btn btn-blank float-end"
                                         jsf:action="#{AktuelleSchritteForm.myPlugin.processSearch}">
-                                        <i
+                                        <span
                                             class="fa fa-search"
-                                            aria-hidden="true"></i>
+                                            aria-hidden="true" />
                                         <span>
                                             <h:outputText value="#{msgs.search}" />
                                         </span>
@@ -114,7 +116,9 @@
                                                 jsf:id="selectProcess"
                                                 class="btn btn-success float-end"
                                                 jsf:action="#{AktuelleSchritteForm.myPlugin.addReference}">
-                                                <i class="fa fa-check"></i>
+                                                <span
+                                                    aria-hidden="true"
+                                                    class="fa fa-check" />
                                                 <f:setPropertyActionListener
                                                     value="#{proc}"
                                                     target="#{AktuelleSchritteForm.myPlugin.currentProcess}" />
