@@ -31,7 +31,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import io.goobi.workflow.api.vocabulary.VocabularyAPIManager;
-import io.goobi.workflow.api.vocabulary.jsfwrapper.JSFVocabularyRecord;
+import io.goobi.workflow.api.vocabulary.helper.ExtendedVocabulary;
+import io.goobi.workflow.api.vocabulary.helper.ExtendedVocabularyRecord;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -208,12 +209,15 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
                     if (values.isEmpty()) {
                         String vocabularyName = hc.getString("/vocabulary");
-                        io.goobi.vocabulary.exchange.Vocabulary vocabulary = vocabularyAPI.vocabularies().findByName(vocabularyName);
-                        
-                        List<JSFVocabularyRecord> recordList = vocabularyAPI.vocabularyRecords().all(vocabulary.getId());
+                        ExtendedVocabulary vocabulary = vocabularyAPI.vocabularies().findByName(vocabularyName);
 
-                        values = recordList.stream()
-                                .map(JSFVocabularyRecord::getMainValue)
+                        values = vocabularyAPI.vocabularyRecords()
+                                .list(vocabulary.getId())
+                                .all()
+                                .request()
+                                .getContent()
+                                .stream()
+                                .map(ExtendedVocabularyRecord::getMainValue)
                                 .sorted()
                                 .collect(Collectors.toList());
                     }
