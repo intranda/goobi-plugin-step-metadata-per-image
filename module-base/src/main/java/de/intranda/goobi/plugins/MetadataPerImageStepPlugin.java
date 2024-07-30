@@ -26,13 +26,10 @@ import java.util.Arrays;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import io.goobi.workflow.api.vocabulary.VocabularyAPIManager;
 import io.goobi.workflow.api.vocabulary.helper.ExtendedVocabulary;
-import io.goobi.workflow.api.vocabulary.helper.ExtendedVocabularyRecord;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -212,14 +209,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                         ExtendedVocabulary vocabulary = vocabularyAPI.vocabularies().findByName(vocabularyName);
 
                         values = vocabularyAPI.vocabularyRecords()
-                                .list(vocabulary.getId())
-                                .all()
-                                .request()
-                                .getContent()
-                                .stream()
-                                .map(ExtendedVocabularyRecord::getMainValue)
-                                .sorted()
-                                .collect(Collectors.toList());
+                                .getRecordMainValues(vocabulary.getId());
                     }
                     field.setValueList(values);
                     break;
