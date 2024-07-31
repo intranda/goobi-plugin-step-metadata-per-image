@@ -18,23 +18,16 @@
 
 package de.intranda.goobi.plugins;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
+import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.forms.HelperForm;
+import de.sub.goobi.helper.FacesContextHelper;
+import de.sub.goobi.helper.Helper;
+import de.sub.goobi.helper.VariableReplacer;
+import de.sub.goobi.helper.enums.StepStatus;
+import de.sub.goobi.metadaten.MetadatenHelper;
+import de.sub.goobi.persistence.managers.MetadataManager;
+import de.sub.goobi.persistence.managers.ProcessManager;
+import io.goobi.workflow.api.vocabulary.VocabularyAPIManager;
 import org.easymock.EasyMock;
 import org.goobi.beans.Process;
 import org.goobi.beans.Project;
@@ -51,23 +44,29 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import de.sub.goobi.config.ConfigurationHelper;
-import de.sub.goobi.forms.HelperForm;
-import de.sub.goobi.helper.FacesContextHelper;
-import de.sub.goobi.helper.Helper;
-import de.sub.goobi.helper.VariableReplacer;
-import de.sub.goobi.helper.enums.StepStatus;
-import de.sub.goobi.metadaten.MetadatenHelper;
-import de.sub.goobi.persistence.managers.MetadataManager;
-import de.sub.goobi.persistence.managers.ProcessManager;
 import ugh.dl.Fileformat;
 import ugh.dl.Prefs;
 import ugh.fileformats.mets.MetsMods;
 
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ MetadatenHelper.class, VariableReplacer.class, ConfigurationHelper.class, ProcessManager.class,
-        MetadataManager.class, Helper.class, HelperForm.class })
+        MetadataManager.class, Helper.class, HelperForm.class, VocabularyAPIManager.class })
 @PowerMockIgnore({ "javax.management.*", "javax.xml.*", "org.xml.*", "org.w3c.*", "javax.net.ssl.*", "jdk.internal.reflect.*" })
 public class MetadataPerImagePluginTest {
 
@@ -91,6 +90,11 @@ public class MetadataPerImagePluginTest {
         }
 
         String log4jFile = resourcesFolder + "log4j2.xml"; // for junit tests in eclipse
+
+        PowerMock.mockStatic(VocabularyAPIManager.class);
+        VocabularyAPIManager vocabularyAPIManager = EasyMock.createMock(VocabularyAPIManager.class);
+        EasyMock.expect(VocabularyAPIManager.getInstance()).andReturn(vocabularyAPIManager).anyTimes();
+        PowerMock.replay(VocabularyAPIManager.class);
 
         System.setProperty("log4j.configurationFile", log4jFile);
     }
