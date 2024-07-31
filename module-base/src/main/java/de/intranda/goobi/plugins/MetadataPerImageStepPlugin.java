@@ -18,18 +18,21 @@
 
 package de.intranda.goobi.plugins;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
+import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.helper.Helper;
+import de.sub.goobi.helper.StorageProvider;
+import de.sub.goobi.helper.exceptions.DAOException;
+import de.sub.goobi.helper.exceptions.SwapException;
+import de.sub.goobi.metadaten.Image;
+import de.sub.goobi.metadaten.MetadatenImagesHelper;
+import de.sub.goobi.persistence.managers.ProcessManager;
 import io.goobi.workflow.api.vocabulary.VocabularyAPIManager;
 import io.goobi.workflow.api.vocabulary.helper.ExtendedVocabulary;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -42,20 +45,6 @@ import org.goobi.production.enums.PluginReturnValue;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
-
-import de.sub.goobi.config.ConfigPlugins;
-import de.sub.goobi.config.ConfigurationHelper;
-import de.sub.goobi.helper.Helper;
-import de.sub.goobi.helper.StorageProvider;
-import de.sub.goobi.helper.exceptions.DAOException;
-import de.sub.goobi.helper.exceptions.SwapException;
-import de.sub.goobi.metadaten.Image;
-import de.sub.goobi.metadaten.MetadatenImagesHelper;
-import de.sub.goobi.persistence.managers.ProcessManager;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
 import ugh.dl.DocStructType;
@@ -75,7 +64,14 @@ import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
 
-import javax.faces.model.SelectItem;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 @PluginImplementation
 @Log4j2
@@ -167,8 +163,6 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     @Setter
     private boolean addReferenceToAll;
 
-    private VocabularyAPIManager vocabularyAPI = VocabularyAPIManager.getInstance();
-
 
     @Override
     public void initialize(Step step, String returnPath) {
@@ -206,9 +200,9 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
                     if (values.isEmpty()) {
                         String vocabularyName = hc.getString("/vocabulary");
-                        ExtendedVocabulary vocabulary = vocabularyAPI.vocabularies().findByName(vocabularyName);
+                        ExtendedVocabulary vocabulary = VocabularyAPIManager.getInstance().vocabularies().findByName(vocabularyName);
 
-                        values = vocabularyAPI.vocabularyRecords()
+                        values = VocabularyAPIManager.getInstance().vocabularyRecords()
                                 .getRecordMainValues(vocabulary.getId());
                     }
                     field.setValueList(values);
