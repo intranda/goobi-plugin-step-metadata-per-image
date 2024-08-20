@@ -18,36 +18,21 @@
 
 package de.intranda.goobi.plugins;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-/**
- * This file is part of a plugin for Goobi - a Workflow tool for the support of mass digitization.
- *
- * Visit the websites for more information.
- *          - https://goobi.io
- *          - https://www.intranda.com
- *          - https://github.com/intranda/goobi
- *
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59
- * Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- */
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
+import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.helper.Helper;
+import de.sub.goobi.helper.StorageProvider;
+import de.sub.goobi.helper.exceptions.DAOException;
+import de.sub.goobi.helper.exceptions.SwapException;
+import de.sub.goobi.metadaten.Image;
+import de.sub.goobi.metadaten.MetadatenImagesHelper;
+import de.sub.goobi.persistence.managers.ProcessManager;
+import io.goobi.workflow.api.vocabulary.VocabularyAPIManager;
+import io.goobi.workflow.api.vocabulary.helper.ExtendedVocabulary;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -60,23 +45,6 @@ import org.goobi.production.enums.PluginReturnValue;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
-import org.goobi.vocabulary.VocabRecord;
-import org.goobi.vocabulary.Vocabulary;
-
-import de.sub.goobi.config.ConfigPlugins;
-import de.sub.goobi.config.ConfigurationHelper;
-import de.sub.goobi.helper.Helper;
-import de.sub.goobi.helper.StorageProvider;
-import de.sub.goobi.helper.exceptions.DAOException;
-import de.sub.goobi.helper.exceptions.SwapException;
-import de.sub.goobi.metadaten.Image;
-import de.sub.goobi.metadaten.MetadatenImagesHelper;
-import de.sub.goobi.persistence.managers.ProcessManager;
-import de.sub.goobi.persistence.managers.VocabularyManager;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
 import ugh.dl.DocStructType;
@@ -95,6 +63,15 @@ import ugh.exceptions.TypeNotAllowedForParentException;
 import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 @PluginImplementation
 @Log4j2
@@ -186,6 +163,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     @Setter
     private boolean addReferenceToAll;
 
+
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -221,18 +199,11 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                     List<String> values = Arrays.asList(hc.getStringArray("/field"));
 
                     if (values.isEmpty()) {
-                        values = new ArrayList<>();
                         String vocabularyName = hc.getString("/vocabulary");
-                        Vocabulary currentVocabulary = VocabularyManager.getVocabularyByTitle(vocabularyName);
-                        if (currentVocabulary != null) {
-                            VocabularyManager.getAllRecords(currentVocabulary);
-                            List<VocabRecord> recordList = currentVocabulary.getRecords();
+                        ExtendedVocabulary vocabulary = VocabularyAPIManager.getInstance().vocabularies().findByName(vocabularyName);
 
-                            for (VocabRecord vr : recordList) {
-                                values.add(vr.getTitle());
-                            }
-                            Collections.sort(values);
-                        }
+                        values = VocabularyAPIManager.getInstance().vocabularyRecords()
+                                .getRecordMainValues(vocabulary.getId());
                     }
                     field.setValueList(values);
                     break;

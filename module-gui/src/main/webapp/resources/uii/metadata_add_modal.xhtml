@@ -11,11 +11,8 @@
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG">
-
-
     <composite:interface>
     </composite:interface>
-
     <composite:implementation>
         <h:panelGroup
             styleClass="modal fade"
@@ -23,9 +20,7 @@
             id="metadataAddBox"
             tabindex="-1"
             role="dialog"
-            aria-labelledby="metadataAddBox"
-            aria-hidden="true">
-
+            aria-labelledby="metadataAddBoxTitle">
             <div
                 class="modal-dialog"
                 role="document">
@@ -38,7 +33,7 @@
                         <div class="modal-header bg-primary text-white">
                             <h4
                                 class="modal-title"
-                                id="myModalLabel">
+                                id="metadataAddBoxTitle">
                                 <h:outputText value="#{msgs.plugin_intranda_step_metadata_per_image_metadataAdd}" />
                             </h4>
                             <button
@@ -46,14 +41,13 @@
                                 class="btn text-white"
                                 title="#{msgs.abbrechen}"
                                 data-bs-dismiss="modal">
-                                <i class="fa fa-times"></i>
+                                <span class="fa fa-times" />
                             </button>
                         </div>
                         <div class="modal-body">
                             <h5>
                                 <h:outputText value="#{AktuelleSchritteForm.myPlugin.selectedField.label}" />
                             </h5>
-
                             <div class="mb-3 mt-3">
                                 <!-- toggle -->
                                 <h:selectOneRadio
@@ -83,7 +77,6 @@
                                         itemValue="empty" />
                                     <f:ajax execute="@this" />
                                 </h:selectOneRadio>
-
                             </div>
                             <hr />
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='input'}">
@@ -102,7 +95,6 @@
                                     displayLabel="true">
                                 </intranda:formInputTextAjax>
                             </ui:fragment>
-
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='textarea'}">
                                 <intranda:formInputTextAreaAjax
                                     id="area"
@@ -119,7 +111,6 @@
                                     displayLabel="true">
                                 </intranda:formInputTextAreaAjax>
                             </ui:fragment>
-
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='select' or AktuelleSchritteForm.myPlugin.selectedField.displayType=='multiselect'}">
                                 <intranda:formInputDropDownAjax
                                     id="select"
@@ -140,7 +131,6 @@
                                     displayLabel="true">
                                 </intranda:formInputDropDownAjax>
                             </ui:fragment>
-
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='gnd'}">
                                 <intranda:formInputGndAjax
                                     id="gnd"
@@ -155,7 +145,6 @@
                                     displayLabel="true">
                                 </intranda:formInputGndAjax>
                             </ui:fragment>
-
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='geonames'}">
                                 <intranda:formInputGeonamesAjax
                                     id="geonames"
@@ -171,7 +160,6 @@
                                     displayLabel="true">
                                 </intranda:formInputGeonamesAjax>
                             </ui:fragment>
-
                             <ui:fragment rendered="#{AktuelleSchritteForm.myPlugin.selectedField.displayType=='viaf'}">
                                 <intranda:formInputViafAjax
                                     id="viaf"
@@ -186,7 +174,6 @@
                                     displayLabel="true">
                                 </intranda:formInputViafAjax>
                             </ui:fragment>
-
                         </div>
                         <div class="modal-footer">
                             <button
@@ -215,6 +202,5 @@
                 </div>
             </div>
         </h:panelGroup>
-
     </composite:implementation>
 </ui:composition>

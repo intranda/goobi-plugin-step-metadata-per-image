@@ -1,20 +1,20 @@
-<!-- 
+<!--
  * This file is part of a plugin for Goobi - a Workflow tool for the support of mass digitization.
- * 
- * Visit the websites for more information. 
+ *
+ * Visit the websites for more information.
  *          - https://goobi.io
  *          - https://www.intranda.com
  *          - https://github.com/intranda/goobi
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59
  * Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * 
+ *
  -->
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
@@ -122,7 +122,6 @@
 
                     <div class="actions d-flex">
 
-
                         <h:commandLink
                             tabindex="-1"
                             id="id10"
@@ -130,7 +129,9 @@
                             styleClass="btn d-flex align-items-center btn--title-action"
                             title="#{msgs.reload}"
                             pt:data-toggle="tooltip">
-                            <i class="fa fa-refresh" />
+                            <span
+                                aria-hidden="true"
+                                class="fa fa-refresh" />
                         </h:commandLink>
                         <h:commandLink
                             tabindex="-1"
@@ -138,7 +139,9 @@
                             styleClass="btn d-flex align-items-center btn--title-action"
                             title="#{msgs.speichern}"
                             pt:data-toggle="tooltip">
-                            <i class="fa fa-floppy-o" />
+                            <span
+                                aria-hidden="true"
+                                class="fa fa-floppy-o" />
                             <x:updateActionListener
                                 property="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
@@ -152,7 +155,9 @@
                             rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
                             title="#{msgs.pluginLeave}"
                             pt:data-toggle="tooltip">
-                            <i class="fa fa-close" />
+                            <span
+                                aria-hidden="true"
+                                class="fa fa-close" />
                             <x:updateActionListener
                                 property="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
@@ -228,7 +233,10 @@
                         <div
                             class="row"
                             id="#{page.pageId}">
-                            <div class="col-md-8 inputfields">
+                            <h:panelGroup
+                                layout="block"
+                                class="col-md-8 inputfields"
+                                id="metadataArea">
                                 <!-- METADATA EDITION AREA -->
                                 <ui:repeat
                                     var="field"
@@ -254,7 +262,7 @@
                                                 readonly="#{field.readonly}"
                                                 fieldStyle="#{entry.valid ? '' : 'invalid'}"
                                                 execute="@this :focusField"
-                                                render=":#{cc.clientId}field"
+                                                render=":#{cc.clientId}:field"
                                                 displayLabel="false"
                                                 onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                                 <ui:include src="field_label.xhtml" />
@@ -277,7 +285,7 @@
                                                 readonly="#{field.readonly}"
                                                 fieldStyle="#{entry.valid ? '' : 'invalid'}"
                                                 execute="@this :focusField"
-                                                render=":#{cc.clientId}field"
+                                                render=":#{cc.clientId}:area"
                                                 displayLabel="false"
                                                 onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                                 <ui:include src="field_label.xhtml" />
@@ -292,7 +300,7 @@
                                                 style="margin-bottom: 5px;"
                                                 id="select"
                                                 ajaxEvent="change"
-                                                ajaxRender=":#{cc.clientId}field"
+                                                ajaxRender=":#{cc.clientId}:select"
                                                 ajaxExecute="@form"
                                                 label="#{msgs[field.label]}"
                                                 field="#{entry.value}"
@@ -323,7 +331,7 @@
                                                 displayAsRequired="#{field.required}"
                                                 required="false"
                                                 displayLabel="false"
-                                                render="@form"
+                                                render=":#{cc.clientId}:gnd"
                                                 onfocus="document.getElementById( 'focusField' ).value = this.id;">
                                                 <ui:include src="field_label.xhtml" />
                                             </intranda:formInputGndAjax>
@@ -343,7 +351,7 @@
                                                 submitDataAction="#{entry.importGeonamesData()}"
                                                 displayLabel="false"
                                                 onfocus="document.getElementById( 'focusField' ).value = this.id;"
-                                                render="@form">
+                                                render=":#{cc.clientId}:geonames">
                                                 <ui:include src="field_label.xhtml" />
                                             </intranda:formInputGeonamesAjax>
                                             <ui:include src="field_validation.xhtml" />
@@ -361,13 +369,14 @@
                                                 required="false"
                                                 displayLabel="false"
                                                 onfocus="document.getElementById( 'focusField' ).value = this.id;"
-                                                render="@form">
+                                                render=":#{cc.clientId}:viaf">
                                                 <ui:include src="field_label.xhtml" />
                                             </intranda:formInputViafAjax>
                                             <ui:include src="field_validation.xhtml" />
                                         </ui:fragment>
                                     </ui:repeat>
                                     <h:panelGroup
+                                        layout="block"
                                         rendered="#{field.displayType=='multiselect'}"
                                         id="multiselectfield">
                                         <intranda:formInputMultiSelect
@@ -415,7 +424,9 @@
                                             <f:setPropertyActionListener
                                                 value=""
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
-                                            <i class="fa fa-files-o" />
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-files-o" />
                                         </button>
                                     </div>
 
@@ -430,7 +441,9 @@
                                                 jsf:action="#{page.deleteProcessReference}"
                                                 title="#{msgs.plugin_intranda_step_metadata_per_image_removeLink}"
                                                 data-toggle="tooltip">
-                                                <i class="fa fa-minus-circle"></i>
+                                                <span
+                                                    aria-hidden="true"
+                                                    class="fa fa-minus-circle" />
                                                 <span>
                                                     <h:outputText
                                                         value="#{reference.otherProcessName}"
@@ -443,7 +456,7 @@
                                                     value="#{reference}"
                                                     target="#{page.selectedReference}" />
                                                 <f:ajax
-                                                    render="@form"
+                                                    render=":#{cc.clientId}"
                                                     execute="@this" />
                                                 <f:setPropertyActionListener
                                                     value=""
@@ -486,7 +499,9 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'first')}"
                                             title="#{msgs.moveSeltectedPagesUp}"
                                             data-toggle="tooltip">
-                                            <i class="fa fa-angle-double-up"></i>
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-angle-double-up" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -501,7 +516,9 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'up')}"
                                             title="#{msgs.moveSeltectedPagesUp}"
                                             data-toggle="tooltip">
-                                            <i class="fa fa-angle-up"></i>
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-angle-up" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -519,7 +536,9 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'down')}"
                                             title="#{msgs.moveSeltectedPagesDown}"
                                             data-toggle="tooltip">
-                                            <i class="fa fa-angle-down"></i>
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-angle-down" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -534,7 +553,9 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'last')}"
                                             title="#{msgs.moveSeltectedPagesDown}"
                                             data-toggle="tooltip">
-                                            <i class="fa fa-angle-double-down"></i>
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-angle-double-down" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -546,11 +567,13 @@
 
                                     <div class="col-12 col-md-9"></div>
                                 </div>
-                            </div>
+                            </h:panelGroup>
 
                             <div class="col-12 col-md-4">
                                 <!-- RIGHT AREA FOR IMAGE -->
-                                <div class="goobi-thumbnail-image mt-3 mt-md-0 float-end">
+                                <div
+                                    class="goobi-thumbnail-image mt-3 mt-md-0 float-end"
+                                    jsf:id="imageArea">
 
                                     <!-- IMAGE DISPLAY -->
                                     <div
@@ -638,7 +661,9 @@
                         class="btn btn-blank"
                         jsf:id="absenden"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <i class="fa fa-close"></i>
+                        <span
+                            aria-hidden="true"
+                            class="fa fa-close" />
                         <span>
                             <h:outputText value="#{msgs.pluginLeave}" />
                         </span>
@@ -653,7 +678,9 @@
                         class="btn btn-success me-3"
                         jsf:id="saveMetadata"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.saveMetadata}">
-                        <i class="fa fa-floppy-o"></i>
+                        <span
+                            aria-hidden="true"
+                            class="fa fa-floppy-o" />
                         <span>
                             <h:outputText value="#{msgs.speichern}" />
                         </span>
@@ -755,7 +782,7 @@
 												case "success": // This is called when ajax response is successfully processed.
 													var source = data.source;
 													loadImages();
-													// dont update focus, if source was a button 
+													// dont update focus, if source was a button
 													if ("SELECT" == source.nodeName) {
 														updateFocus();
 													}
