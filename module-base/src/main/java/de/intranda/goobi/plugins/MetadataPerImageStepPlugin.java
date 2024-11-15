@@ -18,6 +18,28 @@
 
 package de.intranda.goobi.plugins;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+import org.goobi.beans.Process;
+import org.goobi.beans.Step;
+import org.goobi.production.cli.helper.StringPair;
+import org.goobi.production.enums.PluginGuiType;
+import org.goobi.production.enums.PluginReturnValue;
+import org.goobi.production.enums.PluginType;
+import org.goobi.production.enums.StepReturnValue;
+import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
+
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
@@ -33,18 +55,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.SubnodeConfiguration;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-import org.goobi.beans.Process;
-import org.goobi.beans.Step;
-import org.goobi.production.cli.helper.StringPair;
-import org.goobi.production.enums.PluginGuiType;
-import org.goobi.production.enums.PluginReturnValue;
-import org.goobi.production.enums.PluginType;
-import org.goobi.production.enums.StepReturnValue;
-import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
 import ugh.dl.DocStructType;
@@ -63,15 +73,6 @@ import ugh.exceptions.TypeNotAllowedForParentException;
 import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
 @PluginImplementation
 @Log4j2
@@ -163,7 +164,6 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
     @Setter
     private boolean addReferenceToAll;
 
-
     @Override
     public void initialize(Step step, String returnPath) {
         this.returnPath = returnPath;
@@ -192,23 +192,19 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
 
             field.setHelpText(hc.getString("@helpText", ""));
 
-            switch (field.getDisplayType()) {
-                case "select":
-                case "multiselect":
-                    // get allowed values
-                    List<String> values = Arrays.asList(hc.getStringArray("/field"));
+            if ("select".equals(field.getDisplayType()) || "multiselect".equals(field.getDisplayType())) {
+                // get allowed values
+                List<String> values = Arrays.asList(hc.getStringArray("/field"));
 
-                    if (values.isEmpty()) {
-                        String vocabularyName = hc.getString("/vocabulary");
-                        ExtendedVocabulary vocabulary = VocabularyAPIManager.getInstance().vocabularies().findByName(vocabularyName);
+                if (values.isEmpty()) {
+                    String vocabularyName = hc.getString("/vocabulary");
+                    ExtendedVocabulary vocabulary = VocabularyAPIManager.getInstance().vocabularies().findByName(vocabularyName);
 
-                        values = VocabularyAPIManager.getInstance().vocabularyRecords()
-                                .getRecordMainValues(vocabulary.getId());
-                    }
-                    field.setValueList(values);
-                    break;
-                default:
-                    break;
+                    values = VocabularyAPIManager.getInstance()
+                            .vocabularyRecords()
+                            .getRecordMainValues(vocabulary.getId());
+                }
+                field.setValueList(values);
             }
 
             configuredFields.add(field);
@@ -429,10 +425,24 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
         List<MetadataGroup> mainReferences = logical.getAllMetadataGroupsByType(referenceMetadataGroupType);
         if (mainReferences != null) {
             for (MetadataGroup mg : mainReferences) {
+                // check for duplicates
                 ProcessReference pr = parseReference(mg);
-                pr.setProcessId("" + process.getId());
-                pr.setProcessName(publicationElement.getTitle() + " - ");
-                publicationElement.getProcessReferences().add(pr);
+                boolean matchFound = false;
+
+                for (ProcessReference other : publicationElement.getProcessReferences()) {
+                    if (pr.getOtherProcessId().equals(other.getOtherProcessId())
+
+                            && StringUtils.isNotBlank(pr.getOtherDocstructId())
+                            && pr.getOtherDocstructId().equals(other.getOtherDocstructId()) &&
+                            StringUtils.isNotBlank(pr.getOtherImageNumber()) && pr.getOtherImageNumber().equals(other.getOtherImageNumber())) {
+                        matchFound = true;
+                    }
+                }
+                if (!matchFound) {
+                    pr.setProcessId("" + process.getId());
+                    pr.setProcessName(publicationElement.getTitle() + " - ");
+                    publicationElement.getProcessReferences().add(pr);
+                }
             }
 
         }
@@ -507,12 +517,24 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                 // all references
                 List<MetadataGroup> references = pe.getDocstruct().getAllMetadataGroupsByType(referenceMetadataGroupType);
                 for (MetadataGroup mg : references) {
+                    // check for duplicates
                     ProcessReference pr = parseReference(mg);
-                    pr.setDocstructId(pe.getIdentifier().getValue());
-                    pr.setProcessId("" + process.getId());
-                    pr.setProcessName(publicationElement.getTitle());
-                    pr.setImageNumber(String.valueOf(pe.getOrder() + 1));
-                    pe.getProcessReferences().add(pr);
+
+                    boolean matchFound = false;
+                    for (ProcessReference other : pe.getProcessReferences()) {
+                        if (pr.getOtherProcessId().equals(other.getOtherProcessId())) {
+                            matchFound = true;
+                        }
+                    }
+                    if (!matchFound) {
+                        pr.setDocstructId(pe.getIdentifier().getValue());
+                        pr.setProcessId("" + process.getId());
+                        pr.setProcessName(publicationElement.getTitle());
+                        pr.setImageNumber(String.valueOf(pe.getOrder() + 1));
+                        pe.getProcessReferences().add(pr);
+
+                    }
+
                 }
 
                 pages.add(pe);
@@ -755,7 +777,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 if (StringUtils.isBlank(val.getValue())) {
                                     val.setValue(selectedValue.getValue());
                                     val.getMetadata()
-                                            .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                            .setAuthorityFile(selectedValue.getMetadata().getAuthorityID(),
                                                     selectedValue.getMetadata().getAuthorityURI(), selectedValue.getMetadata().getAuthorityValue());
                                     break;
                                 }
@@ -765,7 +787,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                             try {
                                 Metadata md = new Metadata(prefs.getMetadataTypeByName(selectedField.getMetadataField()));
                                 md.setValue(selectedValue.getValue());
-                                md.setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                md.setAuthorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
                                         selectedValue.getMetadata().getAuthorityValue());
                                 pe.getDocstruct().addMetadata(md);
                                 PageMetadataValue value = new PageMetadataValue(md, selectedField.getValidation(), selectedField.isRequired(),
@@ -785,7 +807,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                     if (StringUtils.isBlank(val.getValue())) {
                                         val.setValue(selectedValue.getValue());
                                         val.getMetadata()
-                                                .setAutorityFile(selectedValue.getMetadata().getAuthorityID(),
+                                                .setAuthorityFile(selectedValue.getMetadata().getAuthorityID(),
                                                         selectedValue.getMetadata().getAuthorityURI(),
                                                         selectedValue.getMetadata().getAuthorityValue());
                                         break;
@@ -801,7 +823,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
                                 PageMetadataValue val = pmf.getValues().get(0);
                                 val.setValue(selectedValue.getValue());
                                 val.getMetadata()
-                                        .setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+                                        .setAuthorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
                                                 selectedValue.getMetadata().getAuthorityValue());
                             }
                             break;
@@ -820,7 +842,7 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             Metadata md = new Metadata(prefs.getMetadataTypeByName(selectedField.getMetadataField()));
             md.setValue(selectedValue.getValue());
             md.setValue(selectedValue.getValue());
-            md.setAutorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
+            md.setAuthorityFile(selectedValue.getMetadata().getAuthorityID(), selectedValue.getMetadata().getAuthorityURI(),
                     selectedValue.getMetadata().getAuthorityValue());
             pe.getDocstruct().addMetadata(md);
             PageMetadataValue value = new PageMetadataValue(md, selectedField.getValidation(), selectedField.isRequired(),
@@ -901,8 +923,10 @@ public class MetadataPerImageStepPlugin implements IStepPluginVersion2 {
             }
         }
 
-        String pageNo = currentPageNo.getValue();
-        currentPageNo.setValue(otherPageNo.getValue());
-        otherPageNo.setValue(pageNo);
+        if (currentPageNo != null && otherPageNo != null) {
+            String pageNo = currentPageNo.getValue();
+            currentPageNo.setValue(otherPageNo.getValue());
+            otherPageNo.setValue(pageNo);
+        }
     }
 }

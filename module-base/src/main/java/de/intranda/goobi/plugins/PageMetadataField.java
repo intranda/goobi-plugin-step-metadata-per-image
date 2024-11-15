@@ -85,7 +85,7 @@ public class PageMetadataField implements MultiSelectProperty<String> {
 
     public void clearValue(PageMetadataValue value) {
         value.setValue("");
-        value.getMetadata().setAutorityFile("", "", "");
+        value.getMetadata().setAuthorityFile("", "", "");
     }
 
     // multiselect
