@@ -25,7 +25,6 @@
     xmlns:o="http://omnifaces.org/ui"
     xmlns:of="http://omnifaces.org/functions"
     template="/uii/templatePG/templatePG.html"
-    xmlns:x="http://myfaces.apache.org/tomahawk"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG">
@@ -142,8 +141,8 @@
                             <span
                                 aria-hidden="true"
                                 class="fa fa-floppy-o" />
-                            <x:updateActionListener
-                                property="#{NavigationForm.uiStatus.pluginSimulation}"
+                            <f:setPropertyActionListener
+                                target="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
                         </h:commandLink>
 
@@ -158,8 +157,8 @@
                             <span
                                 aria-hidden="true"
                                 class="fa fa-close" />
-                            <x:updateActionListener
-                                property="#{NavigationForm.uiStatus.pluginSimulation}"
+                            <f:setPropertyActionListener
+                                target="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
                         </h:commandLink>
                     </div>
@@ -179,7 +178,7 @@
                                 field="#{AktuelleSchritteForm.myPlugin.publicationElement.title}"
                                 help=""
                                 required="false" />
-                            <x:dataList
+                            <ui:repeat
                                 var="metadata"
                                 value="#{AktuelleSchritteForm.myPlugin.publicationElement.metadataList}">
                                 <intranda:formOutputText
@@ -190,7 +189,7 @@
                                     field="#{metadata.two}"
                                     help=""
                                     required="false" />
-                            </x:dataList>
+                            </ui:repeat>
 
                             <ui:fragment rendered="#{!AktuelleSchritteForm.myPlugin.publicationElement.processReferences.isEmpty()}">
                                 <div class="row">
@@ -310,8 +309,8 @@
                                                 required="false"
                                                 selectItems="#{field.valueList}"
                                                 fieldStyle="form-select #{entry.valid ? '' : 'invalid'}"
-                                                var="item"
-                                                itemLabel="#{item}"
+                                                var="var"
+                                                itemLabel="#{var}"
                                                 itemValue="#{item}"
                                                 displayLabel="false"
                                                 onfocus="document.getElementById( 'focusField' ).value = this.id;">
@@ -667,8 +666,8 @@
                         <span>
                             <h:outputText value="#{msgs.pluginLeave}" />
                         </span>
-                        <x:updateActionListener
-                            property="#{NavigationForm.uiStatus.pluginSimulation}"
+                        <f:setPropertyActionListener
+                            target="#{NavigationForm.uiStatus.pluginSimulation}"
                             value="#{false}" />
 
                     </button>
@@ -684,8 +683,8 @@
                         <span>
                             <h:outputText value="#{msgs.speichern}" />
                         </span>
-                        <x:updateActionListener
-                            property="#{NavigationForm.uiStatus.pluginSimulation}"
+                        <f:setPropertyActionListener
+                            target="#{NavigationForm.uiStatus.pluginSimulation}"
                             value="#{false}" />
                     </button>
 
@@ -767,8 +766,7 @@
 										loadImages();
 									}
 
-									jsf.ajax
-											.addOnEvent(function(data) {
+									faces.ajax.addOnEvent(function(data) {
 												var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
 
 												switch (ajaxstatus) {

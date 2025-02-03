@@ -104,7 +104,7 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
 
     @Override
     public void setGeonamesNumber(String number) {
-        metadata.setAutorityFile("geonames", "http://www.geonames.org/", number);
+        metadata.setAuthorityFile("geonames", "http://www.geonames.org/", number);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
     @Override
     public void importGeonamesData() {
         metadata.setValue(currentToponym.getName());
-        metadata.setAutorityFile("geonames", "http://www.geonames.org/", "" + currentToponym.getGeoNameId());
+        metadata.setAuthorityFile("geonames", "http://www.geonames.org/", "" + currentToponym.getGeoNameId());
 
         currentToponym = null;
         resultList = null;
@@ -142,7 +142,7 @@ public class PageMetadataValue implements GndSearchProperty, GeonamesSearchPrope
         for (NormData normdata : currentData) {
             if ("NORM_IDENTIFIER".equals(normdata.getKey())) {
                 String gndNumber = normdata.getValues().get(0).getText();
-                metadata.setAutorityFile("gnd", "http://d-nb.info/gnd/", gndNumber);
+                metadata.setAuthorityFile("gnd", "http://d-nb.info/gnd/", gndNumber);
             } else if ("NORM_NAME".equals(normdata.getKey())) {
                 String value = normdata.getValues().get(0).getText();
                 metadata.setValue(value);
