@@ -7,7 +7,6 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:o="http://omnifaces.org/ui"
     xmlns:of="http://omnifaces.org/functions"
-    xmlns:x="http://myfaces.apache.org/tomahawk"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG">
@@ -124,9 +123,9 @@
                                     required="false"
                                     selectItems="#{AktuelleSchritteForm.myPlugin.selectedField.valueList}"
                                     fieldStyle="form-control #{AktuelleSchritteForm.myPlugin.selectedValue.valid ? '' : 'invalid'}"
-                                    var="item"
-                                    itemLabel="#{item}"
-                                    itemValue="#{item}"
+                                    var="var"
+                                    itemLabel="#{var}"
+                                    itemValue="#{var}"
                                     label="#{msgs.plugin_intranda_step_metadata_per_image_value}"
                                     displayLabel="true">
                                 </intranda:formInputDropDownAjax>
