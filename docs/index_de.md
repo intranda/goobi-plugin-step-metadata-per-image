@@ -285,4 +285,4 @@ Als letztes wird noch konfiguriert, wie die Suche nach Verweisen funktioniert:
         </display>
 ```
 
-Dazu wird in <searchfield> festgelegt, in welchen Metadatenfeldern nach den gewünschten Werten gesucht werden soll und in <display> wird definiert, welche Metadatenfelder in der Trefferliste angezeigt werden sollen.
+Dazu wird in `<searchfield>` festgelegt, in welchen Metadatenfeldern nach den gewünschten Werten gesucht werden soll und in `<display>` wird definiert, welche Metadatenfelder in der Trefferliste angezeigt werden sollen.
