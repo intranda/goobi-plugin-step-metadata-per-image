@@ -285,4 +285,4 @@ The last step is to configure how the search for references works:
         </display>
 ```
 
-The metadata fields to be searched for the desired values are defined in <searchfield> and the metadata fields to be displayed in the hit list are defined in <display>.
+The metadata fields to be searched for the desired values are defined in `<searchfield>` and the metadata fields to be displayed in the hit list are defined in `<display>`.
