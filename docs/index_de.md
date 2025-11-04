@@ -3,6 +3,10 @@ title: Metadaten pro Bild erfassen
 identifier: intranda_step_metadata_per_image
 published: true
 description: Dieses Step-Plugin für Goobi workflow erlaubt die direkte Bearbeitung von Metadaten aus einer geöffneten Aufgabe heraus. Dabei lassen sich pro Bild Verknüpfungen zu anderen Vorgängen erstellen.
+keywords:
+    - Goobi workflow
+    - Plugin
+    - Step Plugin
 ---
 ## Einführung
 Dieses Plugin erlaubt die Bearbeitung von konfigurierbaren Metadaten innerhalb der Nutzeroberfläche eine geöffneten Aufgabe, ohne dass dafür der Metadaten-Editor betreten werden muss. Dabei lassen sich für jede Audio-, Video- oder  Bilddatei eigene Metadaten erstellen.

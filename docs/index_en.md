@@ -3,6 +3,10 @@ title: Capture metadata per image
 identifier: intranda_step_metadata_per_image
 published: true
 description: This step plugin for Goobi workflow allows you to edit metadata directly from an open task. Links to other processes can be created for each screen.
+keywords:
+    - Goobi workflow
+    - Plugin
+    - Step Plugin
 ---
 ## Introduction
 This plugin allows you to edit configurable metadata within the user interface of an open task without having to enter the metadata editor. You can create your own metadata for each audio, video or image file.
