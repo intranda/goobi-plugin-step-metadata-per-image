@@ -39,7 +39,7 @@ Die einzelnen Strukturelemente lassen sich umsortieren, um so die Dateien in die
 
 Für jedes Strukturelement werden die konfigurierten Metadaten angezeigt. Je nach Konfiguration gibt es im linken Bereich Optionen, um ein einzelnes Feld zu duplizieren, zu löschen oder einen Wert in allen Strukturelementen gleichzeitig hinzuzufügen.
 
-Eine Besonderheit stellen die Verweise dar. Hiermit ist es möglich, eine Verknüpfung zwischen dem aktuellen Strukturelement und einem anderen Vorgang zu erstellen. Dabei wird ein Popup geöffnet, in dem nach anderen Vorgängen gesucht werden kann. Anschließend kann aus der Trefferliste der gewünschte Vorgang ausgewählt weren. Im Strukturelement wird dann eine Verknüpfung auf den ausgewählten Vorgang erstellt und im anderen Vorgang wird eine Verknüpfung auf das aktuelle Strukturelement erzeugt. 
+Eine Besonderheit stellen die Verweise dar. Hiermit ist es möglich, eine Verknüpfung zwischen dem aktuellen Strukturelement und einem anderen Vorgang zu erstellen. Dabei wird ein Popup geöffnet, in dem nach anderen Vorgängen gesucht werden kann. Anschließend kann aus der Trefferliste der gewünschte Vorgang ausgewählt werden. Im Strukturelement wird dann eine Verknüpfung auf den ausgewählten Vorgang erstellt und im anderen Vorgang wird eine Verknüpfung auf das aktuelle Strukturelement erzeugt. 
 
 Wenn ein Verweis wieder entfernt wird, dann wird er auch aus dem ausgewählten Vorgang entfernt.
 
