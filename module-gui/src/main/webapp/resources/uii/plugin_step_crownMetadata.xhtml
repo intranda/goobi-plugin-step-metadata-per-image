@@ -27,6 +27,7 @@
     template="/uii/template/template.html"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:util="http://goobi.io/util"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
 
     <ui:param
@@ -117,7 +118,7 @@
 
                 <intranda:boxTitle
                     title="#{AktuelleSchritteForm.myPlugin.step.titel}"
-                    icon="fa-puzzle-piece">
+                    icon="puzzle">
 
                     <div class="actions d-flex">
 
@@ -128,9 +129,7 @@
                             styleClass="btn d-flex align-items-center btn--title-action"
                             title="#{msgs.reload}"
                             pt:data-toggle="tooltip">
-                            <span
-                                aria-hidden="true"
-                                class="fa fa-refresh" />
+                            <util:icon icon="refresh" />
                         </h:commandLink>
                         <h:commandLink
                             tabindex="-1"
@@ -138,9 +137,7 @@
                             styleClass="btn d-flex align-items-center btn--title-action"
                             title="#{msgs.speichern}"
                             pt:data-toggle="tooltip">
-                            <span
-                                aria-hidden="true"
-                                class="fa fa-floppy-o" />
+                            <util:icon icon="device-floppy" />
                             <f:setPropertyActionListener
                                 target="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
@@ -154,9 +151,7 @@
                             rendered="#{NavigationForm.uiStatus.pluginSimulation != true}"
                             title="#{msgs.pluginLeave}"
                             pt:data-toggle="tooltip">
-                            <span
-                                aria-hidden="true"
-                                class="fa fa-close" />
+                            <util:icon icon="x" />
                             <f:setPropertyActionListener
                                 target="#{NavigationForm.uiStatus.pluginSimulation}"
                                 value="#{false}" />
@@ -423,9 +418,7 @@
                                             <f:setPropertyActionListener
                                                 value=""
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-files-o" />
+                                            <util:icon icon="files" />
                                         </button>
                                     </div>
 
@@ -440,9 +433,7 @@
                                                 jsf:action="#{page.deleteProcessReference}"
                                                 title="#{msgs.plugin_intranda_step_metadata_per_image_removeLink}"
                                                 data-toggle="tooltip">
-                                                <span
-                                                    aria-hidden="true"
-                                                    class="fa fa-minus-circle" />
+                                                <util:icon icon="circle-minus" />
                                                 <span>
                                                     <h:outputText
                                                         value="#{reference.otherProcessName}"
@@ -498,9 +489,7 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'first')}"
                                             title="#{msgs.moveSeltectedPagesUp}"
                                             data-toggle="tooltip">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-angle-double-up" />
+                                            <util:icon icon="chevrons-up" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -515,9 +504,7 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'up')}"
                                             title="#{msgs.moveSeltectedPagesUp}"
                                             data-toggle="tooltip">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-angle-up" />
+                                            <util:icon icon="chevron-up" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -535,9 +522,7 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'down')}"
                                             title="#{msgs.moveSeltectedPagesDown}"
                                             data-toggle="tooltip">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-angle-down" />
+                                            <util:icon icon="chevron-down" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -552,9 +537,7 @@
                                             jsf:action="#{AktuelleSchritteForm.myPlugin.moveNode(page, 'last')}"
                                             title="#{msgs.moveSeltectedPagesDown}"
                                             data-toggle="tooltip">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-angle-double-down" />
+                                            <util:icon icon="chevrons-down" />
                                             <f:setPropertyActionListener
                                                 value="#{page.pageId}"
                                                 target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -660,9 +643,7 @@
                         class="btn btn-blank"
                         jsf:id="absenden"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.cancel}">
-                        <span
-                            aria-hidden="true"
-                            class="fa fa-close" />
+                       <util:icon icon="x" />
                         <span>
                             <h:outputText value="#{msgs.pluginLeave}" />
                         </span>
@@ -677,9 +658,7 @@
                         class="btn btn-success me-3"
                         jsf:id="saveMetadata"
                         jsf:action="#{AktuelleSchritteForm.myPlugin.saveMetadata}">
-                        <span
-                            aria-hidden="true"
-                            class="fa fa-floppy-o" />
+                        <util:icon icon="device-floppy" />
                         <span>
                             <h:outputText value="#{msgs.speichern}" />
                         </span>

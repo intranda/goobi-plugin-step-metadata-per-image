@@ -6,6 +6,7 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:util="http://goobi.io/util"
     xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
 
     <composite:interface>
@@ -25,9 +26,7 @@
                 class="btn btn-blank me-2 float-end"
                 jsf:id="clearField"
                 jsf:action="#{field.clearValue(entry)}">
-                <span
-                    class="fa fa-trash"
-                    aria-hidden="true" />
+                <util:icon icon="trash" />
                 <f:ajax
                     execute="@this"
                     render="@form" />
@@ -50,9 +49,7 @@
                 <f:ajax
                     execute="@this"
                     render="metadataAddBoxContent" />
-                <span
-                    aria-hidden="true"
-                    class="fa fa-files-o" />
+                <util:icon icon="files" />
                 <f:setPropertyActionListener
                     value=""
                     target="#{AktuelleSchritteForm.myPlugin.scrollTo}" />
@@ -66,9 +63,7 @@
                 jsf:id="removeField"
                 jsf:rendered="#{field.displayDeletionButton}"
                 jsf:action="#{field.removeValue(entry)}">
-                <span
-                    aria-hidden="true"
-                    class="fa fa-minus" />
+                <util:icon icon="minus" />
                 <f:ajax
                     execute="@this"
                     render="@form" />
@@ -87,9 +82,7 @@
                 jsf:id="duplicateField"
                 jsf:rendered="#{field.displayDuplicationButton}"
                 jsf:action="#{field.addNewValue}">
-                <span
-                    aria-hidden="true"
-                    class="fa fa-plus" />
+                <util:icon icon="plus" />
                 <f:ajax
                     execute="@this"
                     render="@form" />

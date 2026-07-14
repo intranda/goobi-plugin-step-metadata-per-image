@@ -5,6 +5,7 @@
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:util="http://goobi.io/util"
     xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <composite:interface>
@@ -18,9 +19,7 @@
             styleClass="w-100 font-danger validation-message row mb-2">
             <div class="col-12 col-md-3"></div>
             <div class="col-12 col-md-9">
-                <span
-                    class="fa fa-exclamation-circle warning-icon error"
-                    aria-hidden="true" />
+                <util:icon icon="exclamation-circle" styleClass="text-warning" />
                 <h:outputText value="#{msgs[field.validationErrorMessage]}" />
             </div>
         </h:panelGroup>
